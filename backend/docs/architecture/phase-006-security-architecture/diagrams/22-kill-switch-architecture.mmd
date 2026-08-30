@@ -1,0 +1,6 @@
+graph TD
+    TRIGGER[Kill Switch Execution: Global / Tenant / Agent / Merchant] --> REDIS[Write Redis Emergency Flag in < 100ms]
+    REDIS --> GATEWAY[API Gateway Edge Blocks Incoming Agent Intents]
+    REDIS --> GUARD[AGENTGUARD Security Gate Rejects Policy Checks]
+    REDIS --> PAYMENT[Payment Orchestrator Cancels Pending Executions]
+    PAYMENT --> AUDIT[Append Emergency Kill Switch Event to Block Hash Log]

@@ -1,0 +1,12 @@
+graph TD
+    REQ[Incoming API Request] --> ID[1. Identity Check]
+    ID --> AUTH[2. Authentication Validation]
+    AUTH --> TENANT[3. Tenant Context Injection]
+    TENANT --> CAP[4. Capability Scope Authorization]
+    CAP --> POLICY[5. AGENTGUARD Policy Gate]
+    POLICY --> RISK[6. FRAUDGUARD Risk Scoring]
+    RISK --> DECISION{7. Authorization Decision}
+    DECISION -- ALLOW --> EXEC[8. Payment Execution]
+    DECISION -- REVIEW --> ESCALATE[Escalate to Human Approval]
+    DECISION -- BLOCK --> REJECT[Block & Log Alert]
+    EXEC & ESCALATE & REJECT --> AUDIT[9. Immutable Audit Logging]

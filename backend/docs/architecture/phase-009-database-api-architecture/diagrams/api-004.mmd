@@ -1,0 +1,5 @@
+graph TD
+    AUTH_REQ[Authenticated Request] --> L1{Layer 1: RBAC Role Check}
+    L1 -- Pass --> L2{Layer 2: Agent Scope Check}
+    L2 -- Pass --> L3{Layer 3: ABAC Context Check}
+    L3 -- Pass --> EXECUTE[Execute Endpoint Controller]

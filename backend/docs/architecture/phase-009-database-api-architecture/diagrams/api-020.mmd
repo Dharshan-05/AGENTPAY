@@ -1,0 +1,4 @@
+graph TD
+    EXCEPTION[Uncaught Exception] --> SANITIZE[Sanitize Stack Trace & Secrets]
+    SANITIZE --> JSON[Format Standardized Error JSON Payload]
+    JSON --> RESP[Return HTTP 500 / 4xx with trace_id]

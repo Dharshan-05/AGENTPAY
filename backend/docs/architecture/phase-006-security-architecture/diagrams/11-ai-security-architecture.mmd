@@ -1,0 +1,8 @@
+graph TD
+    UNTRUSTED[Untrusted Web Page / Merchant Text] --> SANITIZE[Context Sanitization & Prompt Role Isolation]
+    SANITIZE --> LLM[LLM Reasoning & Agent Planner Engine]
+    LLM --> INTENT[JSON Intent Payload Proposal]
+    INTENT --> VALIDATE[Strict JSON Schema Validation]
+    VALIDATE --> GUARD[External AGENTGUARD Security Policy Gate]
+    GUARD -- BREACHED --> BLOCK[BLOCK Transaction]
+    GUARD -- PASSED --> EXECUTE[Authorized Payment Execution]

@@ -1,0 +1,14 @@
+graph TD
+    INTENT[Payment Intent Payload] --> S1{Stage 1: Emergency Stop Active?}
+    S1 -- YES --> BLOCK1[BLOCK: ERR_EMERGENCY_STOP_ACTIVE]
+    S1 -- NO --> S2{Stage 2: Agent Status == ACTIVE?}
+    S2 -- NO --> BLOCK2[BLOCK: ERR_AGENT_NOT_ACTIVE]
+    S2 -- YES --> S3{Stage 3: Category in Blacklist?}
+    S3 -- YES --> BLOCK3[BLOCK: ERR_CATEGORY_BLOCKED]
+    S3 -- NO --> S4{Stage 4: Amount <= Single Limit?}
+    S4 -- NO --> BLOCK4[BLOCK: ERR_SINGLE_LIMIT_EXCEEDED]
+    S4 -- YES --> S5{Stage 5: Cumulative Amount <= Budget?}
+    S5 -- NO --> BLOCK5[BLOCK: ERR_DAILY_BUDGET_EXCEEDED]
+    S5 -- YES --> S6{Stage 6: Risk Score <= Threshold?}
+    S6 -- NO --> BLOCK6[BLOCK: ERR_HIGH_RISK_SCORE]
+    S6 -- YES --> ALLOW[ALLOW: Generate Payment Authorization Token]

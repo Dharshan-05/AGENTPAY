@@ -1,0 +1,6 @@
+graph TD
+    ATT1[Attempt 1: Razorpay Gateway Call] --> RES1{Response?}
+    RES1 -- Success --> SUCCESS[State -> SUCCESS]
+    RES1 -- Non-Retryable Error --> FAIL[State -> FAILED]
+    RES1 -- Retryable Timeout --> RETRY[Calculate Jitter Backoff & Trigger Attempt 2]
+    RETRY --> ATT2[Attempt 2: Retried Settlement Call]

@@ -1,0 +1,4 @@
+graph TD
+    REQ[Ingress API Request] --> LIMIT_CHK{Redis Sliding-Window Rate Limit Exceeded?}
+    LIMIT_CHK -- YES --> REJECT[Return HTTP 429 Too Many Requests]
+    LIMIT_CHK -- NO --> ALLOW[Forward Request to Controller]

@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    actor Agent as AI Agent
+    participant GW as API Gateway Edge
+    participant Redis as Redis Nonce Cache
+    participant Auth as Agent Authenticator
+    participant Guard as AGENTGUARD Policy Engine
+
+    Agent->>GW: POST /api/v1/payment-intents (Signed HMAC)
+    GW->>Redis: Check Nonce (X-Agent-Nonce) in 15m Cache
+    Redis-->>GW: Nonce Valid (Not Replayed)
+    GW->>Auth: Verify HMAC Signature against secret key
+    Auth->>Auth: Compute HMAC-SHA256 & crypto.timingSafeEqual
+    Auth-->>GW: Authentication SUCCESS (agent_id verified)
+    GW->>Guard: Forward Authenticated Intent Payload

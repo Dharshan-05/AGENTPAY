@@ -1,0 +1,8 @@
+graph TD
+    INTENT[Payment Service] --> EVENT[Emit PaymentAuthorized Event]
+    EVENT --> OUTBOX[Transactional Outbox Table]
+    OUTBOX --> WORKER[Outbox Publisher Worker]
+    WORKER --> BUS[Redis Pub/Sub Event Bus]
+    BUS --> SUB1[Notification Service]
+    BUS --> SUB2[Ledger Service]
+    BUS --> SUB3[Observability Dashboard]

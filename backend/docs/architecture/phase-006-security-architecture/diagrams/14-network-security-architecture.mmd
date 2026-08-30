@@ -1,0 +1,19 @@
+graph TD
+    subgraph Public Ingress Subnet
+        INGRESS[Cloud Load Balancer / Nginx Ingress]
+    end
+
+    subgraph Private Kubernetes Application Subnet
+        POD_GW[API Gateway Pods]
+        POD_CORE[Core Service Pods]
+        POD_ML[FRAUDGUARD Python Pods]
+    end
+
+    subgraph Isolated Data Subnet (No Internet Access)
+        DB[(PostgreSQL Database Cluster)]
+        REDIS[(Redis Cache Cluster)]
+    end
+
+    INGRESS -->|HTTPS TLS 1.3| POD_GW
+    POD_GW -->|Internal mTLS| POD_CORE & POD_ML
+    POD_CORE & POD_ML -->|Private DB Driver| DB & REDIS

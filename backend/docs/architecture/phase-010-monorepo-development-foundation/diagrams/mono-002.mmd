@@ -1,0 +1,7 @@
+graph TD
+    USER[Human User] --> WEB[apps/web]
+    AGENT[AI Agent Model] --> AGENT_RT[apps/agent-runtime]
+    AGENT_RT --> GUARD[apps/agentguard]
+    GUARD --> API[apps/api]
+    WEB --> API
+    API --> WORKER[apps/worker]

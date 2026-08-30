@@ -1,0 +1,6 @@
+graph LR
+    ORCH[Payment Orchestrator] --> RZP[RazorpayAdapter]
+    RZP --> API1[POST /v1/orders]
+    RZP --> API2[POST /v1/payments/create/json]
+    RZP --> API3[POST /v1/payments/{id}/refund]
+    RZP --> API4[GET /v1/payments/{id}]

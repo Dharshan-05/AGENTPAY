@@ -1,0 +1,25 @@
+graph TD
+    subgraph Instrumentation Sources
+        GW[API Gateway]
+        POLICY[AGENTGUARD Engine]
+        FRAUD[FRAUDGUARD AI Service]
+        PAYMENT[Payment Orchestrator]
+    end
+
+    subgraph Telemetry Collectors
+        LOG_COLLECTOR[Structured JSON Logger]
+        PROM_EXPORTER[Prometheus Metrics Exporter]
+        OTEL_TRACER[OpenTelemetry Distributed Tracer]
+    end
+
+    subgraph Monitoring & Visualization
+        GRAFANA[Grafana Dashboard]
+        PROMETHEUS_SERVER[Prometheus TSDB]
+        JAEGER[Jaeger Trace Viewer]
+    end
+
+    GW & POLICY & FRAUD & PAYMENT --> LOG_COLLECTOR & PROM_EXPORTER & OTEL_TRACER
+    LOG_COLLECTOR --> GRAFANA
+    PROM_EXPORTER --> PROMETHEUS_SERVER
+    OTEL_TRACER --> JAEGER
+    PROMETHEUS_SERVER --> GRAFANA

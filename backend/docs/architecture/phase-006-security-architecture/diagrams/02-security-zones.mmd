@@ -1,0 +1,11 @@
+graph TD
+    Z0[Zone 0: Public Internet] -->|TLS 1.3 | Z1[Zone 1: Edge Gateway]
+    Z1 -->|Authenticated HTTP| Z2[Zone 2: Authenticated App Tier]
+    Z2 -->|mTLS / Internal API| Z3[Zone 3: Agent Execution Sandbox]
+    Z2 -->|gRPC / Internal API| Z4[Zone 4: AGENTGUARD Security Control Plane]
+    Z4 -->|Internal Authorization Token| Z5[Zone 5: Payment Orchestrator]
+    Z5 -->|TLS 1.3 / HMAC Headers| Z_RAZORPAY[External Razorpay API Rails]
+    Z2 & Z4 & Z5 -->|Private DB Driver| Z6[Zone 6: Datastore & Audit Storage]
+    Z4 -->|REST API| Z7[Zone 7: AI/ML Inference Container Zone]
+    Z2 -->|Authenticated Session| Z8[Zone 8: Security & Risk Console]
+    Z1 & Z2 & Z4 & Z5 & Z6 & Z7 & Z8 -->|Internal VPC| Z9[Zone 9: Infrastructure & Management]

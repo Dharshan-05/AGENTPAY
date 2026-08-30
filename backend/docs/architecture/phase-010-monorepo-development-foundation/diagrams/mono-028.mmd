@@ -1,0 +1,4 @@
+graph TD
+    SRC[TypeScript Package Source] --> BUILD[pnpm build / tsc --build]
+    BUILD --> DIST[dist/ Output Directory]
+    DIST --> APP[Consuming Monorepo Applications]

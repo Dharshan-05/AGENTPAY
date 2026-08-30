@@ -1,0 +1,4 @@
+graph LR
+    MUTATION[Payment State Transaction] --> OUTBOX[Insert into outbox_events]
+    OUTBOX --> WORKER[Worker Event Listener]
+    WORKER --> NOTIFY[Async User Notification Engine]

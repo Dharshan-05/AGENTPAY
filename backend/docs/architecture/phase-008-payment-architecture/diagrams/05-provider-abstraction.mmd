@@ -1,0 +1,7 @@
+graph TD
+    ORCH[Payment Orchestrator] --> INTERFACE[IPaymentProvider Interface]
+    INTERFACE --> ADAPTER1[RazorpayAdapter]
+    INTERFACE --> ADAPTER2[StripeAdapter (Future)]
+    INTERFACE --> ADAPTER3[MockTestAdapter]
+
+    ADAPTER1 --> RAZORPAY[Razorpay Gateway API]

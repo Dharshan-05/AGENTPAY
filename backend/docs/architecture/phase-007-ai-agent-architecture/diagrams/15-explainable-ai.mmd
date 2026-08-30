@@ -1,0 +1,6 @@
+graph LR
+    MODEL[XGBoost Anomaly Model] --> SHAP[SHAP Tree Explainer]
+    SHAP --> WEIGHTS[Top Feature Weights & Descriptions]
+    WEIGHTS --> SYNTHESIS[Natural Language Text Synthesizer]
+    SYNTHESIS --> TRACE[Structured XAI Trace Payload]
+    TRACE --> UI[Approval Center UI & Audit Log]

@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    participant Guard as AGENTGUARD Policy Engine
+    participant Queue as Approval Center Queue
+    participant UI as Approval Center UI Card
+    actor User as Human Owner
+    participant Orch as Payment Orchestrator
+
+    Guard->>Queue: Intent Evaluated -> REVIEW (15m TTL)
+    Queue->>UI: Real-Time WebSocket Card Push
+    User->>UI: Inspects Card & XAI Trace -> Clicks "APPROVE"
+    UI->>Queue: POST /api/v1/approvals/appr_123/action (APPROVE)
+    Queue->>Orch: Issue Signed Authorization Token & Trigger Execution

@@ -1,0 +1,10 @@
+graph TD
+    USER[Human Owner] --> CHAT[Chat Console / Approval Center]
+    CHAT --> AGENT[AI Commerce Agent]
+    AGENT --> INTENT[Payment Intent Proposal]
+    INTENT --> GUARD[AGENTGUARD Security Policy Engine]
+    GUARD --> FRAUD[FRAUDGUARD 12-D ML Risk Engine]
+    GUARD -- ALLOW --> AUTH[Payment Authorization Service]
+    AUTH --> ORCH[Payment Orchestrator]
+    ORCH --> ADAPTER[Razorpay Adapter]
+    ADAPTER --> RAZORPAY[Razorpay Payment Rails]

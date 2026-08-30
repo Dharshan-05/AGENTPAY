@@ -1,0 +1,5 @@
+graph TD
+    CLIENT[API Ingress Context] -->|SET LOCAL app.current_tenant = X| PG[PostgreSQL Session]
+    PG --> RLS{Row-Level Security Policy}
+    RLS -- tenant_id == X --> PERMIT[ALLOW: Return Target Tenant Rows]
+    RLS -- tenant_id != X --> FILTER[DENY: Exclude Foreign Tenant Rows]

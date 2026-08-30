@@ -1,0 +1,7 @@
+graph TD
+    EVENT[Payment Domain Event] --> JOURNAL[Create Journal Record (journal_id)]
+    JOURNAL --> DEBIT[Post Debit Line (account_id, debit_amount)]
+    JOURNAL --> CREDIT[Post Credit Line (account_id, credit_amount)]
+    DEBIT & CREDIT --> BAL_CHK{Sum Debit == Sum Credit?}
+    BAL_CHK -- YES --> COMMIT[Commit Journal Entry to PostgreSQL]
+    BAL_CHK -- NO --> ROLLBACK[Aborting Transaction - Imbalance Error]

@@ -1,0 +1,7 @@
+graph TD
+    APP[Agent Orchestrator] --> INTERFACE[ILLMProvider Interface]
+    INTERFACE --> P1[Primary Provider: OpenAI API]
+    INTERFACE --> P2[Secondary Provider: Anthropic API]
+    INTERFACE --> P3[Local Fallback: Ollama / vLLM]
+    P1 -- Timeout / Error --> P2
+    P2 -- Timeout / Error --> P3

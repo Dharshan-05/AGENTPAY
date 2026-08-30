@@ -1,0 +1,4 @@
+graph TD
+    DEV[Developer Workstation] --> COMPOSE[docker-compose up -d]
+    COMPOSE --> PG[(PostgreSQL Container 5432)]
+    COMPOSE --> REDIS[(Redis Container 6379)]

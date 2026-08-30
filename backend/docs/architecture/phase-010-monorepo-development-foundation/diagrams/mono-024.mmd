@@ -1,0 +1,4 @@
+graph TD
+    COMMIT[Git Commit] --> LEAKS[Gitleaks Secret Scan]
+    LEAKS --> SEMGREP[Semgrep Static Code Analysis]
+    SEMGREP --> AUDIT[PNPM Dependency Security Audit]

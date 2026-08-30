@@ -1,0 +1,6 @@
+graph TD
+    ANOMALY[Agent Prompt Injection / Risk Anomaly Flagged] --> SUSPEND[AGENTGUARD Sets Agent State -> SUSPENDED]
+    SUSPEND --> EVICT[Evict Edge Redis HMAC Key Cache in < 10ms]
+    EVICT --> CANCEL[Cancel All Pending Intents for Target Agent]
+    CANCEL --> NOTIFY[Send Real-Time Push Notification to Human Owner]
+    NOTIFY --> REKEY[Require Owner Mandatory HMAC Key Re-Issuance]

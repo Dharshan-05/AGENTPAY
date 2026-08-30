@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    participant Agent as AI Agent
+    participant GW as API Gateway
+    participant Guard as AGENTGUARD Policy Engine
+    participant Orch as Payment Orchestrator
+    participant Adapter as Razorpay Adapter
+    participant Razorpay as Razorpay API
+    participant Webhook as Webhook Listener Worker
+    participant DB as Relational Database
+
+    Agent->>GW: POST /api/v1/payment-intents (Idempotency-Key: UUID)
+    GW->>GW: Verify Redis Idempotency Lock
+    GW->>Guard: Evaluate Policy & Risk
+    Guard-->>Orch: Decision ALLOW (State: AUTHORIZED)
+    Orch->>DB: Atomically update State -> AUTHORIZED
+    Orch->>Adapter: Dispatch Authorized Intent Payload
+    Adapter->>Razorpay: POST /v1/orders (Create Razorpay Order)
+    Razorpay-->>Adapter: Order Created (Order ID: order_123)
+    Adapter->>Razorpay: POST /v1/payments/pay (Execute Payment)
+    Razorpay-->>Adapter: Payment Authorized (Payment ID: pay_456)
+    Adapter-->>Orch: Settlement Result: SUCCESS
+    Orch->>DB: Atomically update State -> EXECUTED
+    Razorpay--)Webhook: POST /api/v1/webhooks/razorpay (Event: payment.captured)
+    Webhook->>Webhook: Verify Razorpay HMAC Webhook Signature
+    Webhook->>DB: Reconcile Payment Record State -> RECONCILED
+    Webhook->>DB: Append SHA-256 Block Hash Audit Entry

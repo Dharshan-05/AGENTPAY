@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant App as Payment Service Component
+    participant DB as PostgreSQL Transaction Boundary
+    participant Outbox as Outbox Table
+    participant Worker as Outbox Poller Worker
+    participant Bus as Message Event Bus
+
+    App->>DB: BEGIN TRANSACTION
+    App->>DB: UPDATE payments SET status = 'EXECUTED'
+    App->>Outbox: INSERT INTO outbox_events (event_id, payload)
+    App->>DB: COMMIT TRANSACTION
+    Worker->>Outbox: SELECT * FROM outbox_events WHERE processed = false FOR UPDATE
+    Worker->>Bus: Publish Event Payload
+    Worker->>Outbox: UPDATE outbox_events SET processed = true

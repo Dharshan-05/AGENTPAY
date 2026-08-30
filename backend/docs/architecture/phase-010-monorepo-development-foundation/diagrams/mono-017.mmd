@@ -1,0 +1,4 @@
+graph LR
+    APP[Payment Adapter] --> ENV{Environment Tier?}
+    ENV -- Development / Test --> MOCK[MockPaymentAdapter (Sandbox)]
+    ENV -- Staging / Production --> RZP[Razorpay Live / Test Mode API]

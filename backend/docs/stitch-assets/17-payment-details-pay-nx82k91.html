@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay - Payment Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#004e5c",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#4cd7f6",
+                      "surface-dim": "#0b1323",
+                      "on-secondary-container": "#c9aeff",
+                      "on-primary-fixed": "#00174b",
+                      "outline-variant": "#434655",
+                      "primary-container": "#2563eb",
+                      "primary": "#b4c5ff",
+                      "surface-container-high": "#222a3a",
+                      "inverse-on-surface": "#283041",
+                      "surface-tint": "#b4c5ff",
+                      "on-tertiary": "#003640",
+                      "tertiary-fixed": "#acedff",
+                      "secondary": "#d2bbff",
+                      "on-secondary-fixed-variant": "#5a00c6",
+                      "surface-container": "#18202f",
+                      "tertiary": "#4cd7f6",
+                      "surface": "#0b1323",
+                      "on-primary-container": "#eeefff",
+                      "on-surface": "#dbe2f8",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-secondary-fixed": "#25005a",
+                      "surface-container-highest": "#2d3546",
+                      "surface-bright": "#31394a",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-tertiary-fixed": "#001f26",
+                      "background": "#0b1323",
+                      "outline": "#8d90a0",
+                      "surface-container-lowest": "#060e1d",
+                      "on-background": "#dbe2f8",
+                      "tertiary-container": "#00788c",
+                      "inverse-primary": "#0053db",
+                      "primary-fixed": "#dbe1ff",
+                      "error": "#ffb4ab",
+                      "on-error": "#690005",
+                      "secondary-fixed": "#eaddff",
+                      "on-primary": "#002a78",
+                      "on-secondary": "#3f008e",
+                      "secondary-fixed-dim": "#d2bbff",
+                      "error-container": "#93000a",
+                      "on-surface-variant": "#c3c6d7",
+                      "secondary-container": "#6001d1",
+                      "on-tertiary-container": "#d7f6ff",
+                      "surface-container-low": "#131c2b",
+                      "surface-variant": "#2d3546",
+                      "inverse-surface": "#dbe2f8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "density-compact": "0.5rem",
+                      "density-comfortable": "1rem",
+                      "grid-columns": "12",
+                      "margin-safe": "1.5rem",
+                      "gutter": "1rem"
+              },
+              "fontFamily": {
+                      "label-technical": [
+                              "JetBrains Mono"
+                      ],
+                      "button-text": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-technical": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "button-text": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Cyber-Minimalism glows */
+        .neon-glow-primary {
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+        }
+        .neon-glow-active {
+            box-shadow: 0 0 12px rgba(76, 215, 246, 0.6);
+        }
+        .neon-glow-error {
+            box-shadow: 0 0 8px rgba(255, 180, 171, 0.4);
+        }
+        .neon-glow-success {
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.4); /* Generic green for success where needed, relying on theme colors otherwise */
+        }
+        .glass-panel {
+            background: rgba(19, 28, 43, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--tw-colors-outline-variant);
+        }
+        .ai-processing-border {
+            position: relative;
+        }
+        .ai-processing-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(90deg, var(--tw-colors-primary), var(--tw-colors-secondary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* Custom scrollbar for high density */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--tw-colors-surface-container);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--tw-colors-outline-variant);
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tw-colors-outline);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex antialiased">
+<!-- SideNav (Generated from JSON) -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-density-comfortable hidden md:flex z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">generating_tokens</span>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tighter leading-tight">AgentPay</h1>
+<p class="font-label-technical text-label-technical text-on-surface-variant">Ops Console</p>
+</div>
+</div>
+<ul class="flex flex-col gap-1 px-4 flex-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-button-text text-button-text">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-primary bg-primary-container/10 border-r-2 border-primary transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-button-text text-button-text">Payments</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+<span class="font-button-text text-button-text">Merchants</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-button-text text-button-text">Analytics</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-button-text text-button-text">Settings</span>
+</a>
+</li>
+</ul>
+<div class="px-4 mt-auto border-t border-outline-variant pt-4">
+<ul class="flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">help_center</span>
+<span class="font-button-text text-button-text">Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="font-button-text text-button-text">Account</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar (Generated from JSON) -->
+<header class="bg-surface dark:bg-surface text-primary font-body-md text-body-md fixed top-0 right-0 left-0 md:left-64 h-16 border-b border-outline-variant flex items-center justify-between px-margin-safe h-full z-40 transition-all duration-200">
+<div class="flex items-center gap-4">
+<span class="md:hidden font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">AgentPay</span>
+<nav class="hidden md:flex gap-6 ml-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Operations</a>
+<a class="text-primary font-bold hover:text-primary transition-colors" href="#">Payments</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Details</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary-container font-button-text text-button-text px-4 py-2 rounded-DEFAULT neon-glow-primary hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors">
+                    Export CSV
+                </button>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<button class="p-2 rounded-full hover:bg-surface-container-highest hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-highest hover:text-primary transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A small, stylized profile avatar for a fintech operator, featuring a minimalist geometric design with glowing cyan and deep navy tones, highly detailed, sharp edges, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcsiXsczPOv93KiMcYlASmrHfRqleowXP7N82td1loTlUj1CN_8v69VajvB15xGqWodkEaRk4jqXxxJtz7ggZig1tcUjPxwLOQjQQTaq2nW5Pu0XzN8e-2n0xPZcAd3TRcCAZjqyjXKrjLmKKVThCtFyWsYX12_SZj6eUY2irrS3X1HYRcBrUREa7Uwwp2SMyyw1GAiEOML_7B4F6carorzucxp1YBr7WZWgRYHUO627_Z82Y2nob"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 mt-16 p-margin-safe overflow-x-hidden overflow-y-auto">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 mb-6 font-label-technical text-label-technical text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Payments</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">pay_Nx82K91</span>
+</div>
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">pay_Nx82K91</h2>
+<span class="px-2 py-1 rounded bg-secondary-container/20 border border-secondary-container text-secondary font-label-technical text-label-technical flex items-center gap-1 neon-glow-active">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Successful
+                        </span>
+</div>
+<div class="flex items-center gap-6 font-body-md text-body-md text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">currency_rupee</span>
+<span class="text-on-surface font-semibold text-lg">₹4,850.00</span>
+</div>
+<div class="w-px h-4 bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">storefront</span>
+<span>Acme Technologies</span>
+</div>
+<div class="w-px h-4 bg-outline-variant"></div>
+<div class="flex items-center gap-2 font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px] text-outline">schedule</span>
+<span>24 Oct 2023, 14:32:01 IST</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-DEFAULT border border-outline-variant text-on-surface-variant font-button-text text-button-text hover:bg-surface-container-high transition-colors">
+                        Cancel
+                    </button>
+<button class="px-4 py-2 rounded-DEFAULT border border-primary text-primary font-button-text text-button-text hover:bg-primary-container/10 transition-colors">
+                        Refund
+                    </button>
+<button class="px-4 py-2 rounded-DEFAULT bg-primary text-on-primary font-button-text text-button-text hover:bg-primary-fixed transition-colors shadow-[0_0_12px_rgba(180,197,255,0.3)]">
+                        Capture
+                    </button>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
+<!-- Left Column: Info Cards (7 cols) -->
+<div class="xl:col-span-7 flex flex-col gap-6">
+<!-- Payment Info Card -->
+<div class="glass-panel rounded-lg p-6">
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-tertiary">info</span>
+                            Payment Information
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">ORDER ID</span>
+<span class="font-body-md text-body-md text-on-surface flex items-center justify-between group">
+                                    ord_Lk99P21
+                                    <button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline hover:text-primary">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">GATEWAY</span>
+<span class="font-body-md text-body-md text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Razorpay (Primary)
+                                </span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">CREATED AT</span>
+<span class="font-body-md text-body-md text-on-surface font-label-technical text-label-technical">2023-10-24 14:31:45</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">AUTHORIZED AT</span>
+<span class="font-body-md text-body-md text-on-surface font-label-technical text-label-technical">2023-10-24 14:32:01</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">METHOD</span>
+<span class="font-body-md text-body-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]">credit_card</span>
+                                    UPI
+                                </span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">VPA</span>
+<span class="font-body-md text-body-md text-on-surface">johndoe@okicici</span>
+</div>
+</div>
+</div>
+<!-- Customer Info Card -->
+<div class="glass-panel rounded-lg p-6">
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-tertiary">person</span>
+                            Customer Information
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">NAME</span>
+<span class="font-body-md text-body-md text-on-surface">John Doe</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">CUSTOMER ID</span>
+<span class="font-body-md text-body-md text-primary font-label-technical text-label-technical hover:underline cursor-pointer">cust_99X1A</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">EMAIL</span>
+<span class="font-body-md text-body-md text-on-surface">john.doe@example.com</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-technical text-label-technical text-on-surface-variant">PHONE</span>
+<span class="font-body-md text-body-md text-on-surface">+91 98765 43210</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Timeline (5 cols) -->
+<div class="xl:col-span-5">
+<div class="glass-panel rounded-lg p-6 h-full border border-primary/30 ai-processing-border">
+<div class="flex items-center justify-between mb-6 border-b border-outline-variant pb-2">
+<h3 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">timeline</span>
+                                Payment Lifecycle
+                            </h3>
+<span class="font-label-technical text-label-technical px-2 py-1 bg-surface-container-highest rounded text-on-surface-variant">Real-time</span>
+</div>
+<div class="relative pl-4 space-y-6 before:absolute before:inset-y-0 before:left-[11px] before:w-px before:bg-outline-variant before:z-0">
+<!-- Created -->
+<div class="relative z-10 flex gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-outline mt-0.5 shrink-0">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-button-text text-button-text text-on-surface">Created</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">14:31:45</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Payment entity generated via API.</p>
+</div>
+</div>
+<!-- Initiated -->
+<div class="relative z-10 flex gap-4">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-outline mt-0.5 shrink-0">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-button-text text-button-text text-on-surface">Initiated</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">14:31:48</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Customer redirected to UPI app.</p>
+</div>
+</div>
+<!-- Authorized -->
+<div class="relative z-10 flex gap-4">
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center border border-primary mt-0.5 shrink-0 neon-glow-primary">
+<span class="material-symbols-outlined text-[14px] text-on-primary-container" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-button-text text-button-text text-primary">Authorized</span>
+<span class="font-label-technical text-label-technical text-primary">14:32:01</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Funds blocked. Webhook <span class="font-label-technical text-label-technical bg-surface-container px-1 rounded">wh_auth_99</span> sent.</p>
+</div>
+</div>
+<!-- Captured -->
+<div class="relative z-10 flex gap-4 opacity-50">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-outline mt-0.5 shrink-0">
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-button-text text-button-text text-on-surface">Captured</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Awaiting manual or auto-capture.</p>
+</div>
+</div>
+<!-- Settled -->
+<div class="relative z-10 flex gap-4 opacity-50">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center border border-outline mt-0.5 shrink-0">
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-button-text text-button-text text-on-surface">Settled</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Funds transfer to merchant account.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Payment Attempts Table -->
+<div class="glass-panel rounded-lg w-full overflow-hidden">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
+<h3 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">swap_horiz</span>
+                        Routing &amp; Attempts
+                    </h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container rounded border border-outline-variant font-label-technical text-label-technical text-on-surface-variant">Total: 2 Attempts</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm whitespace-nowrap">
+<thead class="bg-surface-container text-on-surface-variant font-label-technical text-label-technical border-b border-outline-variant">
+<tr>
+<th class="px-4 py-3 font-medium">ATTEMPT</th>
+<th class="px-4 py-3 font-medium">GATEWAY</th>
+<th class="px-4 py-3 font-medium">METHOD</th>
+<th class="px-4 py-3 font-medium">STATUS</th>
+<th class="px-4 py-3 font-medium">RESPONSE / ERROR</th>
+<th class="px-4 py-3 font-medium text-right">LATENCY</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50">
+<!-- Attempt 1 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-3 font-label-technical text-label-technical">#1</td>
+<td class="px-4 py-3">PayU</td>
+<td class="px-4 py-3">UPI</td>
+<td class="px-4 py-3">
+<span class="px-2 py-0.5 rounded bg-error-container/20 text-error border border-error/50 font-label-technical text-label-technical">Failed</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant font-label-technical text-label-technical">ERR_BANK_TIMEOUT</td>
+<td class="px-4 py-3 text-right font-label-technical text-label-technical text-on-surface-variant">4500ms</td>
+</tr>
+<!-- Attempt 2 (Success) -->
+<tr class="hover:bg-surface-container-high transition-colors bg-secondary-container/5 border-l-2 border-secondary">
+<td class="px-4 py-3 font-label-technical text-label-technical">#2 (Auto-Retry)</td>
+<td class="px-4 py-3 font-medium text-on-surface">Razorpay</td>
+<td class="px-4 py-3">UPI</td>
+<td class="px-4 py-3">
+<span class="px-2 py-0.5 rounded bg-secondary-container/20 text-secondary border border-secondary/50 font-label-technical text-label-technical">Success</span>
+</td>
+<td class="px-4 py-3 text-on-surface-variant font-label-technical text-label-technical">200_OK_AUTH</td>
+<td class="px-4 py-3 text-right font-label-technical text-label-technical text-tertiary">850ms</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>

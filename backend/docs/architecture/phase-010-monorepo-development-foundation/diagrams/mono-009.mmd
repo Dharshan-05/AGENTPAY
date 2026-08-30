@@ -1,0 +1,6 @@
+graph TD
+    INTENT[Agent Tool Intent] --> GATE[6-Stage Policy Engine]
+    GATE --> RISK[FRAUDGUARD XGBoost Risk Model]
+    RISK --> DECISION{Decision ALLOW?}
+    DECISION -- YES --> SIGN[Issue Signed Authorization Token]
+    DECISION -- NO --> ESCALATE[Escalate to Human Approval Center]

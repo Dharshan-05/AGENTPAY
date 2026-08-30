@@ -1,0 +1,36 @@
+graph TD
+    subgraph External Actors
+        USER[Human Account Owner]
+        AGENT[Autonomous AI Agent]
+        MERCHANT[Commercial Payee / Merchant]
+        ADMIN[Security & Risk Operator]
+    end
+
+    subgraph AGENTPAY Platform Boundary
+        GW[API Gateway & Edge Auth]
+        ORCH[Agent Orchestrator]
+        GUARD[AGENTGUARD Security & Policy Engine]
+        FRAUD[FRAUDGUARD Explainable Risk Engine]
+        PAY[Payment Orchestrator]
+        AUDIT[Immutable Block Hash Audit Store]
+        DSH[Web Console & Approval Center]
+    end
+
+    subgraph Payment Infrastructure
+        RAZORPAY[Razorpay Payment Rails Sandbox / Live]
+        BANK[Bank & UPI Networks]
+    end
+
+    USER -->|Configures Policies & Responds to Approvals| DSH
+    AGENT -->|Submits Signed Payment Intent Payload| GW
+    ADMIN -->|Monitors Telemetry & Investigates Alerts| DSH
+    GW -->|Authenticates & Rates Limits| ORCH
+    ORCH -->|Evaluates Policy Rules| GUARD
+    GUARD -->|Extracts Features & Calculates Risk| FRAUD
+    FRAUD -->|Returns Decision & XAI Trace| GUARD
+    GUARD -->|If ALLOW / User Approved| PAY
+    PAY -->|Dispatches Payment Payload| RAZORPAY
+    RAZORPAY -->|Settles Funds| BANK
+    RAZORPAY -->|Webhook Callback| PAY
+    PAY -->|Appends Cryptographic Record| AUDIT
+    MERCHANT -->|Receives Settlement & Returns Receipt| PAY

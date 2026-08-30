@@ -1,0 +1,5 @@
+graph LR
+    API[apps/api] --> PG[(PostgreSQL)]
+    API --> REDIS[(Redis)]
+    WORKER[apps/worker] --> PG
+    WORKER --> REDIS

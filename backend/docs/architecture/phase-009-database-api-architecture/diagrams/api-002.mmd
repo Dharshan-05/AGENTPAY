@@ -1,0 +1,5 @@
+graph TD
+    REQ[HTTP Request] --> TLS[TLS 1.3 Termination]
+    TLS --> WAF[Web Application Firewall / Rate Limiter]
+    WAF --> CORS[CORS & Security Header Injection]
+    CORS --> ROUTE[Route to Backend Microservices]

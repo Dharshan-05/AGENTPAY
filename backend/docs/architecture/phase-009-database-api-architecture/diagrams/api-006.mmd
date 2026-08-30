@@ -1,0 +1,4 @@
+graph TD
+    CLIENT[Admin / User] --> API1[POST /api/v1/agents (Enroll Agent)]
+    CLIENT --> API2[GET /api/v1/agents (List Tenant Agents)]
+    CLIENT --> API3[POST /api/v1/agents/{id}/suspend (Emergency Suspend)]

@@ -1,0 +1,6 @@
+graph LR
+    INTENT[Payment Intent] --> FEAT[Extract 12-D Feature Vector]
+    FEAT --> MODEL[FRAUDGUARD XGBoost Classifier]
+    MODEL --> SCORE[Normalized Risk Score 0-100]
+    SCORE --> SHAP[SHAP Tree Explainer]
+    SHAP --> TEXT[Natural Language Explanation]

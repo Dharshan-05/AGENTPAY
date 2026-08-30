@@ -1,0 +1,5 @@
+graph TD
+    FAIL[Razorpay API Outage] --> CB{5 Consecutive 5xx Errors?}
+    CB -- YES --> OPEN[Open Circuit Breaker for 30s]
+    OPEN --> UNKNOWN[Mark Inflight Intents PAYMENT_STATUS_UNKNOWN]
+    UNKNOWN --> VERIFY[Execute Verification Job Before Any Retry]

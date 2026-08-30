@@ -1,0 +1,8 @@
+graph TD
+    FAILURE[AI / ML Microservice Outage] --> COND{Service Type?}
+    COND -- LLM API Timeout --> L1[Failover to Secondary Provider (Claude 3.5)]
+    L1 --> L2[Reload Task Checkpoint from Redis]
+    COND -- Risk Container Crash --> R1[Trigger AI Fail-Safe Fallback]
+    R1 --> R2[Execute Static Business Rules & Assign Minimum MEDIUM_RISK]
+    COND -- AGENTGUARD Outage --> G1[Gateway Circuit Breaker Triggers Fail Closed]
+    G1 --> G2[Reject Payment Intent Proposal with HTTP 503]

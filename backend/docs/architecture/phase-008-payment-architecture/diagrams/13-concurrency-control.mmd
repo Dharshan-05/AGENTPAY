@@ -1,0 +1,12 @@
+sequenceDiagram
+    autonumber
+    participant W1 as Worker 1
+    participant DB as PostgreSQL Database
+    participant W2 as Worker 2
+
+    W1->>DB: BEGIN & SELECT FOR UPDATE (Lock row)
+    W2->>DB: BEGIN & SELECT FOR UPDATE (Blocks waiting)
+    W1->>DB: UPDATE payment_intents SET status = 'PROCESSING'
+    W1->>DB: COMMIT (Releases lock)
+    DB-->>W2: Lock granted (Reads updated status 'PROCESSING')
+    W2->>DB: Status precondition fails -> Abort Worker 2 execution

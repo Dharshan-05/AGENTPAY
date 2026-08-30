@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> CREATED: User Enrolls Agent Principal
+    CREATED --> CONFIGURED: Assign Scopes & Budget Caps
+    CONFIGURED --> VERIFIED: HMAC Secret Keys Provisioned
+    VERIFIED --> ACTIVE: Agent Ready for Task Execution
+    ACTIVE --> SUSPENDED: Anomaly Flagged / Emergency Stop
+    ACTIVE --> REVOKED: Human User Revokes Agent Key
+    SUSPENDED --> ACTIVE: Owner Verification Complete
+    SUSPENDED --> REVOKED: Security Incident Confirmed
+    REVOKED --> [*]: Sub-10ms Purge Complete

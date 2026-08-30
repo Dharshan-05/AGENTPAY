@@ -1,0 +1,27 @@
+graph TD
+    subgraph Shared Application Tier
+        GW[API Gateway Middleware]
+        TENANT_CONTEXT[Tenant Context Injector]
+    end
+
+    subgraph Data Isolation Tier
+        subgraph Tenant A Workspace
+            A_AGENTS[Tenant A Agents]
+            A_POLICIES[Tenant A Policies]
+            A_INTENTS[Tenant A Intents (tenant_id == A)]
+        end
+        subgraph Tenant B Workspace
+            B_AGENTS[Tenant B Agents]
+            B_POLICIES[Tenant B Policies]
+            B_INTENTS[Tenant B Intents (tenant_id == B)]
+        end
+    end
+
+    subgraph Datastore Isolation (Row-Level Security)
+        PG_DB[(PostgreSQL Database)]
+        REDIS_CACHE[(Redis Key Namespacing: tenant_id:agent_id)]
+    end
+
+    GW --> TENANT_CONTEXT
+    TENANT_CONTEXT -->|Sets tenant_id in Session| A_AGENTS & B_AGENTS
+    A_AGENTS & B_AGENTS --> PG_DB & REDIS_CACHE

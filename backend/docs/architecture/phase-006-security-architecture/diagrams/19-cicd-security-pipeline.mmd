@@ -1,0 +1,8 @@
+graph LR
+    COMMIT[Git Commit Push] --> S1[Secret Scanning: TruffleHog]
+    S1 --> S2[SAST Code Scan: Semgrep]
+    S2 --> S3[Dependency Audit: npm / pip-audit]
+    S3 --> S4[Container CVE Scan: Trivy]
+    S4 --> GATE{All Security Gates Passed?}
+    GATE -- NO --> REJECT[Fail Pipeline Build]
+    GATE -- YES --> DEPLOY[Approve Production Deployment]

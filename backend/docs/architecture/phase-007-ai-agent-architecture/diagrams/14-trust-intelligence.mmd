@@ -1,0 +1,10 @@
+graph TD
+    SIGNALS[Historical Signals: Identity, Age, Behavior, Failure Rate] --> CALC[Trust Score Computation Engine]
+    CALC --> SCORE[Agent Trust Score 0-100]
+    SCORE --> T1{Score >= 90?}
+    T1 -- YES --> HIGH[High Trust: Auto-Approve up to Single Limit]
+    T1 -- NO --> T2{Score >= 70?}
+    T2 -- YES --> TRUSTED[Trusted: Standard Auto-Approval Limit]
+    T2 -- NO --> T3{Score >= 40?}
+    T3 -- YES --> MEDIUM[Medium Trust: Trigger Mandatory Risk Check]
+    T3 -- NO --> LOW[Low Trust: Hold for Human REVIEW or BLOCK]

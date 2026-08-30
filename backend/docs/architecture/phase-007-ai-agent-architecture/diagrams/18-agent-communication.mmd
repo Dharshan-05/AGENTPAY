@@ -1,0 +1,10 @@
+sequenceDiagram
+    autonumber
+    participant Sender as Sending Agent
+    participant Router as Inter-Agent Message Router
+    participant Receiver as Receiving Agent
+
+    Sender->>Router: POST Message Payload (Signed message_id & tenant_id)
+    Router->>Router: Verify Sender Signature & Receiver Capability Scope
+    Router->>Receiver: Deliver Authorized Payload
+    Receiver-->>Router: Acknowledge Message Receipt

@@ -1,0 +1,5 @@
+graph TD
+    ADMIN[Security Operator] --> TRIGGER[Toggle Emergency Kill Switch Flag]
+    TRIGGER --> REDIS[Set Redis Key: killswitch:tenant:123 = TRUE]
+    REDIS --> GW[API Gateway Ingress Checks Flag in < 10ms]
+    GW -- Flag True --> BLOCK[Reject Payment Proposals with HTTP 503]

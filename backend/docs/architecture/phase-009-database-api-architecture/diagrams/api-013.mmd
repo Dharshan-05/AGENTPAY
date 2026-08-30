@@ -1,0 +1,4 @@
+graph TD
+    APP[Payment Controller] --> POST[POST /api/v1/payments/execute]
+    POST --> VERIFY[Verify Authorization Token & Idempotency Key]
+    VERIFY --> DISPATCH[Dispatch Settlement to Razorpay Adapter]

@@ -1,0 +1,33 @@
+graph TD
+    subgraph Microservice Boundaries
+        SVC_GATEWAY[API Gateway Container]
+        SVC_AGENT[Agent Orchestrator Service]
+        SVC_GUARD[AGENTGUARD Security Service]
+        SVC_FRAUD[FRAUDGUARD Risk Service (Python FastAPI)]
+        SVC_PAYMENT[Payment Processing Service]
+        SVC_WORKER[Async Worker Service]
+    end
+
+    subgraph Internal Subsystems
+        HMAC_VERIFIER[HMAC Signature Verifier]
+        POLICY_ENGINE[6-Stage Policy Pipeline]
+        FEATURE_CALC[12-D Feature Processing Engine]
+        XGBOOST_MODEL[XGBoost Anomaly Scoring Model]
+        SHAP_EXPLAINER[SHAP Attribution Synthesizer]
+        STATE_MACHINE[14-State Transaction Machine]
+        RAZORPAY_CLIENT[Razorpay API Gateway Adapter]
+    end
+
+    SVC_GATEWAY --> HMAC_VERIFIER
+    HMAC_VERIFIER --> SVC_AGENT
+    SVC_AGENT --> SVC_GUARD
+    SVC_GUARD --> POLICY_ENGINE
+    POLICY_ENGINE --> SVC_FRAUD
+    SVC_FRAUD --> FEATURE_CALC
+    FEATURE_CALC --> XGBOOST_MODEL
+    XGBOOST_MODEL --> SHAP_EXPLAINER
+    SHAP_EXPLAINER --> SVC_GUARD
+    SVC_GUARD -->|Authorized Payload| SVC_PAYMENT
+    SVC_PAYMENT --> STATE_MACHINE
+    STATE_MACHINE --> RAZORPAY_CLIENT
+    SVC_PAYMENT --> SVC_WORKER

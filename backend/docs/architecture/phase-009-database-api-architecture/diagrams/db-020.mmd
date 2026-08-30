@@ -1,0 +1,6 @@
+graph TD
+    subgraph Transaction Boundary (BEGIN ... COMMIT)
+        T1[UPDATE payment_intents SET status = 'PROCESSING']
+        T2[INSERT INTO outbox_events]
+        T3[INSERT INTO audit_events]
+    end

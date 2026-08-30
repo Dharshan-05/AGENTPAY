@@ -1,0 +1,9 @@
+graph TD
+    GW[API Gateway Span] --> PLANNER[Planner Node Span]
+    PLANNER --> MODEL[Model Inference Span]
+    MODEL --> TOOL[Tool Execution Span]
+    TOOL --> GUARD[AGENTGUARD Policy Span]
+    GUARD --> RISK[FRAUDGUARD ML Span]
+
+    GW & PLANNER & MODEL & TOOL & GUARD & RISK --> OTEL[OpenTelemetry Collector (trace_id, agent_id)]
+    OTEL --> GRAFANA[Grafana Dashboard & Jaeger Trace Viewer]

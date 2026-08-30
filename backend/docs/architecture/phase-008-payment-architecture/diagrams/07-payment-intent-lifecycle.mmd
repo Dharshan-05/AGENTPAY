@@ -1,0 +1,8 @@
+stateDiagram-v2
+    [*] --> CREATED: Ingest Intent Proposal
+    CREATED --> VALIDATING: Schema Check
+    VALIDATING --> RISK_CHECK: AGENTGUARD Intercept
+    RISK_CHECK --> AUTHORIZED: Policy Pass
+    RISK_CHECK --> BLOCKED: Policy Breach
+    AUTHORIZED --> EXPIRED: 15m TTL Elapsed
+    AUTHORIZED --> PAYMENT_INITIATED: Dispatch Settlement

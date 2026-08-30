@@ -1,0 +1,3 @@
+graph TD
+    CLI[pnpm webhook:trigger] --> DISPATCH[Construct Signed Razorpay Payload]
+    DISPATCH --> INGRESS[POST /api/v1/webhooks/razorpay]

@@ -1,0 +1,31 @@
+graph LR
+    subgraph Inputs
+        INTENT[Payment Intent Payload]
+        RECS[Redis Velocity Counters]
+        HIST[PostgreSQL DB History]
+    end
+
+    subgraph Feature Processing Engine
+        FEAT[12-D Feature Vector Extraction]
+    end
+
+    subgraph ML Scoring Model
+        MODEL[XGBoost Anomaly Scoring Classifier]
+    end
+
+    subgraph XAI Engine
+        SHAP[SHAP Feature Attribution Sampler]
+        TEXT_GEN[Natural Language Text Synthesizer]
+    end
+
+    subgraph Decision Aggregator
+        AGG[Risk & Policy Decision Aggregator]
+    end
+
+    INTENT & RECS & HIST --> FEAT
+    FEAT --> MODEL
+    MODEL -->|Raw Risk Probability P_fraud| SHAP
+    SHAP -->|Top 3 Feature Weights| TEXT_GEN
+    TEXT_GEN -->|Natural Language Summary| AGG
+    MODEL -->|Normalized RISK SCORE 0-100| AGG
+    AGG -->|Outputs| DECISION[ALLOW / REVIEW / BLOCK + XAI Trace]

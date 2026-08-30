@@ -1,0 +1,37 @@
+{
+  "name": "agentpay-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "vitest run",
+    "test:unit": "vitest run --selectProjects unit",
+    "test:integration": "vitest run --selectProjects integration",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --build tsconfig.base.json",
+    "format": "prettier --write \".\"",
+    "format:check": "prettier --check \".\"",
+    "db:migrate": "pnpm --filter @agentpay/database db:migrate",
+    "db:seed": "pnpm --filter @agentpay/database db:seed",
+    "security:scan": "gitleaks detect --verbose",
+    "security:audit": "pnpm audit --prod"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.2.5",
+    "turbo": "^1.12.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  }
+}

@@ -1,0 +1,6 @@
+graph TD
+    REQ[API Ingress Request] --> KEY_CHK{Idempotency-Key Header Present?}
+    KEY_CHK -- NO --> ERR[HTTP 400 Bad Request]
+    KEY_CHK -- YES --> LOCK_CHK{Redis SETNX Lock Exists?}
+    LOCK_CHK -- YES --> RETURN_CACHED[Return Cached JSON Payload]
+    LOCK_CHK -- NO --> PROCESS[Process Request & Cache Response]

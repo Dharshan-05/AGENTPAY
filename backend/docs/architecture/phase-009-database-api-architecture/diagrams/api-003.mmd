@@ -1,0 +1,5 @@
+graph TD
+    AUTH_HEADER{Auth Header Type?}
+    AUTH_HEADER -- Bearer JWT --> JWT_VERIFY[Verify OAuth2 JWT Claims]
+    AUTH_HEADER -- X-Agent-Signature --> HMAC_VERIFY[Verify Agent HMAC-SHA256 Signature]
+    AUTH_HEADER -- x509 Cert --> MTLS_VERIFY[Verify mTLS Service Certificate]

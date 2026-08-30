@@ -1,0 +1,6 @@
+graph LR
+    INTENT[Payment Intent Proposal] --> FEAT[Extract 12-D Feature Vector]
+    FEAT --> MODEL[FRAUDGUARD XGBoost Anomaly Classifier]
+    MODEL --> SCORE[Normalized RISK SCORE 0-100]
+    SCORE --> SHAP[SHAP Feature Attribution Explainer]
+    SHAP --> TEXT[Natural Language Explanation Synthesizer]

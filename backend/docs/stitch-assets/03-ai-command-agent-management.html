@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay - AI Command &amp; Agent Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#0b1323",
+                      "on-background": "#dbe2f8",
+                      "tertiary": "#4cd7f6",
+                      "on-tertiary": "#003640",
+                      "error-container": "#93000a",
+                      "surface-dim": "#0b1323",
+                      "inverse-on-surface": "#283041",
+                      "primary": "#b4c5ff",
+                      "secondary-fixed": "#eaddff",
+                      "surface-container-low": "#131c2b",
+                      "inverse-surface": "#dbe2f8",
+                      "on-tertiary-fixed-variant": "#004e5c",
+                      "surface-bright": "#31394a",
+                      "surface-variant": "#2d3546",
+                      "on-tertiary-fixed": "#001f26",
+                      "surface-container": "#18202f",
+                      "on-primary": "#002a78",
+                      "on-surface-variant": "#c3c6d7",
+                      "surface-container-highest": "#2d3546",
+                      "tertiary-fixed": "#acedff",
+                      "on-secondary": "#3f008e",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "tertiary-fixed-dim": "#4cd7f6",
+                      "inverse-primary": "#0053db",
+                      "primary-container": "#2563eb",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "outline-variant": "#434655",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "error": "#ffb4ab",
+                      "on-secondary-container": "#c9aeff",
+                      "on-secondary-fixed": "#25005a",
+                      "surface": "#0b1323",
+                      "on-surface": "#dbe2f8",
+                      "on-tertiary-container": "#d7f6ff",
+                      "tertiary-container": "#00788c",
+                      "secondary-fixed-dim": "#d2bbff",
+                      "on-secondary-fixed-variant": "#5a00c6",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-lowest": "#060e1d",
+                      "secondary": "#d2bbff",
+                      "on-error": "#690005",
+                      "secondary-container": "#6001d1",
+                      "on-primary-container": "#eeefff",
+                      "surface-container-high": "#222a3a",
+                      "surface-tint": "#b4c5ff",
+                      "outline": "#8d90a0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "density-compact": "0.5rem",
+                      "density-comfortable": "1rem",
+                      "margin-safe": "1.5rem",
+                      "gutter": "1rem",
+                      "grid-columns": "12"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "button-text": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-technical": [
+                              "JetBrains Mono"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "button-text": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-technical": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glow-border {
+            box-shadow: 0 0 8px rgba(76, 215, 246, 0.3);
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        }
+        .glass-panel {
+            background: rgba(24, 32, 47, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        
+        /* Custom Scrollbar for Chat */
+        .chat-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: #434655;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-sm text-body-sm flex flex-col md:flex-row overflow-x-hidden">
+<!-- JSON Generated TopNavBar (Visible on Mobile, Hidden on Desktop where SideNav takes over logically, but keeping as header per standard layout if needed, adjusting per 'Platform & Layout' rules) -->
+<header class="fixed top-0 w-full z-[100] flex justify-between items-center px-margin-safe h-16 border-b border-outline-variant bg-surface-container-low shadow-sm md:hidden">
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">token</span>
+            AgentPay
+        </div>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:text-tertiary transition-colors duration-200">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-tertiary transition-colors duration-200">account_circle</span>
+</div>
+</header>
+<!-- JSON Generated SideNavBar (Hidden on Mobile, Visible on Desktop) -->
+<nav class="hidden md:flex flex-col p-density-comfortable z-50 fixed left-0 top-0 bottom-0 w-64 border-r border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center gap-3 mb-8 px-2 mt-4">
+<span class="material-symbols-outlined text-3xl text-primary" style="font-variation-settings: 'FILL' 1;">token</span>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight leading-tight">AgentPay AI</h1>
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase tracking-widest">Autonomous Finance</p>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container py-2 px-4 rounded-lg font-button-text text-button-text mb-6 flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">add</span> New Agent
+        </button>
+<ul class="flex flex-col gap-1 flex-1 font-label-technical text-label-technical">
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">payments</span> AgentPay
+                </a>
+</li>
+<li>
+<!-- Assuming AgentGuard is active for Agent Management context or Dashboard. Let's make Dashboard active for general view, or AgentGuard if this is specific. The prompt focuses on Agent Management. Let's make 'AgentPay' active as a default or Dashboard. The prompt says 'Agent Management (Panel 5)', which might be a sub-section of Dashboard or AgentGuard. Let's highlight AgentPay. -->
+<a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-bold shadow-[0_0_8px_rgba(76,215,246,0.3)] transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">security</span> AgentGuard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">shield</span> FraudGuard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Transactions
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant pt-4 flex flex-col gap-1 font-label-technical text-label-technical">
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span> Support
+            </a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pt-16 md:pt-0 p-gutter min-h-screen flex flex-col gap-gutter bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-surface-container-low via-background to-background">
+<!-- Top Search Bar (Desktop) -->
+<div class="hidden md:flex justify-between items-center mb-4 glass-panel p-3 rounded-xl border border-outline-variant">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-highest border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-sm focus:outline-none focus:border-tertiary focus:ring-1 focus:ring-tertiary transition-all" placeholder="Search anything... (products, agents, transactions)" type="text"/>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant font-label-technical text-label-technical">
+<span class="text-tertiary font-bold tracking-widest uppercase">Smarter Agents. Safer Payments.</span>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-6">
+<span class="material-symbols-outlined">api</span>
+<span>Powered by Razorpay</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter flex-1">
+<!-- Left Column: AI Command Interface (Panel 3 equivalent) -->
+<div class="lg:col-span-5 flex flex-col gap-gutter">
+<div class="bg-surface-container rounded-xl border border-outline-variant flex flex-col h-[600px] overflow-hidden relative">
+<!-- Subtle Header -->
+<div class="flex items-center justify-between p-4 border-b border-outline-variant bg-surface-container-low/50">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-container to-secondary-container flex items-center justify-center ai-glow">
+<span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+</div>
+<div>
+<h2 class="font-button-text text-button-text text-on-surface">AI AgentPay</h2>
+<p class="font-label-technical text-label-technical text-on-surface-variant">Your AI shopping assistant</p>
+</div>
+</div>
+<div class="flex gap-2 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">info</span></button>
+<button class="hover:text-error transition-colors"><span class="material-symbols-outlined text-sm">close</span></button>
+</div>
+</div>
+<!-- Chat Area -->
+<div class="flex-1 p-4 overflow-y-auto chat-scroll flex flex-col gap-6">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="bg-surface-variant rounded-2xl rounded-tr-sm p-3 max-w-[85%] border border-outline-variant">
+<p class="text-on-surface font-body-sm text-body-sm">Find me a laptop under ₹90,000 with good battery life and 16GB RAM</p>
+</div>
+</div>
+<!-- AI Response -->
+<div class="flex gap-3">
+<div class="w-6 h-6 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center mt-1">
+<span class="material-symbols-outlined text-white text-[10px]">smart_toy</span>
+</div>
+<div class="flex flex-col gap-3 max-w-[90%]">
+<p class="text-on-surface-variant text-body-sm">I found 5 great options for your budget. Here are the top recommendations:</p>
+<!-- Product Recommendation Card -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-4 glow-border transition-all hover:bg-surface-bright group cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+<div class="flex gap-4">
+<div class="w-20 h-16 bg-surface-container-low rounded-lg border border-outline-variant flex-shrink-0 relative overflow-hidden">
+<img class="object-cover w-full h-full opacity-80 mix-blend-screen" data-alt="A sleek, modern silver laptop half-open, displaying a vibrant abstract desktop wallpaper, floating slightly in a dark studio environment with dramatic rim lighting and a subtle blue reflection on the surface below." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQZswuO_vnF5Q5FiG1h54fBfqPvxh4dulVpl7n3d4mU-uWGXGrsYlpJKRIQDMOTgbzLtn9MuBDMIDQqg3s6RYFlye2JLyty3-DkG2RtdNLiNHAkC0gEDkDuQhWW9HA_mCc2iqsGcFckl4RtMdV8DJDms8TI29-fTq3akpA1j2QGm6q6lusa8sWx-wZO2xWwYb5rccTwF-g1ZKONXctBmi3nq1KiFViy5NFf22zcZc39j8_0mgIaTdK"/>
+</div>
+<div class="flex-1">
+<h3 class="font-button-text text-button-text text-on-surface mb-1">Lenovo IdeaPad Slim 5</h3>
+<div class="text-tertiary font-label-technical text-label-technical font-bold mb-2">₹72,990</div>
+<p class="font-label-technical text-label-technical text-on-surface-variant/70 mb-3">16GB RAM | 512GB SSD | 14" FHD | 12hr Battery</p>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-variant border border-outline-variant text-on-surface py-1.5 rounded-lg font-button-text text-[11px] flex items-center justify-center gap-1 hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span> View Details
+                                                </button>
+<button class="flex-1 bg-surface-variant border border-outline-variant text-on-surface py-1.5 rounded-lg font-button-text text-[11px] flex items-center justify-center gap-1 hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-[14px]">compare_arrows</span> Compare
+                                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 border-t border-outline-variant bg-surface-container-low relative">
+<div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-secondary/30 to-transparent"></div>
+<div class="relative">
+<input class="w-full bg-surface-container-highest border border-outline-variant rounded-xl py-3 pl-4 pr-12 text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Type your message..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-primary-container rounded-lg flex items-center justify-center hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-on-primary-container text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Agent Management Grid (Panel 5 equivalent) -->
+<div class="lg:col-span-7 flex flex-col gap-gutter">
+<div class="bg-surface-container rounded-xl border border-outline-variant p-5 flex flex-col h-full">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">groups</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Agent Management</h2>
+</div>
+<button class="bg-primary-container text-on-primary-container py-1.5 px-3 rounded-lg font-button-text text-button-text flex items-center gap-1 hover:bg-opacity-90 transition-all text-sm">
+<span class="material-symbols-outlined text-sm">add</span> Create Agent
+                        </button>
+</div>
+<!-- Bento Grid for Agents -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+<!-- Shopping Agent Card -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-4 flex flex-col relative group overflow-hidden transition-all hover:border-tertiary/50">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-button-text text-button-text text-on-surface flex items-center gap-2">Your Agents <span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-on-surface">info</span></h3>
+</div>
+<div class="bg-tertiary/10 border border-tertiary/30 text-tertiary px-2 py-0.5 rounded flex items-center gap-1 font-label-technical text-[10px] tracking-wider uppercase">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></div> Active
+                                </div>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary p-0.5 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="A futuristic 3D avatar of a friendly robotic assistant, predominantly white with glowing cyan accents, rendered in a smooth, premium high-gloss finish against a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtFAOSADfVW7I-jf8Pj1wWlPOVZmY7lVIcLDOiOjtFe9GU3H5Kg2EhkN7ysBl7PyspADlIoDwmPu9_426yX7owFaTIROf6ANsJZVA60AGV855EXPcQKBdywNlb1B8uBbhE9AFPtNOxub7Jz6IgjnmZbv66Ls4OJOZSVYiFkU5XhZkZKdeHVeu6F4rji41IUOCVFULdBsVvA4vk-17hvozSE-BJm9vX_FevPL1cwTLtDOBvSfhgSTZ7"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end">
+<div class="font-label-technical text-label-technical text-on-surface-variant">Trust Score</div>
+<div class="font-button-text text-button-text text-tertiary text-lg">92</div>
+</div>
+<!-- Trust Score Bar -->
+<div class="h-1 w-full bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-[92%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto font-label-technical text-[10px] text-on-surface-variant flex justify-between border-t border-outline-variant pt-2">
+<span>Last Active: 2m ago</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+</div>
+<!-- Research Agent Card -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-4 flex flex-col relative group overflow-hidden transition-all hover:border-tertiary/50">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-button-text text-button-text text-on-surface flex items-center gap-2">Research Agent <span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-on-surface">info</span></h3>
+</div>
+<div class="bg-tertiary/10 border border-tertiary/30 text-tertiary px-2 py-0.5 rounded flex items-center gap-1 font-label-technical text-[10px] tracking-wider uppercase">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></div> Active
+                                </div>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary p-0.5 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="A sleek 3D render of an abstract female android head, dark metallic gray with luminescent purple and blue circuits tracing its surface, portraying analytical intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGFBx8diNrsajbgX1izZkIC8GE-Z7rU--W8ufQKb7hgaAKOn40HoGwLQM4QiqmfFkErokaNu_M8idQaKR78ujPq8S-rvOT4fre7j94yjQsed5icyqJfZiYQsDWO99qZqYTG5Qp5-BJE_QEwvxmlfTN9yQWe3SgCzCDJ5MsyHYxQu23mXWW_NNz8-_2ujzzexJjn0WcOTWCF2xSHHDNtIquZ7qlRbASX8-K1rcMoe-1wOrMJ8J_Q_DV"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end">
+<div class="font-label-technical text-label-technical text-on-surface-variant">Trust Score</div>
+<div class="font-button-text text-button-text text-tertiary text-lg">87</div>
+</div>
+<!-- Trust Score Bar -->
+<div class="h-1 w-full bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-[87%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto font-label-technical text-[10px] text-on-surface-variant flex justify-between border-t border-outline-variant pt-2">
+<span>Last Active: 12m ago</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+</div>
+<!-- Finance Agent Card (Suspended) -->
+<div class="bg-surface-container-highest border border-error/50 rounded-xl p-4 flex flex-col relative group overflow-hidden transition-all bg-error/5">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-button-text text-button-text text-on-surface flex items-center gap-2">Finance Agent <span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-on-surface">info</span></h3>
+</div>
+<div class="bg-error/10 border border-error/30 text-error px-2 py-0.5 rounded flex items-center gap-1 font-label-technical text-[10px] tracking-wider uppercase">
+<span class="material-symbols-outlined text-[10px]">block</span> Suspended
+                                </div>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full border-2 border-error p-0.5 relative grayscale opacity-70">
+<img class="w-full h-full rounded-full object-cover" data-alt="A rigid, geometric 3D robot face resembling a classic bank vault door but modernised, dark gunmetal finish, with dim, deactivated red optical sensors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA13aYL_sIQoO7SL-XGu4foVR9OiNnJzlzwcuZVR2b3_RIb9qLXtRzxL67yZ2eZ1alsCpjLihwHIAGBVHjAXIRKBuweEy1r0r1KAFuAZYAPOKbSDPuUcmAw9nOqJt_9BwFfHXKBYEOMmzHhhOPvONlnanjjorrsRoAyX41zwF1L7njsKU7qoJCG-stZWUGjS58T4GT1ggYLstZH65xg98veHjBDHwA8iB56dVYCTSRC8TclHZLGt6CD"/>
+</div>
+<div class="flex-1 opacity-70">
+<div class="flex justify-between items-end">
+<div class="font-label-technical text-label-technical text-on-surface-variant">Trust Score</div>
+<div class="font-button-text text-button-text text-error text-lg">54</div>
+</div>
+<!-- Trust Score Bar -->
+<div class="h-1 w-full bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-error rounded-full w-[54%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto font-label-technical text-[10px] text-error flex justify-between border-t border-outline-variant pt-2">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">warning</span> Action Required</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-on-surface text-on-surface-variant">more_horiz</span>
+</div>
+</div>
+<!-- Travel Agent Card -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-4 flex flex-col relative group overflow-hidden transition-all hover:border-tertiary/50">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-button-text text-button-text text-on-surface flex items-center gap-2">Travel Agent <span class="material-symbols-outlined text-[14px] text-on-surface-variant cursor-pointer hover:text-on-surface">info</span></h3>
+</div>
+<div class="bg-tertiary/10 border border-tertiary/30 text-tertiary px-2 py-0.5 rounded flex items-center gap-1 font-label-technical text-[10px] tracking-wider uppercase">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></div> Active
+                                </div>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary p-0.5 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="A minimalist 3D rendering of an AI persona resembling an aviator, holographic light blue wireframe structure over a dark core, symbolizing global connectivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFsZr3E1BeLslesAbydMqHQ3sMkwVNmF5ot6JMK4koz_ay4xjEjH866_jdT4KMjv5d8-MijIbsavf8D116YMUljQy8nkghidPhtZk9LT4Dk4ZOCzI6_nMayo_kO6WQDEpEkFK4ByNOoetN2gYNcy9T6fwXqIp6FHlFjQWoO00MHrKI1UiIuFKFS9qkM02WeI0HwIr-cU8hB19ZYQmBPR7gk1_adJbPB19ZwTzEFLUjtShiJKAHM29J"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end">
+<div class="font-label-technical text-label-technical text-on-surface-variant">Trust Score</div>
+<div class="font-button-text text-button-text text-tertiary text-lg">90</div>
+</div>
+<!-- Trust Score Bar -->
+<div class="h-1 w-full bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-[90%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto font-label-technical text-[10px] text-on-surface-variant flex justify-between border-t border-outline-variant pt-2">
+<span>Last Active: 1h ago</span>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-on-surface">more_horiz</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- JSON Generated Footer (Adjusted per standard layout) -->
+<footer class="md:ml-64 w-full flex flex-col md:flex-row justify-between items-center px-margin-safe py-density-compact mt-auto border-t border-outline-variant bg-surface-container-lowest">
+<div class="font-label-technical text-label-technical uppercase tracking-widest text-primary mb-2 md:mb-0">
+            © 2024 AgentPay Autonomous Systems. Secure AI Payment Platform.
+        </div>
+<ul class="flex gap-4 font-body-sm text-body-sm text-on-surface-variant">
+<li><a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Terms of Service</a></li>
+<li><a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Security Standards</a></li>
+<li><a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">API Reference</a></li>
+</ul>
+</footer>
+</body></html>

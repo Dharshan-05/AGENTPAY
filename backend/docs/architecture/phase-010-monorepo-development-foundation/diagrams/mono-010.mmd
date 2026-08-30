@@ -1,0 +1,4 @@
+graph TD
+    CRON[Outbox Poller Interval 1s] --> QUERY[Query outbox_events WHERE status = 'PENDING']
+    QUERY --> DISPATCH[Publish Domain Event to Redis Bus]
+    DISPATCH --> MARK[UPDATE status = 'PUBLISHED']

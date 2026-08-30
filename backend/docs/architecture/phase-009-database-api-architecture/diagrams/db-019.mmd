@@ -1,0 +1,3 @@
+graph LR
+    OUTBOX[outbox_events] --> WORKER[Outbox Publisher]
+    WORKER --> DELIVERIES[event_deliveries (Idempotent State)]

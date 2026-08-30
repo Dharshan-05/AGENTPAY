@@ -1,0 +1,16 @@
+graph TD
+    AGENT[AI Agent Request] --> GW[API Gateway Validation]
+    GW --> LOCK{Acquire Redis Idempotency Lock}
+    LOCK -- Acquired --> GUARD[AGENTGUARD Policy Check]
+    GUARD --> FRAUD[FRAUDGUARD Feature & ML Scoring]
+    FRAUD --> XAI[XAI Explanation Synthesis]
+    XAI --> DECISION{Decision Gate}
+    DECISION -- ALLOW --> EXEC[Payment Settlement Execution]
+    DECISION -- REVIEW --> QUEUE[Approval Queue & Notification]
+    DECISION -- BLOCK --> LOG_BLOCK[Write Block Audit Entry]
+    QUEUE --> HUMAN[Human Approval Action]
+    HUMAN -- Approved --> EXEC
+    HUMAN -- Rejected --> LOG_REJECT[Write Rejection Audit Entry]
+    EXEC --> DB_WRITE[Write Relational Intent Record]
+    DB_WRITE --> AUDIT_HASH[Compute SHA-256 Block Hash: H_n = SHA256(H_n-1 || Payload)]
+    AUDIT_HASH --> AUDIT_DB[(Append-Only Audit Log Table)]

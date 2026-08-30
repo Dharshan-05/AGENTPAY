@@ -1,0 +1,6 @@
+graph TD
+    GW[API Gateway Span] --> CTRL[API Controller Span]
+    CTRL --> SERVICE[Application Service Span]
+    SERVICE --> DB[PostgreSQL Query Span]
+
+    GW & CTRL & SERVICE & DB --> OTEL[OpenTelemetry Collector (traceparent)]

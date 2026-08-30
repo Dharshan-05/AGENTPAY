@@ -1,0 +1,8 @@
+graph TD
+    SUITE[Model & Prompt Evaluation Suite] --> TEST1[40 Injection Attack Vectors]
+    SUITE --> TEST2[Synthetic Fraud Dataset Precision]
+    SUITE --> TEST3[Tool Argument Schema Validation]
+
+    TEST1 & TEST2 & TEST3 --> METRICS{Evaluate Metrics: Pass 100% Injections & F1 >= 0.95?}
+    METRICS -- YES --> PASS[Approve Production Deployment]
+    METRICS -- NO --> REJECT[Block Build Pipeline]

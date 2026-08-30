@@ -1,0 +1,8 @@
+graph TD
+    GW[API Gateway Span] --> INTENT[Intent Service Span]
+    INTENT --> GUARD[AGENTGUARD Policy Span]
+    GUARD --> ORCH[Orchestrator Span]
+    ORCH --> RZP[Razorpay Adapter Span]
+
+    GW & INTENT & GUARD & ORCH & RZP --> OTEL[OpenTelemetry Collector (trace_id, payment_id)]
+    OTEL --> DASHBOARD[Grafana & Jaeger Telemetry Viewer]

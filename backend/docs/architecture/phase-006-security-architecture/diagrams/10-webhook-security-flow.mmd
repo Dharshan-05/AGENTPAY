@@ -1,0 +1,10 @@
+graph TD
+    WEBHOOK[Incoming Webhook Request] --> S1{Verify X-Razorpay-Signature HMAC}
+    S1 -- Invalid --> REJECT1[HTTP 401 Unauthorized]
+    S1 -- Valid --> S2{Verify IP / ASN Whitelist}
+    S2 -- Invalid --> REJECT2[HTTP 403 Forbidden]
+    S2 -- Valid --> S3{Check Event ID Idempotency}
+    S3 -- Duplicate --> ACK[HTTP 200 OK (Cached Processing)]
+    S3 -- New --> S4{Validate Transaction State Transition}
+    S4 -- Invalid Transition --> REJECT3[HTTP 422 Unprocessable Entity]
+    S4 -- Valid Transition --> PROCESS[Reconcile Record & Append SHA-256 Audit Block]

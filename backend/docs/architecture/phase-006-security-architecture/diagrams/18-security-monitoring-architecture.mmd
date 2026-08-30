@@ -1,0 +1,10 @@
+graph TD
+    GW[API Gateway] --> LOG[Structured JSON Logger]
+    GUARD[AGENTGUARD Engine] --> LOG
+    FRAUD[FRAUDGUARD AI Service] --> LOG
+    PAYMENT[Payment Service] --> LOG
+
+    LOG --> SIEM[SIEM Event Processor / Elasticsearch]
+    SIEM --> ALERT{Severity >= P1?}
+    ALERT -- YES --> PAGER[PagerDuty / Mobile Push Security Alert]
+    ALERT -- NO --> DASH[Grafana Security Operations Dashboard]

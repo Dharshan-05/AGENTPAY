@@ -1,0 +1,22 @@
+{
+  "name": "@agentpay/worker",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "@agentpay/config": "workspace:*",
+    "@agentpay/database": "workspace:*",
+    "@agentpay/events": "workspace:*",
+    "@agentpay/observability": "workspace:*",
+    "@agentpay/payments": "workspace:*",
+    "@agentpay/types": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

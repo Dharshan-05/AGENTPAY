@@ -1,0 +1,8 @@
+graph TD
+    TOOL_REQ[Agent Tool Invocation Call] --> CHK_SCOPE{Has Required Capability Scope?}
+    CHK_SCOPE -- NO --> FAIL1[ERR_SCOPE_DENIED]
+    CHK_SCOPE -- YES --> CHK_SCHEMA{Matches Required JSON Schema?}
+    CHK_SCHEMA -- NO --> FAIL2[ERR_INVALID_TOOL_SCHEMA]
+    CHK_SCHEMA -- YES --> CHK_LIMIT{Within Rate Limits?}
+    CHK_LIMIT -- NO --> FAIL3[ERR_TOOL_RATE_LIMITED]
+    CHK_LIMIT -- YES --> EXEC[Execute Tool & Sanitize Output Payload]

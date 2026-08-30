@@ -1,0 +1,6 @@
+graph TD
+    QUERY[User Query / Search Request] --> EMBED[Generate Embedding: text-embedding-3-small]
+    EMBED --> SIM[pgvector Cosine Similarity Search]
+    SIM --> RERANK[Cross-Encoder Reranker]
+    RERANK --> FILTER[Filter by tenant_id & RLS Policy]
+    FILTER --> CONTEXT[Inject Context into LLM Prompt]

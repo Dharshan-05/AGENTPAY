@@ -1,0 +1,6 @@
+graph TD
+    HOOK[Razorpay Webhook Payload] --> SIG{HMAC-SHA256 Signature Valid?}
+    SIG -- NO --> REJECT[HTTP 401 Unauthorized]
+    SIG -- YES --> DUP{Event ID Exists in Redis?}
+    DUP -- YES --> IGNORE[HTTP 200 OK (Skip Processing)]
+    DUP -- NO --> QUEUE[Push to Async Worker Queue]

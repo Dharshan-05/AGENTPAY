@@ -1,0 +1,6 @@
+graph TD
+    PUSH[Git Push / PR] --> LINT[Job 1: Lint & Format Check]
+    LINT --> TYPE[Job 2: TypeScript Typecheck]
+    TYPE --> SEC[Job 3: Security & Secret Scan]
+    SEC --> TEST[Job 4: Vitest & Supertest Integration]
+    TEST --> BUILD[Job 5: Monorepo Production Build]

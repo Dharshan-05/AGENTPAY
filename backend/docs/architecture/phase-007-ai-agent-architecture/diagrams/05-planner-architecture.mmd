@@ -1,0 +1,7 @@
+graph TD
+    GOAL[User Commerce Goal] --> DECOMPOSE[Task Decomposition Engine]
+    DECOMPOSE --> STEPS[Generate Step Array]
+    STEPS --> S1[Step 1: Product Search]
+    STEPS --> S2[Step 2: Cart Assembly]
+    STEPS --> S3[Step 3: Intent Proposal]
+    S1 & S2 & S3 --> VALIDATE_PLAN[Schema & Capability Validation Engine]

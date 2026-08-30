@@ -1,0 +1,5 @@
+graph TD
+    REQ[API Ingress Request] --> JWT{Bearer Token?}
+    JWT -- YES --> VERIFY_JWT[Verify OAuth2 JWT Signature & Claims]
+    JWT -- NO --> HMAC{X-Agent-Signature?}
+    HMAC -- YES --> VERIFY_HMAC[Verify Agent HMAC-SHA256 Signature]

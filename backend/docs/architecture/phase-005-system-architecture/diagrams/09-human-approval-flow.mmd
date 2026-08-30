@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    participant Guard as AGENTGUARD Decision Engine
+    participant Queue as Approval Queue (Redis/DB)
+    participant Push as WebSocket Push Service
+    actor User as Human Owner
+    participant UI as Approval Center UI
+    participant Payment as Payment Service
+
+    Guard->>Queue: Intent State -> PENDING_APPROVAL (TTL: 15m)
+    Queue->>Push: Emit Real-Time Escalation Event
+    Push-->>UI: Render Interactive Approval Card (RISK SCORE & XAI Text)
+    Push-->>User: Mobile Push / Dashboard Alert
+    User->>UI: Inspects XAI Trace & Clicks "APPROVE"
+    UI->>Queue: POST /api/v1/approvals/intent_123/action (Action: APPROVE)
+    Queue->>Queue: Acquire Atomic Idempotent Action Lock
+    Queue->>Payment: Transition State -> AUTHORIZED
+    Payment->>Payment: Resume Payment Execution Pipeline
+    Payment-->>UI: Execution Confirmed (Payment ID: pay_456)

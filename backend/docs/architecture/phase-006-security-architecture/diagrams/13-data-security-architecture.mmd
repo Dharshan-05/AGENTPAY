@@ -1,0 +1,8 @@
+graph TD
+    APP[Application Tier Request] --> TLS[TLS 1.3 Wire Encryption]
+    TLS --> RLS{PostgreSQL Row-Level Security Check}
+    RLS -- Tenant Match --> WRITE[Write Relational Data Record]
+    RLS -- Tenant Mismatch --> DENY[Database Privilege Error]
+    WRITE --> AES[AES-256-GCM Volume Encryption]
+    WRITE --> BLOCK_HASH[Compute SHA-256 Block Hash: H_n = SHA256(H_n-1 || Data)]
+    BLOCK_HASH --> AUDIT_TABLE[(Append-Only Audit Log Table)]

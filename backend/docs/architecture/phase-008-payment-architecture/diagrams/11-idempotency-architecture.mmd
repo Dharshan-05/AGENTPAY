@@ -1,0 +1,5 @@
+graph TD
+    REQ[Client Payment Request (Idempotency-Key Header)] --> CHK_REDIS{Redis SETNX Lock Exists?}
+    CHK_REDIS -- YES (Identical) --> CACHED[Return Cached Response Immediately]
+    CHK_REDIS -- YES (Mismatched) --> ERR[HTTP 409 Conflict]
+    CHK_REDIS -- NO --> EXEC[Acquire 24h Lock & Process Transaction]

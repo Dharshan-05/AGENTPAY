@@ -1,0 +1,4 @@
+graph TD
+    AUTH_CONTEXT[Authenticated Identity Context] --> RBAC[Role Check: ADMIN | USER | AGENT]
+    RBAC --> SCOPE[Capability Check: spend:intent_create]
+    SCOPE --> ABAC[ABAC Context Check: Spending Limit & MCC]

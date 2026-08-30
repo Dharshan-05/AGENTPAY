@@ -1,0 +1,3 @@
+graph TD
+    ADMIN[Tenant Admin] --> POST[POST /api/v1/policies/versions (Create Version)]
+    POST --> ACTIVATE[POST /api/v1/policies/versions/{v}/activate (Set Active)]

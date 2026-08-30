@@ -1,0 +1,5 @@
+graph TD
+    APP[Application Cluster] --> POOL[PgBouncer Connection Pooler]
+    POOL -->|Writes| PRIMARY[PostgreSQL Primary Writer Node]
+    POOL -->|Reads| REPLICA1[Read Replica 1]
+    POOL -->|Reads| REPLICA2[Read Replica 2]

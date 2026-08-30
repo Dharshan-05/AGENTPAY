@@ -1,0 +1,4 @@
+erDiagram
+    PAYMENT_INTENTS ||--o| PAYMENT_AUTHORIZATIONS : authorizes
+    PAYMENT_AUTHORIZATIONS ||--o| PAYMENTS : settles
+    PAYMENTS ||--o{ PAYMENT_ATTEMPTS : attempts

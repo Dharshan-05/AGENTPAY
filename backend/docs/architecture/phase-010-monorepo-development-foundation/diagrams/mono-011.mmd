@@ -1,0 +1,4 @@
+graph TD
+    CLI[pnpm db:migrate] --> PKG[@agentpay/database Migration Runner]
+    PKG --> SQL[Execute DDL SQL Migration Scripts]
+    SQL --> PG[(Containerized PostgreSQL)]

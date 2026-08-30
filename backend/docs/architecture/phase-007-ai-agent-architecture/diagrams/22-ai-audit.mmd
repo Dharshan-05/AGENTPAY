@@ -1,0 +1,4 @@
+graph TD
+    EVENT[AI Authorization Event] --> HEADER[Build Block Header: PrevHash || Timestamp || AgentID || PromptVersion || RiskScore]
+    HEADER --> HASH[Compute SHA-256 Block Hash: H_n]
+    HASH --> DB[(PostgreSQL audit_logs Table)]

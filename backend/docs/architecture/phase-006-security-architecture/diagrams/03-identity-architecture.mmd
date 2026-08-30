@@ -1,0 +1,13 @@
+graph TD
+    subgraph Identity Principals
+        U[Human Owner: user_id]
+        A[AI Agent: agent_id]
+        M[Merchant: merchant_id]
+        T[Tenant: tenant_id]
+        S[System Service: service_id]
+    end
+
+    U -->|Owns & Authorizes| A
+    U -->|Belongs to| T
+    A -->|Initiates Intents for| T
+    M -->|Receives Payments from| T

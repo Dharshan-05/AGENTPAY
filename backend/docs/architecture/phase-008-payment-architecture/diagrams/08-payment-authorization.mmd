@@ -1,0 +1,5 @@
+graph TD
+    GUARD[AGENTGUARD Decision Engine] --> ISSUE[Generate Signed Auth Context Token]
+    ISSUE --> CACHE[Cache Token in Redis with 15m TTL]
+    CACHE --> ORCH[Payment Orchestrator Verification]
+    ORCH --> EVICT[Evict Token from Redis (Single-Use)]

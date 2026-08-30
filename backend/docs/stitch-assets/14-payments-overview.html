@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay - Payments Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "surface-dim": "#0b1323",
+                        "on-secondary-container": "#c9aeff",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#434655",
+                        "primary-container": "#2563eb",
+                        "primary": "#b4c5ff",
+                        "surface-container-high": "#222a3a",
+                        "inverse-on-surface": "#283041",
+                        "surface-tint": "#b4c5ff",
+                        "on-tertiary": "#003640",
+                        "tertiary-fixed": "#acedff",
+                        "secondary": "#d2bbff",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "surface-container": "#18202f",
+                        "tertiary": "#4cd7f6",
+                        "surface": "#0b1323",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#dbe2f8",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-secondary-fixed": "#25005a",
+                        "surface-container-highest": "#2d3546",
+                        "surface-bright": "#31394a",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#001f26",
+                        "background": "#0b1323",
+                        "outline": "#8d90a0",
+                        "surface-container-lowest": "#060e1d",
+                        "on-background": "#dbe2f8",
+                        "tertiary-container": "#00788c",
+                        "inverse-primary": "#0053db",
+                        "primary-fixed": "#dbe1ff",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#eaddff",
+                        "on-primary": "#002a78",
+                        "on-secondary": "#3f008e",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c3c6d7",
+                        "secondary-container": "#6001d1",
+                        "on-tertiary-container": "#d7f6ff",
+                        "surface-container-low": "#131c2b",
+                        "surface-variant": "#2d3546",
+                        "inverse-surface": "#dbe2f8"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "density-compact": "0.5rem",
+                        "density-comfortable": "1rem",
+                        "grid-columns": "12",
+                        "margin-safe": "1.5rem",
+                        "gutter": "1rem"
+                    },
+                    fontFamily: {
+                        "label-technical": ["JetBrains Mono"],
+                        "button-text": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "label-technical": ["11px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "button-text": ["14px", { lineHeight: "20px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "headline-xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .neon-border {
+            box-shadow: 0 0 8px 0 rgba(180, 197, 255, 0.2);
+            border-color: rgba(180, 197, 255, 0.4);
+        }
+        .neon-text-glow {
+            text-shadow: 0 0 10px rgba(76, 215, 246, 0.6);
+        }
+        .ai-processing-border {
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(76, 215, 246, 0.4); border-color: rgba(76, 215, 246, 0.5); }
+            70% { box-shadow: 0 0 0 6px rgba(76, 215, 246, 0); border-color: rgba(76, 215, 246, 0.2); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 215, 246, 0); border-color: rgba(76, 215, 246, 0.5); }
+        }
+        /* Grid background pattern */
+        .bg-grid-pattern {
+            background-size: 24px 24px;
+            background-image: linear-gradient(to right, rgba(67, 70, 85, 0.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(67, 70, 85, 0.1) 1px, transparent 1px);
+        }
+        
+        /* Chart specific */
+        .chart-area-gradient {
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased bg-grid-pattern">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant py-density-comfortable z-40">
+<div class="px-margin-safe mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-DEFAULT bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]" data-icon="terminal">terminal</span>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tighter">AgentPay</h1>
+<p class="font-label-technical text-label-technical text-on-surface-variant">Ops Console</p>
+</div>
+</div>
+</div>
+<div class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-button-text text-button-text">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-primary bg-primary-container/10 border-r-2 border-primary cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="payments" data-weight="fill">payments</span>
+<span class="font-button-text text-button-text">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-button-text text-button-text">Merchants</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-button-text text-button-text">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-button-text text-button-text">Settings</span>
+</a>
+</div>
+<div class="px-3 mt-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span class="font-button-text text-button-text">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-button-text text-button-text">Account</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface/90 backdrop-blur-md border-b border-outline-variant flex items-center justify-between px-margin-safe z-30 transition-all duration-200">
+<div class="flex items-center md:hidden">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tighter mr-4">AgentPay</span>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<!-- Navigation links handled in SideNav on desktop, but placeholder from JSON schema -->
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors" href="#">Operations</a>
+<a class="font-button-text text-button-text text-primary font-bold" href="#">Payments</a>
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors" href="#">Details</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex relative items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]" data-icon="search">search</span>
+<input class="bg-surface-container-low border border-outline-variant rounded-DEFAULT py-1.5 pl-9 pr-3 text-body-sm text-on-surface focus:outline-none focus:border-tertiary focus:ring-1 focus:ring-tertiary transition-all w-48 placeholder:text-on-surface-variant/50" placeholder="Search Txn ID..." type="text"/>
+</div>
+<button class="hidden md:flex items-center gap-2 bg-primary-container/10 border border-primary text-primary px-3 py-1.5 rounded-DEFAULT font-button-text text-button-text hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                Export CSV
+            </button>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-4 ml-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full ml-2 border border-outline-variant object-cover" data-alt="A futuristic avatar of a network administrator, minimalist high-tech style, glowing cyan accents on a dark navy background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLHML-64E35qEWxnTBFDpZ9W_adZr-JKPqIdhGQSf0aDIN792y7-T-ZIr7tDd8qmkyKULrIV-wSPpanhdfytrcX7DJZQbTgsUbBKXOaPWxCaQ6JDfkGCWfMzEjkMj7wREBzALDq8mOMMDpaql6HKjB_oaNcFOuqWgMizEUmDH1nenvEpPUQePVyReLyyqaKv__IPpIob0Uh2bsO-cz_oZ6Xmikz9Vo2waDSP8Ey-RTqsbUw0cNkjji"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full md:ml-64 pt-16 pb-24 md:pb-8 px-4 md:px-margin-safe max-w-[1600px] mx-auto overflow-x-hidden">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between py-8 gap-4">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary mb-2">Payments</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Monitor and manage payment activity across the platform</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 bg-surface-container border border-outline-variant text-on-surface px-4 py-2 rounded-DEFAULT font-button-text text-button-text hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                    Filters
+                </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-DEFAULT font-button-text text-button-text hover:bg-primary/90 transition-colors shadow-[0_0_12px_rgba(180,197,255,0.3)]">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                    New Payment
+                </button>
+</div>
+</div>
+<!-- Metric Cards Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Total Payments</span>
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface mb-1">₹48.6 Cr</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-tertiary">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span>+12.4% vs last week</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 relative overflow-hidden group hover:border-tertiary/50 transition-colors">
+<div class="absolute top-0 right-0 w-24 h-24 bg-tertiary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Successful Payments</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="check_circle">check_circle</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface mb-1">1.82M</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-tertiary">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span>+5.2% vs last week</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 relative overflow-hidden group hover:border-error/50 transition-colors">
+<div class="absolute top-0 right-0 w-24 h-24 bg-error/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Failed Payments</span>
+<span class="material-symbols-outlined text-error" data-icon="error">error</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface mb-1">24.7K</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-error">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_down">trending_down</span>
+<span>-1.5% vs last week</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 relative overflow-hidden group ai-processing-border">
+<div class="absolute top-0 right-0 w-24 h-24 bg-secondary/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Success Rate</span>
+<span class="material-symbols-outlined text-secondary" data-icon="donut_large">donut_large</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface mb-1">96.8%</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span>AI Target: 98.0%</span>
+</div>
+</div>
+</div>
+<!-- Main Chart Area -->
+<div class="bg-surface-container border border-outline-variant rounded-lg mb-6 overflow-hidden">
+<div class="p-5 border-b border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h2 class="font-button-text text-button-text text-on-surface mb-1">Payment Volume Trend</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time transaction flow analysis</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-highest p-1 rounded-DEFAULT border border-outline-variant">
+<button class="px-3 py-1 font-label-technical text-label-technical rounded-sm text-on-surface-variant hover:text-on-surface transition-colors">1H</button>
+<button class="px-3 py-1 font-label-technical text-label-technical rounded-sm bg-surface-variant text-on-surface shadow-sm">24H</button>
+<button class="px-3 py-1 font-label-technical text-label-technical rounded-sm text-on-surface-variant hover:text-on-surface transition-colors">7D</button>
+<button class="px-3 py-1 font-label-technical text-label-technical rounded-sm text-on-surface-variant hover:text-on-surface transition-colors">30D</button>
+</div>
+</div>
+<div class="p-5 h-[320px] relative w-full">
+<!-- Decorative Chart Background Grid -->
+<div class="absolute inset-x-5 inset-y-5 flex flex-col justify-between z-0 border-l border-b border-outline-variant/30">
+<div class="w-full border-t border-outline-variant/10 h-0"></div>
+<div class="w-full border-t border-outline-variant/10 h-0"></div>
+<div class="w-full border-t border-outline-variant/10 h-0"></div>
+<div class="w-full border-t border-outline-variant/10 h-0"></div>
+</div>
+<!-- Mock SVG Chart Path -->
+<div class="absolute inset-5 z-10 flex items-end">
+<div class="w-full h-full chart-area-gradient relative overflow-hidden clip-path-chart" style="clip-path: polygon(0 80%, 10% 75%, 20% 60%, 30% 65%, 40% 40%, 50% 50%, 60% 30%, 70% 45%, 80% 20%, 90% 35%, 100% 10%, 100% 100%, 0 100%);"></div>
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="text-primary drop-shadow-[0_0_8px_rgba(180,197,255,0.6)]" d="M0,80 L10,75 L20,60 L30,65 L40,40 L50,50 L60,30 L70,45 L80,20 L90,35 L100,10" fill="none" stroke="currentColor" stroke-width="0.5" vector-effect="non-scaling-stroke"></path>
+</svg>
+<!-- Chart Tooltip Point -->
+<div class="absolute left-[60%] top-[30%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-surface-bright border border-outline-variant px-3 py-2 rounded-DEFAULT mb-2 shadow-lg z-20">
+<div class="font-label-technical text-label-technical text-on-surface-variant mb-1">14:00 PM</div>
+<div class="font-button-text text-button-text text-primary">₹1.2 Cr</div>
+</div>
+<div class="w-2 h-2 rounded-full bg-surface border-2 border-primary z-20 shadow-[0_0_8px_rgba(180,197,255,1)]"></div>
+<div class="w-px h-[70%] bg-primary/30 absolute top-full mt-1 border-dashed"></div>
+</div>
+</div>
+<!-- Y-Axis Labels -->
+<div class="absolute left-0 top-5 bottom-5 flex flex-col justify-between text-on-surface-variant/50 font-label-technical text-[9px] -ml-2">
+<span>2.0Cr</span>
+<span>1.5Cr</span>
+<span>1.0Cr</span>
+<span>0.5Cr</span>
+<span>0</span>
+</div>
+</div>
+</div>
+<!-- Recent Payments Table -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-5 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-button-text text-button-text text-on-surface">Recent Payments</h2>
+<button class="font-label-technical text-label-technical text-primary hover:text-primary-fixed transition-colors flex items-center gap-1">
+                    View All <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface/50 font-label-technical text-label-technical text-on-surface-variant">
+<th class="p-4 font-medium uppercase">Transaction ID</th>
+<th class="p-4 font-medium uppercase">Date &amp; Time</th>
+<th class="p-4 font-medium uppercase">Merchant</th>
+<th class="p-4 font-medium uppercase">Amount</th>
+<th class="p-4 font-medium uppercase">Method</th>
+<th class="p-4 font-medium uppercase">Status</th>
+<th class="p-4 font-medium uppercase text-right">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-label-technical text-on-surface">TXN-98234-AX</td>
+<td class="p-4 text-on-surface-variant">Oct 24, 14:32:11</td>
+<td class="p-4 text-on-surface">TechNova Retail</td>
+<td class="p-4 font-label-technical text-on-surface">₹45,200.00</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="credit_card">credit_card</span>
+<span>UPI</span>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-tertiary-container/20 text-tertiary-fixed-dim font-label-technical border border-tertiary-container/30">
+                                    SUCCESS
+                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-label-technical text-on-surface">TXN-98233-AX</td>
+<td class="p-4 text-on-surface-variant">Oct 24, 14:30:45</td>
+<td class="p-4 text-on-surface">Global Traders</td>
+<td class="p-4 font-label-technical text-on-surface">₹12,500.50</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="account_balance">account_balance</span>
+<span>NetBanking</span>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-tertiary-container/20 text-tertiary-fixed-dim font-label-technical border border-tertiary-container/30">
+                                    SUCCESS
+                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/50 transition-colors group bg-error-container/5 border-l-2 border-l-error">
+<td class="p-4 font-label-technical text-on-surface">TXN-98232-BX</td>
+<td class="p-4 text-on-surface-variant">Oct 24, 14:28:19</td>
+<td class="p-4 text-on-surface">Alpha Electronics</td>
+<td class="p-4 font-label-technical text-on-surface">₹89,000.00</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="credit_card">credit_card</span>
+<span>Card ending 4421</span>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-error-container/20 text-error font-label-technical border border-error-container/30">
+                                    FAILED
+                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-4 font-label-technical text-on-surface">TXN-98231-CX</td>
+<td class="p-4 text-on-surface-variant">Oct 24, 14:25:00</td>
+<td class="p-4 text-on-surface">Cloud Services Inc</td>
+<td class="p-4 font-label-technical text-on-surface">₹3,400.00</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant" data-icon="wallet">wallet</span>
+<span>Wallet</span>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-DEFAULT bg-surface-variant text-on-surface-variant font-label-technical border border-outline-variant">
+                                    PENDING
+                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- BottomNavBar for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-low border-t border-outline-variant flex justify-around items-center px-2 z-40 pb-safe">
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-technical text-[9px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="payments" data-weight="fill">payments</span>
+<span class="font-label-technical text-[9px] font-bold">Payments</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="storefront">storefront</span>
+<span class="font-label-technical text-[9px]">Merchants</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="analytics">analytics</span>
+<span class="font-label-technical text-[9px]">Analytics</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#0b1323",
+                        "on-background": "#dbe2f8",
+                        "tertiary": "#4cd7f6",
+                        "on-tertiary": "#003640",
+                        "error-container": "#93000a",
+                        "surface-dim": "#0b1323",
+                        "inverse-on-surface": "#283041",
+                        "primary": "#b4c5ff",
+                        "secondary-fixed": "#eaddff",
+                        "surface-container-low": "#131c2b",
+                        "inverse-surface": "#dbe2f8",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "surface-bright": "#31394a",
+                        "surface-variant": "#2d3546",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-container": "#18202f",
+                        "on-primary": "#002a78",
+                        "on-surface-variant": "#c3c6d7",
+                        "surface-container-highest": "#2d3546",
+                        "tertiary-fixed": "#acedff",
+                        "on-secondary": "#3f008e",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "inverse-primary": "#0053db",
+                        "primary-container": "#2563eb",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#c9aeff",
+                        "on-secondary-fixed": "#25005a",
+                        "surface": "#0b1323",
+                        "on-surface": "#dbe2f8",
+                        "on-tertiary-container": "#d7f6ff",
+                        "tertiary-container": "#00788c",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#060e1d",
+                        "secondary": "#d2bbff",
+                        "on-error": "#690005",
+                        "secondary-container": "#6001d1",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-high": "#222a3a",
+                        "surface-tint": "#b4c5ff",
+                        "outline": "#8d90a0"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "density-compact": "0.5rem",
+                        "density-comfortable": "1rem",
+                        "margin-safe": "1.5rem",
+                        "gutter": "1rem",
+                        "grid-columns": "12"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Inter"],
+                        "button-text": ["Inter"],
+                        "headline-xl": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-technical": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "button-text": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-technical": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #020817; /* Specific deep navy requested */
+        }
+        .glow-border {
+            border: 1px solid theme('colors.primary-container');
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
+        }
+        .ai-glow-text {
+            text-shadow: 0 0 10px rgba(180, 197, 255, 0.5);
+        }
+        /* Custom scrollbar for high density */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+    </style>
+</head>
+<body class="text-on-background antialiased flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-[100] flex justify-between items-center px-margin-safe h-16 bg-surface-container-low dark:bg-surface-container-low shadow-sm border-b border-outline-variant">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary font-bold text-[28px]" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight ai-glow-text">AgentPay</span>
+</div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex gap-6 items-center ml-8">
+<a class="font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">Home</a>
+<a class="font-label-technical text-label-technical text-primary font-bold border-b-2 border-primary pb-1 opacity-80 transition-all duration-150" href="#">AgentPay</a>
+<a class="font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">AgentGuard</a>
+<a class="font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">FraudGuard</a>
+<a class="font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">Transactions</a>
+<a class="font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-variant rounded-full px-4 py-1.5 border border-outline-variant focus-within:border-tertiary focus-within:ring-1 focus-within:ring-tertiary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant focus:ring-0 w-48 lg:w-64" placeholder="Search anything..." type="text"/>
+</div>
+<span class="font-label-technical text-label-technical text-on-surface-variant hidden md:block">Powered by Razorpay</span>
+<button class="hover:text-tertiary transition-colors duration-200"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-tertiary transition-colors duration-200"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</nav>
+<div class="flex flex-1 pt-16 h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex fixed left-0 top-16 bottom-0 w-64 flex-col p-density-comfortable z-50 bg-background dark:bg-background border-r border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center glow-border">
+<span class="material-symbols-outlined text-on-primary-container text-sm">robot_2</span>
+</div>
+<div>
+<h2 class="font-label-technical text-label-technical font-bold text-on-surface">AgentPay AI</h2>
+<p class="font-body-sm text-[10px] text-on-surface-variant uppercase tracking-widest">Autonomous Finance</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container rounded-lg font-bold shadow-[0_0_8px_rgba(76,215,246,0.3)] scale-95 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="font-label-technical text-label-technical">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+<span class="font-label-technical text-label-technical">AgentPay</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">security</span>
+<span class="font-label-technical text-label-technical">AgentGuard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">shield</span>
+<span class="font-label-technical text-label-technical">FraudGuard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span class="font-label-technical text-label-technical">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span class="font-label-technical text-label-technical">Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-2 pt-4 border-t border-outline-variant/30">
+<button class="w-full bg-gradient-to-r from-primary-container to-secondary-container hover:opacity-90 text-on-primary-container font-button-text text-button-text py-2 rounded glow-border transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span> New Agent
+                </button>
+<div class="flex flex-col gap-1 mt-2">
+<a class="flex items-center gap-3 px-3 py-1.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">help_outline</span>
+<span class="font-label-technical text-label-technical">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-1.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+<span class="font-label-technical text-label-technical">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-margin-safe overflow-y-auto h-full flex flex-col gap-gutter bg-[#020817]">
+<!-- Dashboard Header -->
+<header class="flex justify-between items-end mb-2">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Good Morning, Dharshan <span class="text-xl">👋</span></h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Here's what's happening with your agents and payments today.</p>
+</div>
+<div class="font-label-technical text-label-technical text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                    Today, 24 Nov 2025
+                </div>
+</header>
+<!-- KPI Cards Row -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Total Transactions -->
+<div class="bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant/50 relative overflow-hidden group hover:border-tertiary transition-colors">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-primary-container/10 rounded-full blur-xl group-hover:bg-tertiary/20 transition-all"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<span class="font-label-technical text-label-technical">Total Transactions</span>
+</div>
+</div>
+<div class="flex items-baseline gap-3 mt-4">
+<span class="font-headline-xl text-headline-xl text-on-surface">24</span>
+<span class="font-label-technical text-label-technical text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[12px]">arrow_upward</span> 12%
+                        </span>
+</div>
+</div>
+<!-- Approved -->
+<div class="bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant/50 relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-emerald-500">check_circle</span>
+<span class="font-label-technical text-label-technical">Approved</span>
+</div>
+</div>
+<div class="flex items-baseline gap-3 mt-4">
+<span class="font-headline-xl text-headline-xl text-on-surface">20</span>
+<span class="font-label-technical text-label-technical text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[12px]">arrow_upward</span> 15%
+                        </span>
+</div>
+</div>
+<!-- Under Review -->
+<div class="bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant/50 relative overflow-hidden group hover:border-amber-500/50 transition-colors">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-amber-500">pending</span>
+<span class="font-label-technical text-label-technical">Under Review</span>
+</div>
+</div>
+<div class="flex items-baseline gap-3 mt-4">
+<span class="font-headline-xl text-headline-xl text-on-surface">3</span>
+<span class="font-label-technical text-label-technical text-error bg-error/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[12px]">arrow_downward</span> -20%
+                        </span>
+</div>
+</div>
+<!-- Blocked -->
+<div class="bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant/50 relative overflow-hidden group hover:border-error/50 transition-colors">
+<div class="absolute -right-4 -top-4 w-16 h-16 bg-error/10 rounded-full blur-xl group-hover:bg-error/20 transition-all"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-error">block</span>
+<span class="font-label-technical text-label-technical">Blocked</span>
+</div>
+</div>
+<div class="flex items-baseline gap-3 mt-4">
+<span class="font-headline-xl text-headline-xl text-on-surface">1</span>
+<span class="font-label-technical text-label-technical text-error bg-error/10 px-1.5 py-0.5 rounded flex items-center">
+<span class="material-symbols-outlined text-[12px]">arrow_downward</span> -50%
+                        </span>
+</div>
+</div>
+</div>
+<!-- Main Charts & Feed Area -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter flex-1 min-h-[400px]">
+<!-- Transaction Activity Chart (Spans 2 columns) -->
+<div class="xl:col-span-2 bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant flex flex-col glow-border">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">show_chart</span>
+                            Transaction Activity
+                        </h3>
+<div class="flex gap-4 font-label-technical text-label-technical">
+<div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-on-surface-variant">Approved</span></div>
+<div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="text-on-surface-variant">Under Review</span></div>
+<div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-error"></span><span class="text-on-surface-variant">Blocked</span></div>
+</div>
+</div>
+<div class="flex-1 relative w-full h-full min-h-[250px] border-b border-l border-outline-variant/30 flex items-end">
+<!-- Abstract decorative area chart representation for high density look -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/10 to-transparent opacity-50"></div>
+<!-- Y-axis labels -->
+<div class="absolute left-[-30px] top-0 bottom-0 flex flex-col justify-between font-label-technical text-[10px] text-outline text-right w-[20px] py-2">
+<span>150</span>
+<span>100</span>
+<span>50</span>
+<span>0</span>
+</div>
+<!-- X-axis labels -->
+<div class="absolute left-0 right-0 bottom-[-24px] flex justify-between font-label-technical text-[10px] text-outline px-4">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+<!-- Faux SVG Line Chart -->
+<svg class="w-full h-full absolute inset-0 preserve-3d" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Grid lines -->
+<line opacity="0.5" stroke="var(--tw-colors-outline-variant)" stroke-dasharray="1 2" stroke-width="0.2" x1="0" x2="100" y1="25" y2="25"></line>
+<line opacity="0.5" stroke="var(--tw-colors-outline-variant)" stroke-dasharray="1 2" stroke-width="0.2" x1="0" x2="100" y1="50" y2="50"></line>
+<line opacity="0.5" stroke="var(--tw-colors-outline-variant)" stroke-dasharray="1 2" stroke-width="0.2" x1="0" x2="100" y1="75" y2="75"></line>
+<!-- Area fill -->
+<polygon fill="url(#grad1)" opacity="0.2" points="0,100 0,60 16,70 33,40 50,55 66,20 83,45 100,10 100,100"></polygon>
+<!-- Line -->
+<polyline class="drop-shadow-[0_0_5px_rgba(76,215,246,0.8)]" fill="none" points="0,60 16,70 33,40 50,55 66,20 83,45 100,10" stroke="var(--tw-colors-tertiary)" stroke-width="1.5"></polyline>
+<!-- Points -->
+<circle cx="16" cy="70" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<circle cx="33" cy="40" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<circle cx="50" cy="55" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<circle cx="66" cy="20" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<circle cx="83" cy="45" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<circle cx="100" cy="10" fill="var(--tw-colors-background)" r="1.5" stroke="var(--tw-colors-tertiary)" stroke-width="0.8"></circle>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:var(--tw-colors-tertiary);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:var(--tw-colors-tertiary);stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="bg-surface-container-low rounded-lg p-density-comfortable border border-outline-variant flex flex-col">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-semibold text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant/30 pb-2">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">history</span>
+                        Recent Activity
+                    </h3>
+<div class="flex-1 overflow-y-auto pr-2 space-y-4">
+<!-- Event Item: Approved -->
+<div class="flex gap-3 items-start relative group">
+<div class="absolute left-[15px] top-8 bottom-[-16px] w-[1px] bg-outline-variant/30 group-last:hidden"></div>
+<div class="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-emerald-400 text-[16px]">check</span>
+</div>
+<div class="flex-1 bg-surface-container rounded p-3 border border-outline-variant/30 hover:border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Agent Purchase Completed</span>
+<span class="font-label-technical text-[10px] text-on-surface-variant">2m ago</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Order #9872</span>
+<span class="font-label-technical text-label-technical text-on-surface">₹72,990</span>
+</div>
+</div>
+</div>
+<!-- Event Item: Under Review -->
+<div class="flex gap-3 items-start relative group">
+<div class="absolute left-[15px] top-8 bottom-[-16px] w-[1px] bg-outline-variant/30 group-last:hidden"></div>
+<div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 z-10 shadow-[0_0_8px_rgba(245,158,11,0.2)]">
+<span class="material-symbols-outlined text-amber-500 text-[16px]">hourglass_empty</span>
+</div>
+<div class="flex-1 bg-surface-container rounded p-3 border border-amber-500/30 hover:border-amber-500/50 transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-technical text-label-technical text-amber-400 font-semibold flex items-center gap-1">
+                                        Transaction Under Review <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+</span>
+<span class="font-label-technical text-[10px] text-on-surface-variant">8m ago</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Unusual velocity pattern</span>
+<span class="font-label-technical text-label-technical text-on-surface">₹61,400</span>
+</div>
+</div>
+</div>
+<!-- Event Item: Blocked -->
+<div class="flex gap-3 items-start relative group">
+<div class="absolute left-[15px] top-8 bottom-[-16px] w-[1px] bg-outline-variant/30 group-last:hidden"></div>
+<div class="w-8 h-8 rounded-full bg-error/10 border border-error/30 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-error text-[16px]">block</span>
+</div>
+<div class="flex-1 bg-surface-container rounded p-3 border border-error/30 hover:border-error/50 transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-technical text-label-technical text-error font-semibold">Blocked Transaction</span>
+<span class="font-label-technical text-[10px] text-on-surface-variant">12m ago</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-[11px] text-on-surface-variant">High risk score detected</span>
+<span class="font-label-technical text-label-technical text-on-surface">₹1,20,000</span>
+</div>
+</div>
+</div>
+<!-- Event Item: Agent Created -->
+<div class="flex gap-3 items-start relative group">
+<div class="absolute left-[15px] top-8 bottom-[-16px] w-[1px] bg-outline-variant/30 group-last:hidden"></div>
+<div class="w-8 h-8 rounded-full bg-primary-container/20 border border-primary-container/50 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-primary text-[16px]">smart_toy</span>
+</div>
+<div class="flex-1 bg-surface-container rounded p-3 border border-outline-variant/30 hover:border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-technical text-label-technical text-on-surface font-semibold">Agent Created</span>
+<span class="font-label-technical text-[10px] text-on-surface-variant">25m ago</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Shopping Agent</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="w-full flex flex-col md:flex-row justify-between items-center px-margin-safe py-density-compact mt-auto border-t border-outline-variant bg-surface-container-lowest dark:bg-surface-container-lowest">
+<span class="font-label-technical text-label-technical uppercase tracking-widest text-primary">© 2024 AgentPay Autonomous Systems. Secure AI Payment Platform.</span>
+<div class="flex gap-4 font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">
+<a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Terms of Service</a>
+<a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Privacy Policy</a>
+<a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">Security Standards</a>
+<a class="hover:text-tertiary transition-colors opacity-100 hover:opacity-80" href="#">API Reference</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    participant Guard as AGENTGUARD Policy Engine
+    participant Payment as Payment Service
+    participant Redis as Redis Lock Manager
+    participant Razorpay as Razorpay API Rails
+
+    Guard->>Payment: Issue Signed Authorization Context Token (TTL: 15m)
+    Payment->>Redis: SETNX lock:idempotency_key (24h TTL)
+    Redis-->>Payment: Lock Granted
+    Payment->>Payment: Verify Amount, Merchant & Scope Parameters
+    Payment->>Razorpay: POST /v1/orders (Execute Settlement)
+    Razorpay-->>Payment: Settlement Confirmed (Payment ID)
+    Payment-->>Guard: Intent Status -> EXECUTED

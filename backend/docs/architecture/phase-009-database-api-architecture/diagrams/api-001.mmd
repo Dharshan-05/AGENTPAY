@@ -1,0 +1,7 @@
+graph TB
+    CLIENT[API Client / Agent] --> GW[API Gateway Ingress]
+    GW --> AUTH[Auth Middleware]
+    AUTH --> TENANT[Tenant Context Evaluator]
+    TENANT --> ROUTER[API Controller Router]
+    ROUTER --> SERVICE[Domain Application Service]
+    SERVICE --> DB[(PostgreSQL Database)]

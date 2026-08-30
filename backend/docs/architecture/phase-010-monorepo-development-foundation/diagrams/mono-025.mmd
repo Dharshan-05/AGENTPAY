@@ -1,0 +1,4 @@
+graph TD
+    DEV[Developer Code Edit] --> SAVE[Prettier Format on Save]
+    SAVE --> COMMIT[Git Commit -> Husky Pre-Commit Hook]
+    COMMIT --> PUSH[Git Push -> CI Pipeline Build & Test]

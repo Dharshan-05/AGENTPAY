@@ -1,0 +1,3 @@
+graph TD
+    AUDITOR[Auditor User] --> GET[GET /api/v1/audit/events (Query Audit Logs)]
+    GET --> VERIFY[GET /api/v1/audit/events/{id}/verify (Verify Hash Chain)]

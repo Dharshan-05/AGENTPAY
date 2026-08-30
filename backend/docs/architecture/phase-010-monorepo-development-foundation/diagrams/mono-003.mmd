@@ -1,0 +1,14 @@
+graph LR
+    subgraph Domain Packages
+        PAY[@agentpay/payments]
+        AG[@agentpay/agentguard-core]
+        DB[@agentpay/database]
+    end
+
+    subgraph Primitive Packages
+        TYPES[@agentpay/types]
+        CFG[@agentpay/config]
+        CONTRACTS[@agentpay/api-contracts]
+    end
+
+    Domain Packages --> Primitive Packages

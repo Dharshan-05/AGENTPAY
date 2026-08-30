@@ -1,0 +1,5 @@
+graph LR
+    API[API Controller Mutation] --> DB[(PostgreSQL Transaction)]
+    DB --> OUTBOX[outbox_events Table]
+    OUTBOX --> WORKER[Outbox Publisher Worker]
+    WORKER --> BUS[Redis Pub/Sub Event Bus]

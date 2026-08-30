@@ -1,0 +1,6 @@
+graph TD
+    REFUND_REQ[Refund Request] --> BAL_CHK{Requested Amount <= Remaining Balance?}
+    BAL_CHK -- NO --> REJECT[HTTP 422 ERR_REFUND_EXCEEDS_BALANCE]
+    BAL_CHK -- YES --> AUTH[AGENTGUARD Policy / Step-Up MFA Check]
+    AUTH --> RZP[Razorpay POST /v1/payments/{id}/refund]
+    RZP --> LEDGER[Post Compensating Reversal Journal Entries]

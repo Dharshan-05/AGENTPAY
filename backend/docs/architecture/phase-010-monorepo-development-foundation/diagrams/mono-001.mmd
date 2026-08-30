@@ -1,0 +1,23 @@
+graph TB
+    subgraph APPS[Monorepo Applications (/apps)]
+        WEB[apps/web - Next.js/React Portal]
+        API[apps/api - Express REST Gateway]
+        AGENT_RT[apps/agent-runtime - Python AI Engine]
+        GUARD[apps/agentguard - Security Control Plane]
+        WORKER[apps/worker - Outbox & Async Jobs]
+    end
+
+    subgraph PKGS[Shared Workspace Packages (/packages)]
+        CFG[@agentpay/config]
+        TYPES[@agentpay/types]
+        CONTRACTS[@agentpay/api-contracts]
+        DB[@agentpay/database]
+        AUTH[@agentpay/auth]
+        SEC[@agentpay/security]
+        PAY[@agentpay/payments]
+        AG_CORE[@agentpay/agentguard-core]
+        EVT[@agentpay/events]
+        OBS[@agentpay/observability]
+    end
+
+    APPS --> PKGS

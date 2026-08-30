@@ -1,0 +1,6 @@
+graph TD
+    TIMEOUT[5,000ms Gateway Provider Timeout] --> UNKNOWN[Mark PAYMENT_STATUS_UNKNOWN]
+    UNKNOWN --> WORKER[Reconciliation Worker Queries GET /v1/payments/{id}]
+    WORKER --> RES{Provider Status?}
+    RES -- captured --> SUCCESS[Transition State -> SUCCESS]
+    RES -- failed / not_found --> FAILED[Transition State -> FAILED]

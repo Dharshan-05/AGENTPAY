@@ -1,0 +1,7 @@
+graph TD
+    AGENT[AI Agent] -->|1. Propose Intent| INTENT[Payment Intent Service]
+    INTENT -->|2. Intercept Policy| GUARD[AGENTGUARD]
+    GUARD -->|3. Score Risk| FRAUD[FRAUDGUARD]
+    GUARD -->|4. Issue Token| AUTH[Payment Authorization]
+    AUTH -->|5. Execute Settlement| ORCH[Payment Orchestrator]
+    ORCH -->|6. Call API| RAZORPAY[Razorpay Gateway API]

@@ -1,0 +1,38 @@
+# Node & Workspace Dependencies
+node_modules/
+.pnpm-store/
+
+# Build & Compilation Outputs
+dist/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Environment & Secret Files (CRITICAL PROTECTION)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs & Debug Data
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Test & Coverage Reports
+coverage/
+.vitest/
+playwright-report/
+test-results/
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.user

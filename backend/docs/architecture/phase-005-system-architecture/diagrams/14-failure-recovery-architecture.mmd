@@ -1,0 +1,9 @@
+graph TD
+    FAILURE[Component Outage Event] --> COND{Component Type?}
+    COND -- Redis Crash --> R1[Fallback to Direct DB Queries]
+    R1 --> R2[Asynchronously Rebuild Redis Cache in < 60s]
+    COND -- ML Container Crash --> M1[Trigger AI Model Fail-Safe Fallback]
+    M1 --> M2[Execute Deterministic Rule Pipeline & Assign Min MEDIUM_RISK]
+    COND -- Razorpay Gateway Timeout --> P1[Trigger Gateway Circuit Breaker after 5 Failures]
+    P1 --> P2[Fail-Fast Return ERR_GATEWAY_CIRCUIT_OPEN & Release Locks]
+    COND -- DB Connection Pool Full --> D1[Return HTTP 503 Service Unavailable with Retry-After: 5]

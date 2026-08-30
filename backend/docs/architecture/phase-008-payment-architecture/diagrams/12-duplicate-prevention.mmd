@@ -1,0 +1,4 @@
+graph TD
+    L1[Layer 1: Redis 24h SETNX Lock] --> L2[Layer 2: PostgreSQL Unique Constraint]
+    L2 --> L3[Layer 3: State Machine Precondition State == AUTHORIZED]
+    L3 --> L4[Layer 4: Razorpay Provider Order Idempotency Key]

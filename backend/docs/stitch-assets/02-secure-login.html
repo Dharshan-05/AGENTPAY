@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay - Login</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#0b1323",
+                    "on-background": "#dbe2f8",
+                    "tertiary": "#4cd7f6",
+                    "on-tertiary": "#003640",
+                    "error-container": "#93000a",
+                    "surface-dim": "#0b1323",
+                    "inverse-on-surface": "#283041",
+                    "primary": "#b4c5ff",
+                    "secondary-fixed": "#eaddff",
+                    "surface-container-low": "#131c2b",
+                    "inverse-surface": "#dbe2f8",
+                    "on-tertiary-fixed-variant": "#004e5c",
+                    "surface-bright": "#31394a",
+                    "surface-variant": "#2d3546",
+                    "on-tertiary-fixed": "#001f26",
+                    "surface-container": "#18202f",
+                    "on-primary": "#002a78",
+                    "on-surface-variant": "#c3c6d7",
+                    "surface-container-highest": "#2d3546",
+                    "tertiary-fixed": "#acedff",
+                    "on-secondary": "#3f008e",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary-fixed-dim": "#4cd7f6",
+                    "inverse-primary": "#0053db",
+                    "primary-container": "#2563eb",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed": "#00174b",
+                    "outline-variant": "#434655",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "error": "#ffb4ab",
+                    "on-secondary-container": "#c9aeff",
+                    "on-secondary-fixed": "#25005a",
+                    "surface": "#0b1323",
+                    "on-surface": "#dbe2f8",
+                    "on-tertiary-container": "#d7f6ff",
+                    "tertiary-container": "#00788c",
+                    "secondary-fixed-dim": "#d2bbff",
+                    "on-secondary-fixed-variant": "#5a00c6",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#060e1d",
+                    "secondary": "#d2bbff",
+                    "on-error": "#690005",
+                    "secondary-container": "#6001d1",
+                    "on-primary-container": "#eeefff",
+                    "surface-container-high": "#222a3a",
+                    "surface-tint": "#b4c5ff",
+                    "outline": "#8d90a0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "density-compact": "0.5rem",
+                    "density-comfortable": "1rem",
+                    "margin-safe": "1.5rem",
+                    "gutter": "1rem",
+                    "grid-columns": "12"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "button-text": ["Inter"],
+                    "headline-xl": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "label-technical": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-technical": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom styles for glows and webkit scrollbar */
+        .glow-border {
+            box-shadow: 0 0 10px rgba(76, 215, 246, 0.2), inset 0 0 10px rgba(76, 215, 246, 0.1);
+        }
+        .input-glow:focus-within {
+            box-shadow: 0 0 8px rgba(76, 215, 246, 0.5);
+            border-color: theme('colors.tertiary');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-body-md">
+<!-- Atmospheric Background Effects -->
+<div class="absolute inset-0 pointer-events-none">
+<div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-container opacity-20 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-secondary-container opacity-20 blur-[120px] rounded-full"></div>
+</div>
+<!-- Main Auth Card -->
+<div class="relative w-full max-w-[1000px] flex flex-col md:flex-row bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10 glow-border">
+<!-- Left Column: Authentication Form -->
+<div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r border-outline-variant">
+<!-- Logo -->
+<div class="flex items-center gap-2 mb-10">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-tertiary to-primary-container flex items-center justify-center shadow-[0_0_8px_rgba(76,215,246,0.6)]">
+<span class="material-symbols-outlined text-on-background text-[20px] font-bold">bolt</span>
+</div>
+<span class="font-headline-lg text-headline-lg tracking-tight text-primary">AGENTPAY</span>
+</div>
+<!-- Headers -->
+<div class="mb-8">
+<h1 class="font-headline-xl text-headline-xl mb-2 text-on-surface">Welcome Back</h1>
+<p class="font-body-md text-on-surface-variant">Sign in to your account to continue</p>
+</div>
+<!-- Form -->
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div class="relative flex items-center bg-surface-dim border border-outline-variant rounded-lg transition-all duration-300 input-glow group">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within:text-tertiary transition-colors">mail</span>
+<input class="w-full bg-transparent border-none text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 py-3 pl-12 pr-4 rounded-lg font-body-md" placeholder="Email or username" required="" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="relative flex items-center bg-surface-dim border border-outline-variant rounded-lg transition-all duration-300 input-glow group">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant group-focus-within:text-tertiary transition-colors">lock</span>
+<input class="w-full bg-transparent border-none text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 py-3 pl-12 pr-4 rounded-lg font-body-md" placeholder="Password" required="" type="password"/>
+</div>
+<!-- Options -->
+<div class="flex items-center justify-between mt-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant bg-surface-dim text-tertiary focus:ring-tertiary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Remember me</span>
+</label>
+<a class="font-body-sm text-body-sm text-tertiary hover:text-primary transition-colors" href="#">Forgot password?</a>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary-container hover:bg-primary-fixed text-on-primary-container font-button-text text-button-text py-3 rounded-lg shadow-[0_0_10px_rgba(37,99,235,0.3)] hover:shadow-[0_0_15px_rgba(37,99,235,0.6)] transition-all duration-300 mt-4" type="submit">
+                    Sign In
+                </button>
+</form>
+<!-- Divider -->
+<div class="flex items-center my-6">
+<div class="flex-grow h-px bg-outline-variant/50"></div>
+<span class="px-4 font-body-sm text-body-sm text-on-surface-variant">or</span>
+<div class="flex-grow h-px bg-outline-variant/50"></div>
+</div>
+<!-- Social Logins -->
+<div class="space-y-3">
+<button class="w-full flex items-center justify-center gap-3 bg-surface-dim border border-outline-variant hover:bg-surface-variant text-on-surface font-button-text text-button-text py-2.5 rounded-lg transition-colors duration-200" type="button">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+                    Continue with Google
+                </button>
+<button class="w-full flex items-center justify-center gap-3 bg-surface-dim border border-outline-variant hover:bg-surface-variant text-on-surface font-button-text text-button-text py-2.5 rounded-lg transition-colors duration-200" type="button">
+<span class="material-symbols-outlined text-[20px]">code</span>
+                    Continue with GitHub
+                </button>
+</div>
+<!-- Footer Link -->
+<p class="text-center mt-8 font-body-sm text-body-sm text-on-surface-variant">
+                Don't have an account? <a class="text-tertiary hover:text-primary font-medium transition-colors" href="#">Sign Up</a>
+</p>
+</div>
+<!-- Right Column: Artwork & Value Prop -->
+<div class="w-full md:w-1/2 relative hidden md:flex flex-col justify-end min-h-[500px]">
+<!-- Background Image -->
+<div class="absolute inset-0 w-full h-full">
+<div class="w-full h-full bg-cover bg-center absolute inset-0" data-alt="A highly detailed, cinematic portrait of a futuristic AI robotic humanoid face in profile. The android features sleek, dark metallic plating integrated with intricate, glowing cyan and vivid purple neon circuitry pathways. The lighting is dramatic, utilizing deep blue ambient light and bright magenta rim lights to emphasize the sophisticated mechanical contours against a pitch-black background. The overall aesthetic is cyber-minimalist, high-end technical, and evocative of secure, autonomous artificial intelligence." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAYJ-V475kj1fRaxDDC1FaonqJRKIXBBjSsSOCq9LAcwQ5EmtMARumAYPYo8BhorwYzS3nDP8NihkYxK6EatkyVHxAJmEJJtHGXCl7s-ezj-A9Ew9DJFNFOacSmvzq-Y_dAtpDIaB4mAm0tVzAa091McpY4uBQu1wMkyu9cxQvmKuEGG3KmE7uTuIrqBue39dbPYSkVM0nLQ647clOhgC_bD55Pk5bXWKWYoH0IspvK8ppsCzWajmO6')"></div>
+<!-- Gradient Overlays for depth and text readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent"></div>
+</div>
+<!-- Content Overlay -->
+<div class="relative z-10 p-12 pr-16 max-w-md">
+<h2 class="font-headline-lg text-headline-lg text-on-background mb-4 leading-tight">
+                    AI Agents <span class="text-tertiary">+</span><br/>
+                    Secure Payments <span class="text-tertiary">+</span><br/>
+                    Explainable AI
+                </h2>
+<p class="font-body-md text-on-surface-variant">
+                    The next generation of autonomous commerce. Experience frictionless, hyper-secure transactions powered by cognitive agents.
+                </p>
+</div>
+<!-- Decorative Tech Accents -->
+<div class="absolute top-8 right-8 flex gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary shadow-[0_0_5px_rgba(76,215,246,1)] animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Grid overlay subtle -->
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none mix-blend-overlay"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,6 @@
+graph TD
+    AGENT[AI Agent] --> REGISTRY[Centralized Tool Registry]
+    REGISTRY --> TOOL1[product_search (Scope: product:search)]
+    REGISTRY --> TOOL2[cart_assemble (Scope: cart:create)]
+    REGISTRY --> TOOL3[create_payment_intent (Scope: spend:intent_create)]
+    TOOL1 & TOOL2 & TOOL3 --> VALIDATOR[Zod Input/Output Schema Validator]

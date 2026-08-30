@@ -1,0 +1,3 @@
+graph LR
+    PRIMARY[PostgreSQL Primary] -->|Sync WAL Stream| STANDBY[Standby Read Replica]
+    PRIMARY -->|Continuous Archiving| S3[S3 Glacier Encrypted Bucket]

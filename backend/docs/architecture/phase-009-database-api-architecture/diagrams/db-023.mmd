@@ -1,0 +1,3 @@
+graph TD
+    QUERY[SELECT * FROM outbox_events WHERE status = 'PENDING'] --> INDEX[Partial Index: idx_outbox_pending]
+    INDEX --> FAST_SCAN[Sub-1ms Index Scan]

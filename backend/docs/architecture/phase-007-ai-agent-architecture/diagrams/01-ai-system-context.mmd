@@ -1,0 +1,12 @@
+graph TD
+    USER[Human Owner] --> CHAT[Chat Console / Approval Center]
+    CHAT --> AGENT[AI Commerce Agent Node]
+    AGENT --> PLANNER[Structured Planner Node]
+    PLANNER --> ROUTER[Task Model Router]
+    ROUTER --> LLM[LLM Reasoning Engine]
+    LLM --> INTENT[Proposed Payment Intent]
+    INTENT --> GUARD[AGENTGUARD Security Policy Gate]
+    GUARD --> FRAUD[FRAUDGUARD 12-D ML Risk Engine]
+    FRAUD --> XAI[SHAP Explainability Engine]
+    GUARD -- ALLOW --> PAY[Payment Orchestrator]
+    PAY --> RAZORPAY[Razorpay Payment Rails]

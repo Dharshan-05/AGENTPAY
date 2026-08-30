@@ -1,0 +1,6 @@
+graph TD
+    INTENT[Payment Intent Proposal] --> EVAL[POST /api/v1/agentguard/evaluate]
+    EVAL --> POLICY[Evaluate Policy Rules & FRAUDGUARD Risk Score]
+    POLICY --> DECISION{Decision ALLOW?}
+    DECISION -- YES --> TOKEN[Issue Signed Payment Authorization Token]
+    DECISION -- NO --> BLOCK[Return Decision BLOCK / REVIEW]

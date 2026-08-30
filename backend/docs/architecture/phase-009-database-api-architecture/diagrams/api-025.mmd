@@ -1,0 +1,4 @@
+graph TD
+    OUTAGE[Microservice / DB Outage] --> CB{Circuit Breaker Open?}
+    CB -- YES --> FAIL_CLOSED[Return HTTP 503 Service Unavailable]
+    CB -- NO --> TRY[Attempt Inter-Service Call]

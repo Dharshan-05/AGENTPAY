@@ -1,0 +1,10 @@
+sequenceDiagram
+    autonumber
+    participant W1 as Worker 1
+    participant DB as PostgreSQL DB
+    participant W2 as Worker 2
+
+    W1->>DB: BEGIN & SELECT FOR UPDATE (Locks row)
+    W2->>DB: BEGIN & SELECT FOR UPDATE (Blocks)
+    W1->>DB: UPDATE payments & COMMIT (Releases lock)
+    DB-->>W2: Unblocks W2 (Reads updated state & aborts duplicate)

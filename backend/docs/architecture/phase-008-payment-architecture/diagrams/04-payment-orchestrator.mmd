@@ -1,0 +1,7 @@
+graph TD
+    AUTH_TOKEN[Payment Authorization Context Token] --> VALIDATE[1. Validate Cryptographic Signature & Expiration]
+    VALIDATE --> LOCK[2. Acquire Redis 24h Idempotency Lock]
+    LOCK --> RULE_CHK[3. Verify Amount & Merchant Match Intent]
+    RULE_CHK --> ADAPTER[4. Invoke Razorpay Adapter executePayment]
+    ADAPTER --> STATE_UPDATE[5. Persist State Transition inside DB Transaction]
+    STATE_UPDATE --> OUTBOX[6. Write Domain Event to Outbox Table]

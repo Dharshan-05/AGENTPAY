@@ -1,0 +1,10 @@
+graph TD
+    SUPERVISOR[Supervisor Node] --> COMMERCE[Commerce Agent]
+    SUPERVISOR --> PAYMENT[Payment Agent]
+    SUPERVISOR --> RISK[Risk Agent]
+    SUPERVISOR --> SECURITY[Security Agent]
+
+    COMMERCE -->|Proposes Intent| SUPERVISOR
+    SUPERVISOR -->|Forward Proposal| RISK
+    RISK -->|Score Payload| SUPERVISOR
+    SUPERVISOR -->|Forward Authorized Payload| PAYMENT

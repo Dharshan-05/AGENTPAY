@@ -1,0 +1,9 @@
+graph TD
+    GUARD[AGENTGUARD Decision ALLOW] --> TOKEN[Issue Payment Authorization Context Token]
+    TOKEN --> LOCK{Acquire 24h Redis Idempotency Lock}
+    LOCK -- Lock Acquired --> ADAPTER[Razorpay Adapter Integration]
+    LOCK -- Lock Denied --> REJECT[Reject Duplicate Execution]
+    ADAPTER --> SIGN[Sign Razorpay Order Request Payload]
+    SIGN --> RAZORPAY[External Razorpay Settlement API]
+    RAZORPAY --> CONFIRM[Receive Signed Settlement Response]
+    CONFIRM --> AUDIT[Append Immutable SHA-256 Audit Block]

@@ -1,0 +1,4 @@
+graph TD
+    PKG[Workspace Package: @agentpay/types] --> EXPORTS["exports" Map in package.json]
+    EXPORTS --> PUBLIC[Public Entrypoint: dist/index.js]
+    EXPORTS -.-X|Internal Folders Protected| PRIVATE[src/internal/*]

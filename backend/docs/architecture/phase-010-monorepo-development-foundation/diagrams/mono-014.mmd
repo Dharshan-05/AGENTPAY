@@ -1,0 +1,4 @@
+graph TD
+    CONTRACTS[@agentpay/api-contracts] --> GEN[pnpm openapi:generate]
+    GEN --> SPEC[openapi.json]
+    SPEC --> LINT[Spectral OpenAPI Linter]

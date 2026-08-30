@@ -1,0 +1,9 @@
+graph TD
+    subgraph Memory Subsystems
+        ST[Short-Term: Redis Conversation Session Cache]
+        LT[Long-Term: PostgreSQL User Preference Store]
+        EP[Episodic: Historical Transaction Receipts]
+        SEM[Semantic: PostgreSQL + pgvector Vector Embeddings]
+    end
+
+    AGENT[AI Agent Node] --> ST & LT & EP & SEM

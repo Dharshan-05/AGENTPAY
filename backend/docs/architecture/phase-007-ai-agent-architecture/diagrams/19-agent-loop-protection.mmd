@@ -1,0 +1,8 @@
+graph TD
+    LOOP[Agent Step Execution Iteration] --> CHK1{max_steps > 10?}
+    CHK1 -- YES --> HALT1[HALT: ERR_MAX_STEPS_EXCEEDED]
+    CHK1 -- NO --> CHK2{max_tool_calls > 5?}
+    CHK2 -- YES --> HALT2[HALT: ERR_MAX_TOOLS_EXCEEDED]
+    CHK2 -- NO --> CHK3{max_cost > ₹50?}
+    CHK3 -- YES --> HALT3[HALT: ERR_MAX_COST_EXCEEDED]
+    CHK3 -- NO --> EXECUTE[Execute Step & Increment Step Counters]

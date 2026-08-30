@@ -1,0 +1,10 @@
+graph TD
+    ATTACKER[Adversary / Malicious Agent] --> A1[Parallel Double-Spend Attempt]
+    ATTACKER --> A2[Forged Webhook Event Signal]
+    ATTACKER --> A3[Refund Overflow Request (> Amount)]
+    ATTACKER --> A4[Cross-Tenant Data Read]
+
+    A1 --> DEF1[Redis 24h SETNX Lock + DB Unique Key Constraint]
+    A2 --> DEF2[Razorpay HMAC-SHA256 Signature Verification]
+    A3 --> DEF3[Cumulative Balance Check (Requested <= Remaining)]
+    A4 --> DEF4[PostgreSQL Row-Level Security (tenant_id = RLS)]

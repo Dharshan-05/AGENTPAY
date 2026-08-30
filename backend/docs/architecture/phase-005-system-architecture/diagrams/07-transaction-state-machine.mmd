@@ -1,0 +1,30 @@
+stateDiagram-v2
+    [*] --> CREATED: Ingest Payment Intent Payload
+    CREATED --> VALIDATING: Schema & Auth Check
+    VALIDATING --> POLICIED: AGENTGUARD Policy Evaluation
+    VALIDATING --> REJECTED: Schema/Auth Error
+    POLICIED --> RISK_CHECK: FRAUDGUARD Risk Scoring
+    POLICIED --> BLOCKED: Policy Boundary Breach
+
+    RISK_CHECK --> AUTHORIZED: Decision == ALLOW (Under Ceiling)
+    RISK_CHECK --> PENDING_APPROVAL: Decision == REVIEW (Exceeds Ceiling)
+    RISK_CHECK --> BLOCKED: Decision == BLOCK (High Risk)
+
+    PENDING_APPROVAL --> AUTHORIZED: Human Clicks "APPROVE"
+    PENDING_APPROVAL --> REJECTED: Human Clicks "REJECT"
+    PENDING_APPROVAL --> EXPIRED: 15-Minute TTL Elapsed
+
+    AUTHORIZED --> PROCESSING: Payment Adapter Dispatch
+    PROCESSING --> EXECUTED: Razorpay Settlement Confirmed
+    PROCESSING --> FAILED: Gateway Error / Timeout (5s)
+
+    EXECUTED --> RECONCILED: Webhook Signature Verified
+    EXECUTED --> REFUND_PENDING: User/Merchant Initiates Refund
+    REFUND_PENDING --> REFUNDED: Refund Processed
+
+    REJECTED --> [*]
+    BLOCKED --> [*]
+    EXPIRED --> [*]
+    FAILED --> [*]
+    RECONCILED --> [*]
+    REFUNDED --> [*]

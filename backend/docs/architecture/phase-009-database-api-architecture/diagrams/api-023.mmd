@@ -1,0 +1,4 @@
+graph TD
+    GW[API Gateway Ingress] --> HSTS[Inject HSTS Header]
+    HSTS --> NOSNIFF[Inject X-Content-Type-Options: nosniff]
+    NOSNIFF --> DENY[Inject X-Frame-Options: DENY]

@@ -1,0 +1,3 @@
+graph TD
+    APP[agentpay_app Role] -->|SELECT, INSERT, UPDATE| TABLES[Application Relational Tables]
+    APP -.-X|DELETE Prohibited| AUDIT[audit_events & ledger_entries]

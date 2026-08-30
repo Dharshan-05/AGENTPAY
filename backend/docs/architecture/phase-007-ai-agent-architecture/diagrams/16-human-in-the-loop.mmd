@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant Guard as AGENTGUARD Decision Engine
+    participant Queue as Approval Queue (Redis/DB)
+    participant UI as Approval Center UI
+    actor User as Human Owner
+    participant Payment as Payment Service
+
+    Guard->>Queue: Intent State -> PENDING_APPROVAL (TTL: 15m)
+    Queue->>UI: Real-Time WebSocket Push (Card + XAI Trace)
+    UI->>User: Renders Interactive Escalation Card
+    User->>UI: Inspects Card & Clicks "APPROVE"
+    UI->>Queue: POST /api/v1/approvals/intent_123/action (APPROVE)
+    Queue->>Payment: Transition State -> AUTHORIZED
+    Payment->>Payment: Resume Payment Settlement Execution

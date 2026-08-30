@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    actor Admin as Security Admin
+    participant Console as Admin Console UI
+    participant Gateway as API Gateway
+    participant StepUp as Step-Up Auth Verifier
+    participant Core as Core Backend
+
+    Admin->>Console: Request High-Risk Action (e.g. Change Risk Limits)
+    Console->>Console: Prompt Step-Up Auth Modal (Password + TOTP MFA)
+    Admin->>Console: Submits Password + TOTP Code
+    Console->>Gateway: POST /api/v1/admin/step-up (Payload)
+    Gateway->>StepUp: Verify Password Hash & TOTP Token
+    StepUp-->>Gateway: Verification SUCCESS (Token valid 5m)
+    Gateway->>Core: Execute Privileged Action
+    Core->>Core: Log Elevated Security Audit Record
+    Core-->>Console: Action Executed Successfully

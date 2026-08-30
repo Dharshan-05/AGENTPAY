@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Merchant Onboarding - AgentPay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-container-lowest": "#060e1d",
+                "outline-variant": "#434655",
+                "inverse-on-surface": "#283041",
+                "surface-container-highest": "#2d3546",
+                "on-tertiary-fixed-variant": "#004e5c",
+                "surface-variant": "#2d3546",
+                "on-secondary-container": "#c9aeff",
+                "tertiary-fixed": "#acedff",
+                "secondary-fixed": "#eaddff",
+                "primary-container": "#2563eb",
+                "on-secondary-fixed-variant": "#5a00c6",
+                "secondary": "#d2bbff",
+                "on-surface": "#dbe2f8",
+                "surface-tint": "#b4c5ff",
+                "on-primary-fixed": "#00174b",
+                "error-container": "#93000a",
+                "surface-bright": "#31394a",
+                "surface-container": "#18202f",
+                "surface-dim": "#0b1323",
+                "surface": "#0b1323",
+                "primary-fixed-dim": "#b4c5ff",
+                "on-secondary-fixed": "#25005a",
+                "inverse-surface": "#dbe2f8",
+                "background": "#0b1323",
+                "inverse-primary": "#0053db",
+                "surface-container-low": "#131c2b",
+                "on-tertiary-fixed": "#001f26",
+                "on-tertiary-container": "#d7f6ff",
+                "error": "#ffb4ab",
+                "on-primary": "#002a78",
+                "on-secondary": "#3f008e",
+                "on-error": "#690005",
+                "tertiary": "#4cd7f6",
+                "secondary-container": "#6001d1",
+                "on-tertiary": "#003640",
+                "secondary-fixed-dim": "#d2bbff",
+                "on-primary-container": "#eeefff",
+                "outline": "#8d90a0",
+                "primary-fixed": "#dbe1ff",
+                "on-surface-variant": "#c3c6d7",
+                "on-background": "#dbe2f8",
+                "on-primary-fixed-variant": "#003ea8",
+                "surface-container-high": "#222a3a",
+                "tertiary-fixed-dim": "#4cd7f6",
+                "on-error-container": "#ffdad6",
+                "primary": "#b4c5ff",
+                "tertiary-container": "#00788c"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "density-compact": "0.5rem",
+                "margin-safe": "1.5rem",
+                "density-comfortable": "1rem",
+                "gutter": "1rem",
+                "grid-columns": "12"
+        },
+        "fontFamily": {
+                "headline-lg": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg-mobile": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-xl": [
+                        "Hanken Grotesk"
+                ],
+                "button-text": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "label-technical": [
+                        "JetBrains Mono"
+                ]
+        },
+        "fontSize": {
+                "headline-lg": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-xl": [
+                        "36px",
+                        {
+                                "lineHeight": "44px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "button-text": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "18px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-technical": [
+                        "11px",
+                        {
+                                "lineHeight": "14px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        /* Custom scrollbar for dark tech theme */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #434655; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8d90a0; }
+        
+        /* Subtle glow utilities */
+        .glow-cyan { box-shadow: 0 0 12px 0 rgba(76, 215, 246, 0.2); }
+        .glow-cyan-active { box-shadow: 0 0 8px 0 rgba(76, 215, 246, 0.4), inset 0 0 4px 0 rgba(76, 215, 246, 0.2); }
+        .glow-blue { box-shadow: 0 0 12px 0 rgba(37, 99, 235, 0.2); }
+        .glow-blue-active { box-shadow: 0 0 8px 0 rgba(37, 99, 235, 0.4), inset 0 0 4px 0 rgba(37, 99, 235, 0.2); }
+    </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body-md h-screen flex flex-col overflow-hidden">
+<!-- Dedicated Onboarding Header (Navigation Shell Suppressed per Rules) -->
+<header class="h-16 flex-none border-b border-outline-variant bg-surface-container-lowest px-margin-safe flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center glow-blue">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-lg text-[18px] leading-tight font-bold text-on-surface tracking-tight">AgentPay</span>
+<span class="font-label-technical text-label-technical text-outline uppercase">Secure Merchant Onboarding</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-technical text-label-technical text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary inline-block animate-pulse"></span>
+                Session Active
+            </span>
+<button class="px-4 py-2 rounded font-button-text text-button-text text-on-surface-variant border border-outline-variant hover:bg-surface-container-high transition-colors">
+                Save &amp; Exit
+            </button>
+</div>
+</header>
+<!-- Main Workspace Layout -->
+<main class="flex-1 grid grid-cols-12 gap-gutter p-margin-safe overflow-hidden h-full">
+<!-- Left Sidebar: Stepper -->
+<aside class="col-span-12 md:col-span-3 lg:col-span-2 flex flex-col h-full border-r border-outline-variant pr-gutter">
+<h2 class="font-label-technical text-label-technical text-outline uppercase mb-6 tracking-widest">Progress</h2>
+<nav class="flex flex-col relative before:absolute before:inset-y-0 before:left-3 before:w-px before:bg-outline-variant before:-z-10 ml-1">
+<!-- Completed Step 1 -->
+<div class="flex gap-4 items-start relative mb-8 group cursor-pointer">
+<div class="flex-none w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center group-hover:border-on-surface transition-colors mt-0.5">
+<span class="font-label-technical text-[10px] text-outline">01</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface-variant">Business Info</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary">check_circle</span>Completed</span>
+</div>
+</div>
+<!-- Completed Step 2 -->
+<div class="flex gap-4 items-start relative mb-8 group cursor-pointer">
+<div class="flex-none w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center group-hover:border-on-surface transition-colors mt-0.5">
+<span class="font-label-technical text-[10px] text-outline">02</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface-variant">Contact Details</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary">check_circle</span>Completed</span>
+</div>
+</div>
+<!-- Pending Step 3 -->
+<div class="flex gap-4 items-start relative mb-8 group cursor-pointer opacity-75">
+<div class="flex-none w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center group-hover:border-on-surface transition-colors mt-0.5">
+<span class="font-label-technical text-[10px] text-outline">03</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface-variant">Banking Info</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary">check_circle</span>Completed</span>
+</div>
+</div>
+<!-- Active Step 4 -->
+<div class="flex gap-4 items-start relative mb-8">
+<div class="flex-none w-6 h-6 rounded-full bg-surface-dim border border-primary flex items-center justify-center mt-0.5 glow-blue relative z-10">
+<span class="font-label-technical text-[10px] text-primary">04</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-primary">KYC &amp; Compliance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Current Step</span>
+</div>
+</div>
+<!-- Pending Step 5 -->
+<div class="flex gap-4 items-start relative opacity-50">
+<div class="flex-none w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center mt-0.5 bg-surface-dim relative z-10">
+<span class="font-label-technical text-[10px] text-outline">05</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-outline">Review &amp; Sign</span>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Center Main Content: Forms -->
+<section class="col-span-12 md:col-span-6 lg:col-span-7 h-full overflow-y-auto pr-gutter pb-24">
+<div class="mb-8">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Identity Verification</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Securely upload your business registration documents to comply with federal regulations.</p>
+</div>
+<!-- Status Banner -->
+<div class="bg-surface-container-low border-l-2 border-primary rounded p-4 mb-8 flex items-start gap-4 shadow-sm">
+<span class="material-symbols-outlined text-primary mt-0.5">policy</span>
+<div>
+<h3 class="font-button-text text-button-text text-on-surface">In Progress - KYC documents under review</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Our automated systems are verifying your previously submitted details. Please upload the remaining required documents below to expedite the process.</p>
+</div>
+</div>
+<!-- Upload Forms -->
+<div class="space-y-6">
+<!-- PAN Document -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-6 hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-button-text text-button-text text-on-surface flex items-center gap-2">
+                                Permanent Account Number (PAN)
+                                <span class="px-2 py-0.5 bg-error-container/20 border border-error-container text-error rounded text-[10px] uppercase font-bold tracking-wider">Required</span>
+</h4>
+<p class="font-body-sm text-body-sm text-outline mt-1">Company PAN card scan.</p>
+</div>
+<span class="material-symbols-outlined text-outline">credit_card</span>
+</div>
+<div class="border border-dashed border-outline-variant rounded-lg bg-surface-container hover:border-primary hover:bg-surface-container-high transition-all cursor-pointer group p-8 flex flex-col items-center justify-center text-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center mb-3 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">cloud_upload</span>
+</div>
+<span class="font-button-text text-button-text text-on-surface mb-1">Click to upload or drag and drop</span>
+<span class="font-label-technical text-label-technical text-outline">PDF, JPG, PNG (Max 5MB)</span>
+</div>
+</div>
+<!-- GST Certificate -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-6 hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-button-text text-button-text text-on-surface flex items-center gap-2">
+                                GST Registration Certificate
+                                <span class="px-2 py-0.5 bg-error-container/20 border border-error-container text-error rounded text-[10px] uppercase font-bold tracking-wider">Required</span>
+</h4>
+<p class="font-body-sm text-body-sm text-outline mt-1">Form GST REG-06.</p>
+</div>
+<span class="material-symbols-outlined text-outline">receipt_long</span>
+</div>
+<div class="border border-dashed border-outline-variant rounded-lg bg-surface-container hover:border-primary hover:bg-surface-container-high transition-all cursor-pointer group p-8 flex flex-col items-center justify-center text-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center mb-3 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">cloud_upload</span>
+</div>
+<span class="font-button-text text-button-text text-on-surface mb-1">Click to upload or drag and drop</span>
+<span class="font-label-technical text-label-technical text-outline">PDF, JPG, PNG (Max 5MB)</span>
+</div>
+</div>
+<!-- Business Registration (Uploaded State Example) -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-6 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary-container opacity-5 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<h4 class="font-button-text text-button-text text-on-surface flex items-center gap-2">
+                                Certificate of Incorporation
+                            </h4>
+<p class="font-body-sm text-body-sm text-outline mt-1">Business Registration Proof.</p>
+</div>
+<span class="material-symbols-outlined text-primary">verified</span>
+</div>
+<div class="border border-outline-variant rounded bg-surface-container-high p-4 flex items-center justify-between relative z-10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline-variant text-[32px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">description</span>
+<div>
+<p class="font-label-technical text-label-technical text-on-surface truncate w-48">AcmeCorp_Inc_Cert_2023.pdf</p>
+<p class="font-label-technical text-label-technical text-outline mt-0.5">2.4 MB • Uploaded Today</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-container-highest rounded text-outline hover:text-on-surface transition-colors" title="View">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-2 hover:bg-surface-container-highest rounded text-outline hover:text-error transition-colors" title="Remove">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-8 pt-6 border-t border-outline-variant flex justify-end gap-4">
+<button class="px-6 py-2.5 rounded font-button-text text-button-text text-on-surface border border-outline-variant bg-surface-container-low hover:bg-surface-container-high transition-colors">
+                    Back
+                </button>
+<button class="px-6 py-2.5 rounded font-button-text text-button-text bg-primary-container text-on-primary-container hover:bg-primary transition-colors flex items-center gap-2 glow-blue-active">
+                    Verify &amp; Continue
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Right Sidebar: Contextual Help -->
+<aside class="hidden lg:flex col-span-3 h-full flex-col gap-6 pl-4 border-l border-outline-variant overflow-y-auto pb-24">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-5">
+<div class="flex items-center gap-2 mb-3 text-tertiary">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<h3 class="font-label-technical text-label-technical uppercase tracking-wide text-primary">Why this matters</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                    To comply with Anti-Money Laundering (AML) regulations and ensure the security of the AgentPay network, we are required by law to verify the legal existence of your business entities.
+                </p>
+<div class="mt-4 pt-4 border-t border-outline-variant">
+<p class="font-label-technical text-label-technical text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">lock</span> Data encrypted at rest
+                    </p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+<h3 class="font-label-technical text-label-technical text-on-surface mb-3 uppercase tracking-wide">Document Guidelines</h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ensure all four corners of the document are visible.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Text must be clear and legible, not blurry.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-error text-[16px] mt-0.5">cancel</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Do not upload password-protected PDFs.</span>
+</li>
+</ul>
+</div>
+<div class="mt-auto pt-6">
+<p class="font-label-technical text-label-technical text-outline text-center mb-2">Need assistance?</p>
+<button class="w-full py-2 rounded border border-outline-variant font-button-text text-button-text text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors flex justify-center items-center gap-2 bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+                    Contact Support
+                </button>
+</div>
+</aside>
+</main>
+</body></html>

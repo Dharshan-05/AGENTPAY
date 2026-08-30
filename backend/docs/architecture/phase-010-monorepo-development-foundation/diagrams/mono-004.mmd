@@ -1,0 +1,7 @@
+graph TD
+    API[apps/api] --> DB_PKG[@agentpay/database]
+    API --> AUTH_PKG[@agentpay/auth]
+    API --> PAY_PKG[@agentpay/payments]
+    PAY_PKG --> TYPES_PKG[@agentpay/types]
+    DB_PKG --> TYPES_PKG
+    AUTH_PKG --> TYPES_PKG

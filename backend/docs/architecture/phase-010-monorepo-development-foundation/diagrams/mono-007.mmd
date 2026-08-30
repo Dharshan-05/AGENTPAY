@@ -1,0 +1,5 @@
+graph TD
+    GW[API Ingress Router] --> MW[Zod Request Validation & Auth MW]
+    MW --> SERVICE[Payment Orchestration Service]
+    SERVICE --> OUTBOX[Outbox Event Publisher]
+    SERVICE --> RZP[Razorpay Payment Adapter]

@@ -1,0 +1,27 @@
+graph TD
+    subgraph Untrusted Internet
+        CLIENT[User Browser / AI Agent]
+    end
+
+    subgraph Boundary 1: Edge TLS 1.3 & HMAC Validation
+        GW[API Gateway Router]
+    end
+
+    subgraph Boundary 2: Microservice Network
+        GUARD[AGENTGUARD Control Plane]
+        PAYMENT[Payment Orchestrator]
+    end
+
+    subgraph Boundary 3: Private Storage Subnet
+        DB[(PostgreSQL RLS Database)]
+    end
+
+    subgraph Boundary 4: External Settlement Rails
+        RAZORPAY[Razorpay API Gateway]
+    end
+
+    CLIENT --> GW
+    GW --> GUARD
+    GUARD --> PAYMENT
+    PAYMENT --> DB
+    PAYMENT --> RAZORPAY

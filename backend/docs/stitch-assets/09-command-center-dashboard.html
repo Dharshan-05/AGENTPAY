@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgentPay Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#222a3a",
+                        "surface-container-lowest": "#060e1d",
+                        "background": "#0b1323",
+                        "surface-dim": "#0b1323",
+                        "inverse-on-surface": "#283041",
+                        "on-primary-container": "#eeefff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-bright": "#31394a",
+                        "on-primary": "#002a78",
+                        "surface-tint": "#b4c5ff",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#acedff",
+                        "secondary-fixed": "#eaddff",
+                        "surface": "#0b1323",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#2d3546",
+                        "on-tertiary-fixed": "#001f26",
+                        "tertiary": "#4cd7f6",
+                        "on-secondary-fixed": "#25005a",
+                        "surface-variant": "#2d3546",
+                        "outline-variant": "#434655",
+                        "on-tertiary": "#003640",
+                        "secondary-container": "#6001d1",
+                        "surface-container-low": "#131c2b",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "on-tertiary-container": "#d7f6ff",
+                        "surface-container": "#18202f",
+                        "on-secondary": "#3f008e",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-surface": "#dbe2f8",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "error": "#ffb4ab",
+                        "secondary": "#d2bbff",
+                        "on-surface-variant": "#c3c6d7",
+                        "outline": "#8d90a0",
+                        "primary-container": "#2563eb",
+                        "on-background": "#dbe2f8",
+                        "on-secondary-container": "#c9aeff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#00788c",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-surface": "#dbe2f8",
+                        "primary": "#b4c5ff",
+                        "inverse-primary": "#0053db",
+                        "on-primary-fixed-variant": "#003ea8"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "grid-columns": "12",
+                        "gutter": "1rem",
+                        "density-comfortable": "1rem",
+                        "margin-safe": "1.5rem",
+                        "density-compact": "0.5rem"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "button-text": ["Inter"],
+                        "label-technical": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "headline-xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "headline-lg-mobile": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "button-text": ["14px", { lineHeight: "20px", fontWeight: "600" }],
+                        "label-technical": ["11px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .neon-border {
+            border: 1px solid theme('colors.primary');
+            box-shadow: 0 0 8px rgba(180, 197, 255, 0.2);
+        }
+        .ai-glow {
+            border: 1px solid theme('colors.secondary');
+            box-shadow: 0 0 12px rgba(210, 187, 255, 0.3);
+        }
+        .card-panel {
+            background-color: theme('colors.surface-container-low');
+            border: 1px solid theme('colors.outline-variant');
+            border-radius: theme('borderRadius.DEFAULT');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-[100] flex justify-between items-center px-margin-safe h-16 bg-surface-container-low dark:bg-surface-container-low border-b border-outline-variant shadow-sm text-primary dark:text-primary">
+<div class="flex items-center gap-6">
+<div class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hexagon</span>
+                AgentPay
+            </div>
+<nav class="hidden md:flex gap-6 items-center h-full">
+<a class="h-full flex items-center font-label-technical text-label-technical text-primary font-bold border-b-2 border-primary pb-1" href="#">Dashboard</a>
+<a class="h-full flex items-center font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">AgentPay</a>
+<a class="h-full flex items-center font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">AgentGuard</a>
+<a class="h-full flex items-center font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">FraudGuard</a>
+<a class="h-full flex items-center font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">Transactions</a>
+<a class="h-full flex items-center font-label-technical text-label-technical text-on-surface-variant font-medium hover:text-tertiary transition-colors duration-200" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-highest px-3 py-1.5 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-outline text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none text-body-sm text-on-surface focus:ring-0 w-48 placeholder-outline-variant" placeholder="Search anything..." type="text"/>
+</div>
+<span class="font-label-technical text-label-technical text-on-surface-variant hidden md:block">Powered by Razorpay</span>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- SideNavBar & Main Content Wrapper -->
+<div class="flex h-full pt-16">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 flex flex-col p-density-comfortable z-50 bg-background dark:bg-background border-r border-outline-variant hidden xl:flex">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant overflow-hidden">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile text-primary">AgentPay AI</h2>
+<p class="font-label-technical text-label-technical text-on-surface-variant">Autonomous Finance</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container rounded-lg font-bold shadow-[0_0_8px_rgba(76,215,246,0.3)] font-label-technical text-label-technical transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+                    AgentPay
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">security</span>
+                    AgentGuard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+                    FraudGuard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                    Transactions
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="mt-auto flex flex-col gap-4">
+<button class="w-full py-2 bg-surface-container-highest border border-outline-variant text-primary font-button-text text-button-text rounded flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    New Agent
+                </button>
+<div class="flex flex-col gap-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+                        Support
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface rounded-lg font-label-technical text-label-technical transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                        Logout
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-0 xl:ml-64 overflow-y-auto p-density-comfortable md:p-margin-safe bg-surface-lowest">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Command Center</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Monitor your business, payments, operations, and AI insights from one place.</p>
+</div>
+<div class="flex gap-3">
+<div class="flex bg-surface-container-high rounded border border-outline-variant overflow-hidden">
+<button class="px-3 py-1.5 font-label-technical text-label-technical text-on-surface bg-surface-variant">Today</button>
+<button class="px-3 py-1.5 font-label-technical text-label-technical text-on-surface-variant hover:bg-surface-variant">7D</button>
+<button class="px-3 py-1.5 font-label-technical text-label-technical text-on-surface-variant hover:bg-surface-variant">30D</button>
+<button class="px-3 py-1.5 font-label-technical text-label-technical text-on-surface-variant hover:bg-surface-variant">1Y</button>
+</div>
+<button class="bg-primary text-on-primary font-button-text text-button-text px-4 py-1.5 rounded flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-[0_0_10px_rgba(37,99,235,0.4)]">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+                        Quick Action
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- KPI Cards (Cols 1-8, rows 1-2) -->
+<div class="md:col-span-8 grid grid-cols-2 lg:grid-cols-3 gap-density-comfortable">
+<!-- KPI 1 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Total Revenue</span>
+<span class="material-symbols-outlined text-outline text-[16px]">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹24.86 Cr</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                +18.4%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-20"></div>
+</div>
+<!-- KPI 2 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Total Transactions</span>
+<span class="material-symbols-outlined text-outline text-[16px]">receipt_long</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">1.84M</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                +12.8%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-20"></div>
+</div>
+<!-- KPI 3 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Successful Payments</span>
+<span class="material-symbols-outlined text-outline text-[16px]">check_circle</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">98.42%</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                +1.24%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-20"></div>
+</div>
+<!-- KPI 4 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-error transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Failed Payments</span>
+<span class="material-symbols-outlined text-outline text-[16px]">error</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">1.58%</div>
+<div class="flex items-center gap-1 mt-1 text-error font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                                -0.42%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-error to-transparent opacity-20"></div>
+</div>
+<!-- KPI 5 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Active Customers</span>
+<span class="material-symbols-outlined text-outline text-[16px]">group</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">84,291</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                +8.7%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-20"></div>
+</div>
+<!-- KPI 6 -->
+<div class="card-panel p-4 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-technical text-label-technical text-on-surface-variant">Avg Transaction</span>
+<span class="material-symbols-outlined text-outline text-[16px]">price_change</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹1,352</div>
+<div class="flex items-center gap-1 mt-1 text-tertiary font-label-technical text-label-technical">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                +4.2%
+                            </div>
+</div>
+<div class="mt-3 h-8 w-full bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-20"></div>
+</div>
+</div>
+<!-- AI Command Center (Cols 9-12, rows 1-2) -->
+<div class="md:col-span-4 ai-glow card-panel p-5 relative overflow-hidden bg-surface-container-highest flex flex-col">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent pointer-events-none"></div>
+<div class="flex items-center gap-2 mb-4 relative z-10">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">AI Command Center</h2>
+</div>
+<div class="relative z-10 mb-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">mic</span>
+<input class="w-full bg-surface-container-lowest border border-secondary/50 rounded-full py-2.5 pl-10 pr-4 text-body-sm text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary/50 placeholder-on-surface-variant/50" placeholder="Ask AI anything..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<button class="bg-surface-variant border border-outline-variant px-2 py-1 rounded text-[10px] font-label-technical text-on-surface-variant hover:text-on-surface hover:border-secondary transition-colors">Why did payment failures increase?</button>
+<button class="bg-surface-variant border border-outline-variant px-2 py-1 rounded text-[10px] font-label-technical text-on-surface-variant hover:text-on-surface hover:border-secondary transition-colors">Predict tomorrow's volume</button>
+</div>
+</div>
+<div class="flex-1 relative z-10 flex flex-col gap-2 mt-2">
+<h3 class="font-label-technical text-label-technical text-on-surface-variant mb-1 uppercase tracking-wider">AI Insights</h3>
+<div class="bg-surface-container-low border border-error/30 rounded p-2 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[16px]">trending_up</span>
+<span class="font-body-sm text-body-sm text-on-surface">Payment failure increase</span>
+</div>
+<button class="text-error text-[10px] font-label-technical uppercase border border-error/50 px-2 py-0.5 rounded hover:bg-error/10">Investigate</button>
+</div>
+<div class="bg-surface-container-low border border-tertiary/30 rounded p-2 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]">show_chart</span>
+<span class="font-body-sm text-body-sm text-on-surface">Revenue above forecast</span>
+</div>
+<button class="text-tertiary text-[10px] font-label-technical uppercase border border-tertiary/50 px-2 py-0.5 rounded hover:bg-tertiary/10">View Details</button>
+</div>
+<div class="bg-surface-container-low border border-secondary/30 rounded p-2 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">policy</span>
+<span class="font-body-sm text-body-sm text-on-surface">Unusual patterns detected</span>
+</div>
+<button class="text-secondary text-[10px] font-label-technical uppercase border border-secondary/50 px-2 py-0.5 rounded hover:bg-secondary/10">Review</button>
+</div>
+</div>
+</div>
+<!-- Revenue Analytics Chart (Cols 1-8, row 3) -->
+<div class="md:col-span-8 card-panel p-4 flex flex-col h-80">
+<div class="flex justify-between items-center mb-4 border-b border-outline-variant pb-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Revenue Analytics</h2>
+<div class="flex bg-surface-container-highest rounded border border-outline-variant">
+<button class="px-2 py-1 text-[10px] font-label-technical text-on-surface-variant hover:text-on-surface border-r border-outline-variant">7D</button>
+<button class="px-2 py-1 text-[10px] font-label-technical text-on-surface bg-surface-variant border-r border-outline-variant">30D</button>
+<button class="px-2 py-1 text-[10px] font-label-technical text-on-surface-variant hover:text-on-surface border-r border-outline-variant">90D</button>
+<button class="px-2 py-1 text-[10px] font-label-technical text-on-surface-variant hover:text-on-surface">1Y</button>
+</div>
+</div>
+<div class="flex-1 relative w-full h-full bg-surface-container-lowest/50 rounded flex items-end overflow-hidden border border-outline-variant/30">
+<!-- Placeholder for Chart -->
+<div class="w-full h-full flex items-center justify-center text-outline font-label-technical">
+                            [Interactive Area Chart Rendering]
+                        </div>
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary/10 to-transparent pointer-events-none"></div>
+</div>
+</div>
+<!-- Transaction Performance (Cols 9-12, row 3) -->
+<div class="md:col-span-4 card-panel p-4 flex flex-col h-80">
+<div class="flex justify-between items-center mb-4 border-b border-outline-variant pb-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Transaction Status</h2>
+<button class="text-outline hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</div>
+<div class="flex-1 flex items-center justify-center relative">
+<!-- Placeholder for Donut Chart -->
+<div class="w-40 h-40 rounded-full border-4 border-surface-variant relative flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-tertiary" style="clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 50% 100%);"></div>
+<div class="absolute inset-0 rounded-full border-4 border-error" style="clip-path: polygon(50% 50%, 50% 100%, 0 100%, 0 80%);"></div>
+<div class="absolute inset-0 rounded-full border-4 border-secondary" style="clip-path: polygon(50% 50%, 0 80%, 0 0, 50% 0);"></div>
+<div class="text-center">
+<div class="font-headline-lg-mobile text-headline-lg-mobile">1.84M</div>
+<div class="text-[10px] text-outline font-label-technical uppercase">Total</div>
+</div>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-2 text-[10px] font-label-technical">
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-tertiary"></div> Success (98.4%)</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-error"></div> Failed (1.5%)</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-secondary"></div> Pending (0.1%)</div>
+<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-surface-variant"></div> Refunded (&lt;0.1%)</div>
+</div>
+</div>
+<!-- Recent Activity & Alerts (Cols 1-8, row 4) -->
+<div class="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Attention Required -->
+<div class="card-panel p-4 flex flex-col border-error/50 bg-error/5">
+<div class="flex items-center gap-2 mb-3 border-b border-error/20 pb-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Attention Required</h2>
+</div>
+<div class="flex flex-col gap-2">
+<div class="bg-surface-container-highest p-3 rounded border border-error/30 flex justify-between items-start">
+<div>
+<div class="text-error font-label-technical text-[10px] uppercase mb-1">Critical</div>
+<div class="font-body-md text-on-surface">Payment failure rate high on Gateway A</div>
+</div>
+<button class="text-on-surface hover:text-error"><span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+</div>
+<div class="bg-surface-container-highest p-3 rounded border border-secondary/30 flex justify-between items-start">
+<div>
+<div class="text-secondary font-label-technical text-[10px] uppercase mb-1">Warning</div>
+<div class="font-body-md text-on-surface">Settlement delayed for Merchant ID #892</div>
+</div>
+<button class="text-on-surface hover:text-secondary"><span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="card-panel p-4 flex flex-col">
+<div class="flex justify-between items-center mb-3 border-b border-outline-variant pb-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Recent Activity</h2>
+<button class="text-[10px] font-label-technical text-primary hover:underline uppercase">View All</button>
+</div>
+<div class="flex flex-col gap-3 flex-1 overflow-y-auto">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary/10 border border-tertiary/30 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[16px]">payments</span>
+</div>
+<div>
+<div class="font-body-sm text-on-surface">Payment received <span class="text-tertiary">₹45,000</span></div>
+<div class="text-[10px] text-outline font-label-technical">2 mins ago • TXN-8921</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[16px]">currency_exchange</span>
+</div>
+<div>
+<div class="font-body-sm text-on-surface">Refund processed <span class="text-outline">₹1,200</span></div>
+<div class="text-[10px] text-outline font-label-technical">15 mins ago • REF-091</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[16px]">storefront</span>
+</div>
+<div>
+<div class="font-body-sm text-on-surface">New merchant onboarded</div>
+<div class="text-[10px] text-outline font-label-technical">1 hour ago • TechStore Inc.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions & System Health (Cols 9-12, row 4) -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Quick Actions -->
+<div class="card-panel p-4">
+<h2 class="font-label-technical text-label-technical text-on-surface-variant uppercase mb-3 border-b border-outline-variant pb-2">Quick Actions</h2>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-surface-container-highest hover:bg-surface-variant border border-outline-variant rounded p-3 flex flex-col items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-primary">add_circle</span>
+<span class="text-[10px] font-label-technical text-on-surface text-center">Create Payment</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-surface-variant border border-outline-variant rounded p-3 flex flex-col items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-tertiary">person_add</span>
+<span class="text-[10px] font-label-technical text-on-surface text-center">Add Merchant</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-surface-variant border border-outline-variant rounded p-3 flex flex-col items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-outline">undo</span>
+<span class="text-[10px] font-label-technical text-on-surface text-center">Process Refund</span>
+</button>
+<button class="bg-surface-container-highest hover:bg-surface-variant border border-outline-variant rounded p-3 flex flex-col items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">description</span>
+<span class="text-[10px] font-label-technical text-on-surface text-center">Generate Report</span>
+</button>
+</div>
+</div>
+<!-- System Health -->
+<div class="card-panel p-4 flex-1">
+<div class="flex justify-between items-center mb-3 border-b border-outline-variant pb-2">
+<h2 class="font-label-technical text-label-technical text-on-surface-variant uppercase">System Health</h2>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface">API Gateway</span>
+<span class="text-tertiary font-label-technical">99.99% • 45ms</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface">Webhooks</span>
+<span class="text-tertiary font-label-technical">100% • 12ms</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface">Database</span>
+<span class="text-tertiary font-label-technical">99.98% • 8ms</span>
+</div>
+<div class="flex justify-between items-center text-body-sm opacity-50 mt-1 pt-1 border-t border-outline-variant">
+<span class="text-on-surface">Fraud Engine (AI)</span>
+<span class="text-secondary font-label-technical">Active • 110ms</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Content -->
+<footer class="mt-8 pt-4 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4 w-full px-margin-safe py-density-compact bg-surface-container-lowest text-on-surface-variant font-body-sm">
+<div>© 2024 AgentPay Autonomous Systems. Secure AI Payment Platform.</div>
+<div class="flex gap-4">
+<a class="hover:text-tertiary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-tertiary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-tertiary transition-colors" href="#">Security Standards</a>
+<a class="hover:text-tertiary transition-colors" href="#">API Reference</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

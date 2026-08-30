@@ -1,0 +1,6 @@
+graph TD
+    TASK[Task Request] --> EVAL{Evaluate Task Type & Complexity}
+    EVAL -- Intent Classification --> FAST[Fast Model: gpt-4o-mini / Llama-3-8B]
+    EVAL -- Complex Decomposition --> REASON[Reasoning Engine: gpt-4o / Claude 3.5]
+    EVAL -- Fraud Scoring --> XGBOOST[Deterministic ML: XGBoost Classifier]
+    EVAL -- Policy Check --> CODE[Deterministic Policy: TypeScript Rules]

@@ -1,0 +1,4 @@
+graph TD
+    RZP[Razorpay Webhook Callback] --> POST[POST /api/v1/webhooks/razorpay]
+    POST --> VERIFY[Verify HMAC-SHA256 Signature & Deduplicate Event ID]
+    VERIFY --> ACK[Return HTTP 200 OK & Push Event to Worker Queue]

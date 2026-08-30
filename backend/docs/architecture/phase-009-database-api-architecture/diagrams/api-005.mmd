@@ -1,0 +1,4 @@
+graph LR
+    JWT[JWT / HMAC Authentication] --> EXTRACT[Extract Server-Side tenant_id Claim]
+    EXTRACT --> BIND[Bind SET LOCAL app.current_tenant in DB Connection]
+    BIND --> RLS[PostgreSQL Row-Level Security Execution]

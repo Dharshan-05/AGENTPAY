@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> CREATED: User Creates Agent Principal
+    CREATED --> VERIFIED: HMAC Secret Keys Issued
+    VERIFIED --> ACTIVE: Policy Limits Assigned
+    ACTIVE --> SUSPENDED: Anomaly Detected / Emergency Stop
+    ACTIVE --> REVOKED: Human User Revokes Agent
+    SUSPENDED --> ACTIVE: Human Re-verifies Agent
+    SUSPENDED --> REVOKED: Revocation Confirmed
+    REVOKED --> [*]: Sub-10ms Cache Purge Complete

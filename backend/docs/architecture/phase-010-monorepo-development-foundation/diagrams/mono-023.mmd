@@ -1,0 +1,4 @@
+graph TD
+    APP[Application Microservice] --> OTEL[@agentpay/observability OTEL SDK]
+    OTEL --> WINSTON[Winston JSON Logger]
+    WINSTON --> STDOUT[Standard Output Logs (trace_id)]

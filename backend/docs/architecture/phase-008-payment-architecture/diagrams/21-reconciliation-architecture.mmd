@@ -1,0 +1,7 @@
+graph TD
+    CRON[Nightly Cron Job 01:00 UTC] --> RZP[Fetch Razorpay Settlement Batch API]
+    RZP --> FETCH_DB[Fetch Local Database Transactions]
+    FETCH_DB --> COMPARE[Compare Amount, Status & Idempotency Keys]
+    COMPARE --> RESULT{Match 100%?}
+    RESULT -- YES --> MATCHED[Mark State: MATCHED]
+    RESULT -- NO --> ALERT[Generate Reconciliation Discrepancy Record & SecOps Alert]

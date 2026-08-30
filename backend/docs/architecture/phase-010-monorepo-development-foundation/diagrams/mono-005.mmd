@@ -1,0 +1,5 @@
+graph TD
+    HTTP[API Controller Ingress] --> SERVICE[Application Service Layer]
+    SERVICE --> DOMAIN[Domain Entity State Machine]
+    DOMAIN --> REPO[Repository Data Access Layer]
+    REPO --> PG[(PostgreSQL Database)]

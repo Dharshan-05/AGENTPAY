@@ -1,0 +1,8 @@
+graph TD
+    ALERT[Security Incident Event Triggered] --> CLASSIFY{Classify Severity}
+    CLASSIFY -- P0 Critical --> CONTAIN_P0[Auto-Engage Emergency Kill Switch & Isolate Agent]
+    CLASSIFY -- P1 High --> CONTAIN_P1[Suspend Target Agent & Freeze Active Sessions]
+    CLASSIFY -- P2/P3 --> INVESTIGATE[Notify Security Analyst for Manual Review]
+    CONTAIN_P0 & CONTAIN_P1 --> ERADICATE[Revoke Compromised Credentials & Patch Root Cause]
+    ERADICATE --> RECOVER[Verify System Integrity & Restore Operations]
+    RECOVER --> POSTMORTEM[Generate Incident RCA Report & Audit Log]

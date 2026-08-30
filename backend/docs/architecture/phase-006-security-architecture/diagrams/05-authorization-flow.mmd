@@ -1,0 +1,10 @@
+graph TD
+    AUTH[Authenticated Request] --> RBAC{RBAC Check: Role Allowed?}
+    RBAC -- NO --> DENY1[DENY: ERR_ROLE_UNAUTHORIZED]
+    RBAC -- YES --> SCOPE{Scope Check: Has spend:intent_create?}
+    SCOPE -- NO --> DENY2[DENY: ERR_SCOPE_DENIED]
+    SCOPE -- YES --> TENANT{Tenant Check: Resource tenant_id Match?}
+    TENANT -- NO --> DENY3[DENY: ERR_TENANT_MISMATCH]
+    TENANT -- YES --> ABAC{ABAC Check: Policy & Risk Threshold Pass?}
+    ABAC -- NO --> DENY4[DENY: ERR_POLICY_BREACH]
+    ABAC -- YES --> GRANT[GRANT: Proceed to Execution]

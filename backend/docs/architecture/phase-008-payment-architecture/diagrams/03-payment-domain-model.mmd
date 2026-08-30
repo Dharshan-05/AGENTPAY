@@ -1,0 +1,10 @@
+erDiagram
+    TENANT ||--o{ USER : owns
+    TENANT ||--o{ AGENT : owns
+    TENANT ||--o{ ORDER : scope
+    ORDER ||--o{ PAYMENT_INTENT : triggers
+    PAYMENT_INTENT ||--o| PAYMENT_AUTHORIZATION : receives
+    PAYMENT_AUTHORIZATION ||--o| PAYMENT : executes
+    PAYMENT ||--o{ PAYMENT_ATTEMPT : attempts
+    PAYMENT ||--o{ REFUND : refunds
+    PAYMENT ||--o{ LEDGER_ENTRY : posts

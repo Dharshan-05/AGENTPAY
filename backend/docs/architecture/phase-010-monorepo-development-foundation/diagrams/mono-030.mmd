@@ -1,0 +1,5 @@
+graph TD
+    MONO[Monorepo Root] --> DOCKER_BUILD[Multi-Stage Docker Build]
+    DOCKER_BUILD --> BASE[Stage 1: Base Alpine Image]
+    BASE --> DEPS[Stage 2: Install Workspace Dependencies]
+    DEPS --> PROD[Stage 3: Minimal Production Image (USER node)]

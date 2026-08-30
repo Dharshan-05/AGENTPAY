@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    participant Razorpay as Razorpay Webhook Gateway
+    participant Listener as Webhook Listener Endpoint
+    participant Queue as Redis Queue
+    participant Worker as Background State Machine Worker
+
+    Razorpay->>Listener: POST /api/v1/webhooks/razorpay
+    Listener->>Listener: Verify HMAC-SHA256 Signature
+    Listener->>Queue: Push Event to Queue
+    Listener-->>Razorpay: HTTP 200 OK (Fast Ack < 5ms)
+    Queue->>Worker: Consume Webhook Event
+    Worker->>Worker: Execute State Machine Update & Outbox

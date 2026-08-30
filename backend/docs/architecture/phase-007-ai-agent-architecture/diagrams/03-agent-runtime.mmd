@@ -1,0 +1,8 @@
+graph TD
+    TASK[Task Ingress] --> STATE_INIT[Load Agent Principal & Session State]
+    STATE_INIT --> PROMPT_BUILD[Inject 6-Tier System Prompt Hierarchy]
+    PROMPT_BUILD --> INFER[Execute LLM Model Inference]
+    INFER --> PARSE[Parse Structured Plan Schema Output]
+    PARSE --> VALIDATE[Validate Action Scopes & Capabilities]
+    VALIDATE --> EXECUTE[Invoke Registered Tool Function]
+    EXECUTE --> MEMORY_SAVE[Save Task State Checkpoint in Redis]

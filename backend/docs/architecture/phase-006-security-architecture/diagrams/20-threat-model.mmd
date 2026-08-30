@@ -1,0 +1,10 @@
+graph TD
+    ATTACKER[Adversary / Compromised Agent] --> S1[Spoofing: Stolen Key]
+    ATTACKER --> S2[Tampering: Payload Mod]
+    ATTACKER --> S3[Information Leak: Credential Exposure]
+    ATTACKER --> S4[Elevation: Prompt Injection]
+
+    S1 --> DEF1[HMAC Signatures & Replay Nonce Cache]
+    S2 --> DEF2[Canonical Payload Signatures & TLS 1.3]
+    S3 --> DEF3[Zero Banking Credential Storage in LLMs]
+    S4 --> DEF4[AGENTGUARD External Policy Gate Supremacy]

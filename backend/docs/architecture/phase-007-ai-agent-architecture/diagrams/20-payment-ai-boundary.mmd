@@ -1,0 +1,11 @@
+graph TD
+    LLM[LLM Reasoning Engine] -->|1. Generates Structured Intent Payload| PROPOSAL[Payment Intent Proposal]
+    PROPOSAL -->|2. Submits to Gateway| GATEWAY[API Gateway Edge]
+    GATEWAY -->|3. Validates Capabilities| SCOPE[Scope & Capability Checker]
+    SCOPE -->|4. Evaluates Business Rules| GUARD[AGENTGUARD Security Policy Engine]
+    GUARD -->|5. Scores Fraud Anomaly| FRAUD[FRAUDGUARD XGBoost ML Risk Service]
+    FRAUD -->|6. Generates Auth Token| TOKEN[Signed Payment Authorization Token]
+    TOKEN -->|7. Dispatches Settlement| ORCH[Payment Orchestrator]
+    ORCH -->|8. Executes Payment| RAZORPAY[Razorpay Settlement API]
+
+    LLM -.-X|STRICTLY FORBIDDEN DIRECT ACCESS| RAZORPAY

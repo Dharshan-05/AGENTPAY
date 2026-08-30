@@ -1,0 +1,13 @@
+graph TB
+    CLIENT[Client / Agent] --> GW[API Gateway]
+    GW --> INTENT[Payment Intent Service]
+    INTENT --> GUARD[AGENTGUARD]
+    GUARD --> FRAUD[FRAUDGUARD]
+    GUARD --> AUTH[Authorization Service]
+    AUTH --> ORCH[Payment Orchestrator]
+    ORCH --> ADAPTER[Razorpay Adapter]
+    ADAPTER --> RAZORPAY[Razorpay API]
+    RAZORPAY --> WEBHOOK[Webhook Listener]
+    WEBHOOK --> STATE[State Machine Engine]
+    STATE --> LEDGER[Double-Entry Ledger]
+    LEDGER --> RECON[Reconciliation Engine]
