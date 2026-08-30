@@ -1,0 +1,10 @@
+{
+  "risk": "template",
+  "health": "pnpm dev",
+  "agentFiles": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "deployPolicy": "none",
+  "globalHooksAllowed": false
+}

@@ -1,0 +1,195 @@
+RTOS_PERMISSION_ENGINE.PY
+made with Sesame
+
+RTOS Permission Engine — Core Logic
+
+Deterministic gatekeeper for command execution with Force Execute override.
+
+Stripped-down, production-ready. No fluff.
+
+from enum import Enum
+from dataclasses import dataclass
+from typing import Callable
+
+──────────────────────────────────────────────
+made with Sesame
+PERMISSION TIERS
+made with Sesame
+──────────────────────────────────────────────
+made with Sesame
+
+class PermissionLevel(Enum):
+    OPEN       = 0   # No restriction — execute freely
+    GUARDED    = 1   # Requires role match
+    RESTRICTED = 2   # Requires elevated role + reason
+    LOCKED     = 3   # Blocked entirely unless FORCE flag is set
+
+
+──────────────────────────────────────────────
+made with Sesame
+COMMAND DEFINITION
+made with Sesame
+──────────────────────────────────────────────
+made with Sesame
+
+@dataclass(frozen=True)
+class Command:
+    name: str
+    permission: PermissionLevel
+    handler: Callable[..., str]
+    description: str = ""
+
+
+──────────────────────────────────────────────
+made with Sesame
+CALLER CONTEXT
+made with Sesame
+──────────────────────────────────────────────
+made with Sesame
+
+@dataclass(frozen=True)
+class CallerContext:
+    role: str                        # e.g. "admin", "operator", "guest"
+    force_execute: bool = False      # Override flag for troubleshooting
+    reason: str = ""                 # Required when accessing RESTRICTED commands
+
+
+──────────────────────────────────────────────
+made with Sesame
+PERMISSION ENGINE
+made with Sesame
+──────────────────────────────────────────────
+made with Sesame
+
+class PermissionEngine:
+    """
+    Fast, deterministic gatekeeper for command execution.
+    Decision order: LOCKED → FORCE_EXECUTE → GUARDED/RESTRICTED → OPEN.
+    No ambiguity. No async. No side effects on deny.
+    """
+
+    ROLE_HIERARCHY: dict[str, int] = {
+        "guest":    0,
+        "operator": 1,
+        "admin":    2,
+        "root":     3,
+    }
+
+    def __init__(self) -> None:
+        self._registry: dict[str, Command] = {}
+        self._audit_log: list[dict] = []
+
+    def register(self, command: Command) -> None:
+        """Register a command into the engine."""
+        self._registry[command.name] = command
+
+    def execute(self, command_name: str, caller: CallerContext, **kwargs) -> str:
+        """
+        Evaluate permission and execute command if cleared.
+        Returns result string or denial message.
+        """
+        cmd = self._registry.get(command_name)
+        if not cmd:
+            return f"[DENY] Unknown command: '{command_name}'"
+
+        result = self._gate(cmd, caller)
+
+        self._audit(command_name, caller, result)
+
+        if result == "ALLOW":
+            return cmd.handler(**kwargs)
+        else:
+            return f"[DENY] {command_name} — {result}"
+
+    def _gate(self, cmd: Command, caller: CallerContext) -> str:
+        """
+        Core gatekeeper. Returns 'ALLOW' or a denial reason string.
+        """
+        level = cmd.permission
+
+        # LOCKED — blocked unless Force Execute is active
+        if level == PermissionLevel.LOCKED:
+            if caller.force_execute:
+                return "ALLOW"  # Force Execute override engaged
+            return "Command is LOCKED. Use force_execute=True to override."
+
+        # Force Execute bypasses GUARDED and RESTRICTED (not LOCKED — already handled above)
+        if caller.force_execute:
+            return "ALLOW"
+
+        # OPEN — no restriction
+        if level == PermissionLevel.OPEN:
+            return "ALLOW"
+
+        caller_rank = self.ROLE_HIERARCHY.get(caller.role, -1)
+
+        # GUARDED — requires at least operator rank
+        if level == PermissionLevel.GUARDED:
+            if caller_rank >= self.ROLE_HIERARCHY["operator"]:
+                return "ALLOW"
+            return f"GUARDED command requires 'operator' role or higher. Caller: '{caller.role}'"
+
+        # RESTRICTED — requires admin rank + a stated reason
+        if level == PermissionLevel.RESTRICTED:
+            if caller_rank < self.ROLE_HIERARCHY["admin"]:
+                return f"RESTRICTED command requires 'admin' role or higher. Caller: '{caller.role}'"
+            if not caller.reason.strip():
+                return "RESTRICTED command requires a non-empty reason."
+            return "ALLOW"
+
+        return "DENY — unrecognized permission level."
+
+    def _audit(self, command_name: str, caller: CallerContext, result: str) -> None:
+        """Lightweight audit trail — in-memory. Swap for DB/log sink in prod."""
+        self._audit_log.append({
+            "command":       command_name,
+            "role":          caller.role,
+            "force_execute": caller.force_execute,
+            "reason":        caller.reason,
+            "result":        result,
+        })
+
+    def audit_log(self) -> list[dict]:
+        return list(self._audit_log)
+
+
+──────────────────────────────────────────────
+made with Sesame
+QUICK SMOKE TEST / USAGE EXAMPLE
+made with Sesame
+──────────────────────────────────────────────
+made with Sesame
+
+if __name__ == "__main__":
+    engine = PermissionEngine()
+
+    # Register sample commands
+    engine.register(Command("ping",          PermissionLevel.OPEN,       lambda: "pong",                    "Health check"))
+    engine.register(Command("read_config",   PermissionLevel.GUARDED,    lambda: "config loaded",           "Read system config"))
+    engine.register(Command("flush_cache",   PermissionLevel.RESTRICTED, lambda: "cache flushed",           "Flush all caches"))
+    engine.register(Command("kill_process",  PermissionLevel.LOCKED,     lambda: "process terminated",      "Hard-kill a process"))
+
+    guest    = CallerContext(role="guest")
+    operator = CallerContext(role="operator")
+    admin    = CallerContext(role="admin", reason="scheduled maintenance")
+    override = CallerContext(role="operator", force_execute=True, reason="troubleshooting prod issue")
+
+    tests = [
+        ("ping",         guest),
+        ("read_config",  guest),
+        ("read_config",  operator),
+        ("flush_cache",  operator),
+        ("flush_cache",  admin),
+        ("kill_process", admin),
+        ("kill_process", override),   # Force Execute — should pass
+    ]
+
+    print("=== RTOS Permission Engine — Smoke Test ===\n")
+    for cmd_name, ctx in tests:
+        out = engine.execute(cmd_name, ctx)
+        fe  = " [FORCE]" if ctx.force_execute else ""
+        print(f"  [{ctx.role.upper()}{fe}] {cmd_name:15s} → {out}")
+
+    print("\n=== Audit Log ===")
+    for entry in engine.audit_log():
+        print(f"  {entry}")

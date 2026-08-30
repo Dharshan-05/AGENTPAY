@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract BlockchainMessenger {
+    address public owner;
+    string public message;
+    uint256 public updateCount;
+
+    // Event emitted when the message is updated
+    event MessageUpdated(string newMessage, uint256 updateCount);
+
+    // Constructor sets the deployer as the owner
+    constructor(string memory initialMessage) {
+        owner = msg.sender;
+        message = initialMessage;
+        updateCount = 0;
+    }
+
+    // Modifier to restrict access to the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can update the message.");
+        _;
+    }
+
+    // Function to update the message
+    function updateMessage(string memory newMessage) public onlyOwner {
+        message = newMessage;
+        updateCount += 1;
+        emit MessageUpdated(newMessage, updateCount);
+    }
+}

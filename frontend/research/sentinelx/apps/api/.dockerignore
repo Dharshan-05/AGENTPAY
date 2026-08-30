@@ -1,0 +1,71 @@
+# Docker ignore file
+
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist
+build
+*.tsbuildinfo
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Environment files (not for production)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage
+.nyc_output
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+
+# Prisma
+prisma/migrations
+
+# Railway/Vercel
+.vercel
+.railway
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Tests
+tests
+*.test.ts
+*.spec.ts
+
+# TypeScript
+*.ts
+!*.d.ts
+
+# Config files (use Railway env vars instead)
+*.config.js
+*.config.ts

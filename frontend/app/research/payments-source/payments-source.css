@@ -1,0 +1,27 @@
+/* AGENTPAY Master Obsidian Dark Theme for Payments Source Research */
+
+.payments-source-dark-root {
+  background-color: #020617;
+  color: #f8fafc;
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  min-height: 100vh;
+}
+
+/* Custom dark scrollbar */
+.payments-source-dark-root ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.payments-source-dark-root ::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+.payments-source-dark-root ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+.payments-source-dark-root ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

@@ -1,0 +1,68 @@
+name: AGENTPAY - DeepSeek V4 Pro
+version: 1.0.0
+schema: v1
+
+models:
+
+  # ============================================================
+  # 🧠 PRIMARY — DEEPSEEK V4 PRO MAX REASONING
+  # ============================================================
+  - name: DeepSeek V4 Pro MAX
+    provider: openai
+    model: deepseek-ai/deepseek-v4-pro-0813
+    apiBase: https://integrate.api.nvidia.com/v1
+    apiKey: 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
+
+    roles:
+      - chat
+      - edit
+      - apply
+
+    defaultCompletionOptions:
+      temperature: 1
+      topP: 0.95
+      maxTokens: 16384
+      contextLength: 1000000
+      reasoning_effort: max
+
+    capabilities:
+      - tool_use
+
+
+  # ============================================================
+  # ⚡ SECONDARY — DEEPSEEK V4 PRO HIGH
+  # ============================================================
+  - name: DeepSeek V4 Pro HIGH
+    provider: openai
+    model: deepseek-ai/deepseek-v4-pro-0813
+    apiBase: https://integrate.api.nvidia.com/v1
+    apiKey: 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
+
+    roles:
+      - chat
+      - edit
+      - apply
+
+    defaultCompletionOptions:
+      temperature: 1
+      topP: 0.95
+      maxTokens: 16384
+      contextLength: 1000000
+      reasoning_effort: high
+
+    capabilities:
+      - tool_use
+
+
+  # ============================================================
+  # 🚀 LOCAL — FAST / PRIVATE CODING
+  # ============================================================
+  - name: Local DeepSeek
+    provider: ollama
+    model: deepseek-r1:14b
+
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete

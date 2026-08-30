@@ -1,0 +1,14 @@
+# Railway Configuration
+# This file configures the Railway deployment for the SentinelX API
+
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 120
+restartPolicyType = "always"
+restartPolicyMaxRetries = 10
+
+# NOTE: Do NOT set PORT here. Railway injects PORT dynamically at runtime.
+# Setting PORT here would override Railway's assigned port and break networking.

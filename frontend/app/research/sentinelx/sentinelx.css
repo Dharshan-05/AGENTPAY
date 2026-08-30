@@ -1,0 +1,86 @@
+.sentinelx-root {
+& {
+  --bg-primary: #090d16;
+  --bg-secondary: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --status-low: #10b981;
+  --status-medium: #f59e0b;
+  --status-high: #f97316;
+  --status-critical: #ef4444;
+  --status-info: #3b82f6;
+}
+
+.sentinelx-root {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  font-family: var(--font-sans), Inter, system-ui, sans-serif;
+}
+
+.sentinelx-root * {
+  box-sizing: border-box;
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+}
+
+.card-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.12);
+  border-color: var(--border-strong);
+}
+
+.tech-chip {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-mono), monospace;
+}
+
+.bg-critical {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.bg-high {
+  background-color: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.bg-medium {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.bg-low {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.bg-info {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.text-status-critical { color: var(--status-critical); }
+.text-status-high { color: var(--status-high); }
+.text-status-medium { color: var(--status-medium); }
+.text-status-low { color: var(--status-low); }
+.text-status-info { color: var(--status-info); }
+
+}

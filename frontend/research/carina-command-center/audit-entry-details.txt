@@ -1,0 +1,160 @@
+from future import annotations
+
+import time
+import uuid
+from dataclasses import dataclass, field, asdict
+from typing import Any, Dict, List, Optional
+
+
+@dataclass
+class AuditEntry:
+    id: str
+    chain_name: str
+    status: str  # "success" | "aborted" | "error"
+    started_at: float
+    ended_at: float
+    duration_ms: float
+    triggered_by: str
+    steps: List[Dict[str, Any]] = field(default_factory=list)
+    error: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class AuditLogger:
+    def init(self) -> None:
+        self._entries: List[AuditEntry] = []
+
+    def start_chain(
+        self,
+        chain_name: str,
+        triggered_by: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        audit_id = str(uuid.uuid4())
+        started_at = time.time()
+        ctx = {
+            "id": audit_id,
+            "chain_name": chain_name,
+            "triggered_by": triggered_by,
+            "started_at": started_at,
+            "steps": [],
+            "metadata": metadata or {},
+        }
+        return ctx
+
+    def record_step(
+        self,
+        ctx: Dict[str, Any],
+        index: int,
+        cmd_name: str,
+        params: Dict[str, Any],
+        result: Any = None,
+        status: str = "ok",
+        error: Optional[str] = None,
+        started_at: Optional[float] = None,
+        ended_at: Optional[float] = None,
+    ) -> None:
+        step_started = started_at or time.time()
+        step_ended = ended_at or time.time()
+        step = {
+            "index": index,
+            "command": cmd_name,
+            "params": params,
+            "status": status,
+            "error": error,
+            "started_at": step_started,
+            "ended_at": step_ended,
+            "duration_ms": (step_ended - step_started) * 1000.0,
+            "result": result,
+        }
+        ctx.setdefault("steps", []).append(step)
+
+    def end_chain(
+        self,
+        ctx: Dict[str, Any],
+        status: str,
+        error: Optional[str] = None,
+    ) -> AuditEntry:
+        ended_at = time.time()
+        started_at = ctx["started_at"]
+        entry = AuditEntry(
+            id=ctx["id"],
+            chain_name=ctx["chain_name"],
+            status=status,
+            started_at=started_at,
+            ended_at=ended_at,
+            duration_ms=(ended_at - started_at) * 1000.0,
+            triggered_by=ctx["triggered_by"],
+            steps=ctx.get("steps", []),
+            error=error,
+            metadata=ctx.get("metadata", {}),
+        )
+        self._entries.append(entry)
+        return entry
+
+    def list_entries(self) -> List[AuditEntry]:
+        return list(self._entries)
+
+    def list_entries_dict(self) -> List[Dict[str, Any]]:
+        return [asdict(e) for e in self._entries]
+
+    def clear(self) -> None:
+        self._entries.clear()
+
+
+def execute_chain_with_audit(
+    sequencer,
+    playbook: List[Any],
+    chain_name: str,
+    triggered_by: str,
+    audit_logger: AuditLogger,
+    metadata: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    ctx = audit_logger.start_chain(
+        chain_name=chain_name,
+        triggered_by=triggered_by,
+        metadata=metadata,
+    )
+
+    results: List[Dict[str, Any]] = []
+    try:
+        t0 = time.time()
+        for idx, step in enumerate(playbook):
+            step_start = time.time()
+            res = sequencer.registry.get_command(step.cmd_name).handler(step.params)
+            step_end = time.time()
+
+            audit_logger.record_step(
+                ctx=ctx,
+                index=idx,
+                cmd_name=step.cmd_name,
+                params=step.params,
+                result=res,
+                status="ok",
+                started_at=step_start,
+                ended_at=step_end,
+            )
+
+            results.append(
+                {
+                    "step": idx,
+                    "command": step.cmd_name,
+                    "result": res,
+                }
+            )
+
+        audit_entry = audit_logger.end_chain(ctx, status="success")
+        return {
+            "status": "success",
+            "results": results,
+            "audit_id": audit_entry.id,
+        }
+
+    except Exception as exc:
+        audit_entry = audit_logger.end_chain(ctx, status="error", error=str(exc))
+        return {
+            "status": "error",
+            "error": str(exc),
+            "results": results,
+            "audit_id": audit_entry.id,
+        }

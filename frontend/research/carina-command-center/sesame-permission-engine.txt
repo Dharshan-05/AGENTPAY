@@ -1,0 +1,118 @@
+from typing import Dict, Any, List
+
+--- ASSUME THESE ALREADY EXIST FROM PREVIOUS BLOCKS ---
+made with Sesame
+- BURSTSEQUENCER
+made with Sesame
+- CHAINCOMMAND
+made with Sesame
+- COMMANDREGISTRY IMPLEMENTATION
+made with Sesame
+- PERMISSIONENGINE IMPLEMENTATION
+made with Sesame
+- HANDLE_SYSTEM_STATUS
+made with Sesame
+- HANDLE_BRIDGE_PREPARE
+made with Sesame
+- HANDLE_REGISTRY_WARMUP
+made with Sesame
+
+
+class AppPermissionEngine(PermissionEngine):
+    def init(self, roles: Dict[str, List[str]] | None = None, active_role: str = "system"):
+        self._roles = roles or {
+            "system": [
+                "system.read",
+                "system.write",
+            ],
+        }
+        self._active_role = active_role
+
+    def set_role(self, role: str) -> None:
+        self._active_role = role
+
+    def check_permission(self, permission_level: str, context: Dict[str, Any] | None = None) -> bool:
+        allowed = self._roles.get(self._active_role, [])
+        return permission_level in allowed
+
+
+class AppCommand:
+    def init(self, name: str, permission_level: str, handler):
+        self.name = name
+        self.permission_level = permission_level
+        self._handler = handler
+
+    def handler(self, params: Dict[str, Any]) -> Any:
+        return self._handler(params)
+
+
+class AppCommandRegistry(CommandRegistry):
+    def init(self):
+        self._commands: Dict[str, AppCommand] = {}
+
+    def register(self, cmd: AppCommand) -> None:
+        self._commands[cmd.name] = cmd
+
+    def get_command(self, name: str) -> AppCommand | None:
+        return self._commands.get(name)
+
+
+--- WIRE HANDLERS INTO REGISTRY + SEQUENCER ---
+made with Sesame
+
+registry = AppCommandRegistry()
+
+registry.register(AppCommand(
+    name="system_status",
+    permission_level="system.read",
+    handler=handle_system_status,
+))
+
+registry.register(AppCommand(
+    name="bridge_prepare",
+    permission_level="system.write",
+    handler=handle_bridge_prepare,
+))
+
+registry.register(AppCommand(
+    name="registry_warmup",
+    permission_level="system.write",
+    handler=handle_registry_warmup,
+))
+
+permission_engine = AppPermissionEngine()
+
+sequencer = BurstSequencer(
+    registry=registry,
+    engine=permission_engine,
+)
+
+
+--- EXAMPLE PLAYBOOK USING THE WIRED REGISTRY ---
+made with Sesame
+
+SYSTEM_PRIME: List[ChainCommand] = [
+    ChainCommand(
+        cmd_name="system_status",
+        params={"include_components": True},
+        delay=0.0,
+    ),
+    ChainCommand(
+        cmd_name="bridge_prepare",
+        params={"mode": "prime", "channels": ["control", "events", "telemetry"]},
+        delay=0.0005,
+    ),
+    ChainCommand(
+        cmd_name="registry_warmup",
+        params={"prefetch": ["schedule_task", "cancel_task", "list_tasks"]},
+        delay=0.001,
+    ),
+]
+
+
+def run_system_prime() -> Dict[str, Any]:
+    return sequencer.execute_chain(SYSTEM_PRIME)
+
+
+if name == "main":
+    print(run_system_prime())

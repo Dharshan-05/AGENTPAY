@@ -1,0 +1,19 @@
+{
+  "name": "sentinelx-root",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "cd apps/web && npm run build",
+    "dev": "cd apps/web && npm run dev",
+    "typecheck": "cd apps/web && npm run typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  }
+}

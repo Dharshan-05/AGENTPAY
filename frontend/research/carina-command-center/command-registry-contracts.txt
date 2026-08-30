@@ -1,0 +1,168 @@
+import time
+from dataclasses import dataclass
+from typing import List, Dict, Any, Protocol, Callable
+
+# --- Command + Registry Contracts ---
+
+class Command(Protocol):
+    name: str
+    permission_level: str
+
+    def handler(self, params: Dict[str, Any]) -> Any:
+        ...
+
+class CommandRegistry(Protocol):
+    def get_command(self, name: str) -> Command | None:
+        ...
+
+class PermissionEngine(Protocol):
+    def check_permission(self, permission_level: str, context: Dict[str, Any] | None = None) -> bool:
+        ...
+
+# --- Chain Command + Burst Sequencer ---
+
+@dataclass
+class ChainCommand:
+    cmd_name: str
+    params: Dict[str, Any]
+    delay: float = 0.0  # seconds, supports sub‑millisecond via perf_counter busy‑wait
+
+
+class BurstSequencer:
+    """High‑precision, zero‑gap command chain executor.
+
+    Pre‑verifies permissions so a chain either fully runs or aborts cleanly
+    before the first command fires.
+    """
+
+    def __init__(self, registry: CommandRegistry, engine: PermissionEngine):
+        self.registry = registry
+        self.engine = engine
+
+    def execute_chain(self, playbook: List[ChainCommand]) -> Dict[str, Any]:
+        results: List[Dict[str, Any]] = []
+
+        # Pre‑load + permission check so we fail fast before firing anything
+        resolved: List[Command] = []
+        for step in playbook:
+            cmd = self.registry.get_command(step.cmd_name)
+            if cmd is None:
+                return {
+                    "status": "aborted",
+                    "error": f"Unknown command: {step.cmd_name}",
+                }
+            if not self.engine.check_permission(cmd.permission_level):
+                return {
+                    "status": "aborted",
+                    "error": f"Permission denied at {step.cmd_name}",
+                }
+            resolved.append(cmd)
+
+        # Execute with high‑precision gaps
+        t0 = time.perf_counter()
+        for idx, (step, cmd) in enumerate(zip(playbook, resolved)):
+            if step.delay > 0:
+                target = t0 + step.delay
+                # busy wait for sub‑ms precision
+                while time.perf_counter() < target:
+                    pass
+
+            res = cmd.handler(step.params)
+            results.append({
+                "step": idx,
+                "command": step.cmd_name,
+                "result": res,
+            })
+
+        return {
+            "status": "success",
+            "results": results,
+        }
+
+# --- Example commands for System Prime ---
+
+@dataclass
+class SimpleCommand:
+    name: str
+    permission_level: str
+    handler: Callable[[Dict[str, Any]], Any]
+
+
+class InMemoryRegistry:
+    def __init__(self):
+        self._commands: Dict[str, SimpleCommand] = {}
+
+    def register(self, cmd: SimpleCommand) -> None:
+        self._commands[cmd.name] = cmd
+
+    def get_command(self, name: str) -> SimpleCommand | None:
+        return self._commands.get(name)
+
+
+class AllowAllPermissionEngine:
+    def check_permission(self, permission_level: str, context: Dict[str, Any] | None = None) -> bool:
+        return True
+
+
+# Handlers used by System Prime
+
+def handle_check_status(params: Dict[str, Any]) -> Dict[str, Any]:
+    # stub: plug into your real health / telemetry
+    return {"ok": True, "components": ["scheduler", "registry", "bridge"]}
+
+
+def handle_prepare_bridge(params: Dict[str, Any]) -> Dict[str, Any]:
+    # stub: bring IPC / network bridge online
+    return {"bridge": "prepared", "mode": params.get("mode", "default")}
+
+
+def handle_warmup_registry(params: Dict[str, Any]) -> Dict[str, Any]:
+    # stub: pre‑register or hydrate hot commands
+    return {"registry": "warmed", "prefetch": params.get("prefetch", [])}
+
+
+# Wiring for System Prime
+
+registry = InMemoryRegistry()
+registry.register(SimpleCommand(
+    name="check_status",
+    permission_level="system.read",
+    handler=handle_check_status,
+))
+registry.register(SimpleCommand(
+    name="prepare_bridge",
+    permission_level="system.write",
+    handler=handle_prepare_bridge,
+))
+registry.register(SimpleCommand(
+    name="warmup_registry",
+    permission_level="system.write",
+    handler=handle_warmup_registry,
+))
+
+engine = AllowAllPermissionEngine()
+sequencer = BurstSequencer(registry=registry, engine=engine)
+
+# --- System Prime playbook ---
+
+SYSTEM_PRIME: List[ChainCommand] = [
+    ChainCommand(
+        cmd_name="check_status",
+        params={"include_components": True},
+        delay=0.0,
+    ),
+    ChainCommand(
+        cmd_name="prepare_bridge",
+        params={"mode": "prime"},
+        delay=0.0005,  # 0.5 ms after status
+    ),
+    ChainCommand(
+        cmd_name="warmup_registry",
+        params={"prefetch": ["schedule_task", "cancel_task", "list_tasks"]},
+        delay=0.001,  # 1 ms after bridge prepare
+    ),
+]
+
+if __name__ == "__main__":
+    result = sequencer.execute_chain(SYSTEM_PRIME)
+    print(result)

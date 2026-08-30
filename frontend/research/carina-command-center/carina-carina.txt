@@ -1,0 +1,325 @@
+CORE_EXECUTION_BUNDLE.TXT
+made with Sesame
+
+CORE EXECUTION BUNDLE — Carina Agent System
+
+Three components, one copy-paste block.
+
+Swift App Intent → Flask Bridge → Python Command Registry
+
+─────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+
+FILE 1 OF 3 — RunCarinaCommand.swift
+
+Swift App Intent — wires Siri / Shortcuts into the Carina Flask bridge.
+################################################################################
+
+/*
+RunCarinaCommand.swift
+Requires: iOS 16+, Xcode 14+
+Add to your App Intents target. Set CARINA_BRIDGE_URL to your bridge host.
+*/
+
+import AppIntents
+import Foundation
+
+// MARK: - Configuration
+private let carinaBridgeURL = "http://localhost:5050/execute"  // ← update for prod
+
+// MARK: - App Intent
+
+struct RunCarinaCommand: AppIntent {
+
+    static var title: LocalizedStringResource = "Run Carina Command"
+    static var description = IntentDescription("Send a command to the Carina agent via the local bridge.")
+
+    @Parameter(title: "Command", description: "The command name to execute (e.g. 'status', 'flush_cache')")
+    var command: String
+
+    @Parameter(title: "Arguments", description: "Optional arguments as a comma-separated string", default: "")
+    var arguments: String
+
+    @Parameter(title: "Role", description: "Caller role: guest | operator | admin | root", default: "operator")
+    var role: String
+
+    @Parameter(title: "Force Execute", description: "Bypass GUARDED/RESTRICTED permission gates", default: false)
+    var forceExecute: Bool
+
+    @Parameter(title: "Reason", description: "Required for RESTRICTED commands", default: "")
+    var reason: String
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("Run Carina command \(\.$command) as \(\.$role)")
+    }
+
+    func perform() async throws -> some ReturnsValue<String> & ProvidesDialog {
+        let payload: [String: Any] = [
+            "command":       command,
+            "arguments":     arguments,
+            "role":          role,
+            "force_execute": forceExecute,
+            "reason":        reason
+        ]
+
+        guard let url = URL(string: carinaBridgeURL) else {
+            throw CarinaError.invalidURL
+        }
+
+        var request = URLRequest(url: url, timeoutInterval: 10)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let http = response as? HTTPURLResponse else {
+            throw CarinaError.invalidResponse
+        }
+
+        let body = try JSONDecoder().decode(BridgeResponse.self, from: data)
+
+        if http.statusCode == 200 {
+            return .result(value: body.result, dialog: "\(body.result)")
+        } else {
+            return .result(value: body.result, dialog: "Carina denied: \(body.result)")
+        }
+    }
+}
+
+// MARK: - Models
+
+struct BridgeResponse: Codable {
+    let result: String
+    let command: String
+    let allowed: Bool
+}
+
+// MARK: - Errors
+
+enum CarinaError: Error, LocalizedError {
+    case invalidURL
+    case invalidResponse
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:       return "Carina bridge URL is invalid."
+        case .invalidResponse:  return "Unexpected response from Carina bridge."
+        }
+    }
+}
+
+
+################################################################################
+
+FILE 2 OF 3 — command_registry.py
+
+Python Command Registry — maps command names to handlers + permission levels.
+
+Integrates with RTOS_Permission_Engine.py
+################################################################################
+
+COMMAND_REGISTRY.PY
+made with Sesame
+DROP THIS NEXT TO RTOS_PERMISSION_ENGINE.PY.
+made with Sesame
+IMPORT BUILD_REGISTRY() INTO BRIDGE_HANDLER.PY TO WIRE THE ENGINE.
+made with Sesame
+
+from RTOS_Permission_Engine import Command, PermissionEngine, PermissionLevel
+
+
+── HANDLERS ─────────────────────────────────────────────────────────────────
+made with Sesame
+
+def _ping() -> str:
+    return "pong — Carina is alive."
+
+def _status() -> str:
+    import platform, datetime
+    return (
+        f"Host: {platform.node()} | "
+        f"OS: {platform.system()} {platform.release()} | "
+        f"Time: {datetime.datetime.utcnow().isoformat()}Z"
+    )
+
+def _list_commands() -> str:
+    return (
+        "Available commands: ping, status, list_commands, "
+        "read_config, flush_cache, restart_agent, kill_process"
+    )
+
+def _read_config() -> str:
+    # Replace with actual config read in prod
+    return "Config: { mode: production, log_level: INFO, bridge_port: 5050 }"
+
+def _flush_cache() -> str:
+    # Replace with real cache flush logic
+    return "Cache flushed successfully."
+
+def _restart_agent() -> str:
+    # Replace with actual agent restart signal
+    return "Agent restart signal sent."
+
+def _kill_process() -> str:
+    # Destructive — LOCKED by default, Force Execute required
+    return "Target process terminated."
+
+
+── REGISTRY BUILDER ──────────────────────────────────────────────────────────
+made with Sesame
+
+def build_registry() -> PermissionEngine:
+    """
+    Instantiate and populate the permission engine with all registered commands.
+    Returns a ready-to-use PermissionEngine.
+    """
+    engine = PermissionEngine()
+
+    commands = [
+        Command("ping",           PermissionLevel.OPEN,       _ping,           "Health check"),
+        Command("status",         PermissionLevel.OPEN,       _status,         "System status snapshot"),
+        Command("list_commands",  PermissionLevel.OPEN,       _list_commands,  "List all registered commands"),
+        Command("read_config",    PermissionLevel.GUARDED,    _read_config,    "Read current system config"),
+        Command("flush_cache",    PermissionLevel.RESTRICTED, _flush_cache,    "Flush all caches"),
+        Command("restart_agent",  PermissionLevel.RESTRICTED, _restart_agent,  "Restart the Carina agent process"),
+        Command("kill_process",   PermissionLevel.LOCKED,     _kill_process,   "Hard-kill a running process"),
+    ]
+
+    for cmd in commands:
+        engine.register(cmd)
+
+    return engine
+
+
+── STANDALONE TEST ───────────────────────────────────────────────────────────
+made with Sesame
+
+if name == "main":
+    from RTOS_Permission_Engine import CallerContext
+
+    engine = build_registry()
+
+    tests = [
+        ("ping",          CallerContext(role="guest")),
+        ("read_config",   CallerContext(role="guest")),
+        ("read_config",   CallerContext(role="operator")),
+        ("flush_cache",   CallerContext(role="admin", reason="nightly maintenance")),
+        ("kill_process",  CallerContext(role="admin", reason="forced shutdown")),
+        ("kill_process",  CallerContext(role="operator", force_execute=True, reason="emergency override")),
+    ]
+
+    print("=== Command Registry — Smoke Test ===\n")
+    for cmd_name, ctx in tests:
+        fe  = " [FORCE]" if ctx.force_execute else ""
+        out = engine.execute(cmd_name, ctx)
+        print(f"  [{ctx.role.upper()}{fe}] {cmd_name:16s} → {out}")
+
+
+################################################################################
+
+FILE 3 OF 3 — bridge_handler.py
+
+Flask Bridge Handler — HTTP entry point between Swift and the Python engine.
+
+POST /execute → permission check → command handler → JSON response
+################################################################################
+
+BRIDGE_HANDLER.PY
+made with Sesame
+RUN: PYTHON BRIDGE_HANDLER.PY
+made with Sesame
+LISTENS ON 0.0.0.0:5050 BY DEFAULT.
+made with Sesame
+
+from flask import Flask, request, jsonify, Response
+from RTOS_Permission_Engine import CallerContext
+from command_registry import build_registry
+
+app = Flask(name)
+engine = build_registry()   # Built once at startup — thread-safe reads
+
+
+── ROUTES ────────────────────────────────────────────────────────────────────
+made with Sesame
+
+@app.route("/execute", methods=["POST"])
+def execute() -> tuple[Response, int]:
+    """
+    Execute a Carina command.
+
+    Expected JSON body:
+    {
+        "command":       "flush_cache",
+        "role":          "admin",
+        "reason":        "nightly maintenance",
+        "force_execute": false,
+        "arguments":     ""          // optional, reserved for future use
+    }
+    """
+    data = request.get_json(force=True, silent=True)
+    if not data:
+        return jsonify({"error": "Invalid or missing JSON body"}), 400
+
+    command       = data.get("command", "").strip()
+    role          = data.get("role", "guest").strip()
+    reason        = data.get("reason", "").strip()
+    force_execute = bool(data.get("force_execute", False))
+
+    if not command:
+        return jsonify({"error": "Missing required field: 'command'"}), 400
+
+    caller = CallerContext(
+        role=role,
+        force_execute=force_execute,
+        reason=reason,
+    )
+
+    result  = engine.execute(command, caller)
+    allowed = not result.startswith("[DENY]")
+
+    status_code = 200 if allowed else 403
+    return jsonify({
+        "command": command,
+        "result":  result,
+        "allowed": allowed,
+    }), status_code
+
+
+@app.route("/health", methods=["GET"])
+def health() -> tuple[Response, int]:
+    """Liveness probe — used by iOS Swift client and monitoring."""
+    return jsonify({"status": "ok", "service": "carina-bridge"}), 200
+
+
+@app.route("/commands", methods=["GET"])
+def list_commands() -> tuple[Response, int]:
+    """Return all registered command names (no handlers or permission details)."""
+    names = list(engine._registry.keys())
+    return jsonify({"commands": names}), 200
+
+
+@app.route("/audit", methods=["GET"])
+def audit_log() -> tuple[Response, int]:
+    """Return the full in-memory audit log. Swap for DB-backed log in prod."""
+    return jsonify({"log": engine.audit_log()}), 200
+
+
+── ENTRY POINT ───────────────────────────────────────────────────────────────
+made with Sesame
+
+if name == "main":
+    print("[Carina Bridge] Starting on port 5050...")
+    app.run(host="0.0.0.0", port=5050, debug=False)
+
+
+################################################################################
+
+END OF BUNDLE
+
+Dependency chain: RTOS_Permission_Engine.py ← command_registry.py ← bridge_handler.py
+
+Swift RunCarinaCommand.intent → POST http://<host>:5050/execute
+################################################################################

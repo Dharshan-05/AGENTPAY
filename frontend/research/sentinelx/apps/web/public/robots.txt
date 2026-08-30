@@ -1,0 +1,18 @@
+# robots.txt for SentinelX AI
+
+# Sitemap
+Sitemap: https://sentinelx.ai/sitemap.xml
+
+# Crawl Settings
+User-agent: *
+Allow: /
+
+# Disallow specific paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+Disallow: /admin/
+
+# Crawl delay for aggressive bots
+# User-agent: *
+# Crawl-delay: 10

@@ -1,0 +1,87 @@
+def handle_system_status(params: dict) -> dict:
+    """Real system status handler.
+
+    Expected params:
+      - include_components: bool (optional)
+    """
+    import os
+    import time
+
+    include_components = params.get("include_components", True)
+
+    # Basic system telemetry
+    uptime_seconds = time.time() - psutil.boot_time() if "psutil" in globals() or import("importlib").util.find_spec("psutil") else None
+
+    data: dict = {
+        "status": "online",
+        "timestamp": time.time(),
+    }
+
+    if uptime_seconds is not None:
+        data["uptime_seconds"] = uptime_seconds
+
+    try:
+        load1, load5, load15 = os.getloadavg()
+        data["load"] = {
+            "1m": load1,
+            "5m": load5,
+            "15m": load15,
+        }
+    except (AttributeError, OSError):
+        # Not all platforms support getloadavg
+        data["load"] = None
+
+    if include_components:
+        data["components"] = {
+            "scheduler": "ok",
+            "registry": "ok",
+            "bridge": "ok",
+        }
+
+    return data
+
+
+def handle_bridge_prepare(params: dict) -> dict:
+    """Prepare / prime the bridge for high throughput.
+
+    Expected params:
+      - mode: str (e.g. "prime", "default")
+      - channels: list[str] (optional)
+    """
+    import time
+
+    mode = params.get("mode", "default")
+    channels = params.get("channels") or ["control", "events"]
+
+    # Simulate some prep work
+    prepared = {name: "ready" for name in channels}
+
+    return {
+        "action": "bridge_prepared",
+        "mode": mode,
+        "channels": prepared,
+        "prepared_at": time.time(),
+    }
+
+
+def handle_registry_warmup(params: dict) -> dict:
+    """Warm up the command registry by preloading hot commands.
+
+    Expected params:
+      - prefetch: list[str]
+    """
+    import time
+
+    prefetch = params.get("prefetch") or []
+
+    warmed: list[str] = []
+    for name in prefetch:
+        # In a real system, you would touch the registry here so lookups are hot
+        warmed.append(name)
+
+    return {
+        "action": "registry_warmup",
+        "prefetch": warmed,
+        "count": len(warmed),
+        "warmed_at": time.time(),
+    }

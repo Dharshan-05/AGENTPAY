@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "cd apps/api && npm install && npx prisma generate && npm run build"
+
+[deploy]
+startCommand = "cd apps/api && npm run start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# NOTE: Do NOT set PORT here. Railway injects PORT dynamically.
+# Do NOT set HOST here. The application binds to 0.0.0.0 in code.
+[env]
+NODE_ENV = "production"

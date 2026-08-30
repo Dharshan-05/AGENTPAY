@@ -1,0 +1,9 @@
+import { CustomerRecord } from './customer-types';
+
+export const MOCK_CUSTOMERS: CustomerRecord[] = [
+  { id: 'c1', customerId: 'CUS-AGP-001', name: 'Acme Global Corp', emailMasked: 'acme•••@enterprise.com', country: 'US', currency: 'USD', verificationState: 'VERIFIED', linkedAgentId: 'AGT-892', paymentMethod: 'VISA •••• 4821', riskScore: 12, riskTier: 'LOW', txnCount: 1420, totalVolume: '$842,500.00', status: 'ACTIVE', lastActivity: '2m ago' },
+  { id: 'c2', customerId: 'CUS-AGP-002', name: 'Apex Logistics LLC', emailMasked: 'ops•••@apexlogistics.io', country: 'DE', currency: 'EUR', verificationState: 'VERIFIED', linkedAgentId: 'AGT-441', paymentMethod: 'BANK •••• 9921', riskScore: 18, riskTier: 'LOW', txnCount: 890, totalVolume: '€512,000.00', status: 'ACTIVE', lastActivity: '15m ago' },
+  { id: 'c3', customerId: 'CUS-AGP-003', name: 'Bharat Tech Solutions', emailMasked: 'finance•••@bharattech.in', country: 'IN', currency: 'INR', verificationState: 'VERIFIED', linkedAgentId: 'AGT-118', paymentMethod: 'agentpay•••@hdfc', riskScore: 35, riskTier: 'MEDIUM', txnCount: 650, totalVolume: '₹4,500,000.00', status: 'ACTIVE', lastActivity: '1h ago' },
+  { id: 'c4', customerId: 'CUS-AGP-004', name: 'CyberSphere Autonomous', emailMasked: 'sec•••@cybersphere.ai', country: 'US', currency: 'USD', verificationState: 'KYC_REQUIRED', linkedAgentId: 'AGT-990', paymentMethod: 'MC •••• 9901', riskScore: 78, riskTier: 'HIGH', txnCount: 120, totalVolume: '$45,000.00', status: 'FLAGGED', lastActivity: '3h ago' },
+  { id: 'c5', customerId: 'CUS-AGP-005', name: 'Nordic Retail Group', emailMasked: 'pay•••@nordicretail.se', country: 'SE', currency: 'EUR', verificationState: 'PENDING', linkedAgentId: 'AGT-301', paymentMethod: 'WALLET •••• 1120', riskScore: 22, riskTier: 'LOW', txnCount: 340, totalVolume: '€180,000.00', status: 'ACTIVE', lastActivity: '5h ago' },
+];

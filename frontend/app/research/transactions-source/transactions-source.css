@@ -1,0 +1,12 @@
+/* AGENTPAY Phase 12A — Transactions Source Research UI */
+/* Neutral research baseline — no AGENTPAY Obsidian theme */
+
+.transactions-source-root {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background-color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.transactions-source-root * {
+  box-sizing: border-box;
+}

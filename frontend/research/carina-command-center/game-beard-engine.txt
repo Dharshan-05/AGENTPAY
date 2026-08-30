@@ -1,0 +1,292 @@
+GAME BEARD PERCEPTION ENGINE
+made with Sesame
+
+Overview
+
+The Perception Engine replaces the passive Trigger → Action model with an autonomous Perception → Decision → Action loop. Rather than waiting for an external signal to initiate behavior, the engine continuously ingests game state, builds an internal world model, predicts opportunity windows, and issues actions on its own schedule. The agent becomes proactive rather than reactive.
+
+---
+
+Architectural Shift: Why the Old Model Fails
+
+Legacy model — Trigger → Action
+- The agent is inert by default. It wakes only when an external event fires (button press, webhook, timer tick).
+- No memory of prior state exists between triggers — each cycle is stateless.
+- Complex timing windows (e.g., "attack during the 400 ms recovery frame") are impossible without persistent observation.
+- Opportunity detection is the caller's responsibility, not the agent's.
+
+New model — Perception → Decision → Action
+- The agent runs a continuous background loop at a configurable tick rate.
+- It maintains a rolling world model — a structured snapshot of game state that persists and evolves across ticks.
+- A decision layer evaluates the world model against a priority-ordered rule set and predicts optimal execution windows.
+- Actions are issued autonomously when conditions are met, with no external prompt required.
+
+---
+
+Core Components
+
+1. Perception Layer (PerceptionCore)
+
+Responsible for ingesting raw signals and translating them into structured state.
+
+Inputs
+- Screen capture feed (frame buffer, configurable FPS)
+- Memory-read hooks (game process memory map, offset table)
+- Network packet inspection (for multiplayer state sync)
+- Audio signal stream (for audio-cue-driven events)
+
+Output — WorldModel (frozen dataclass, replaced each tick)
+
+---
+  WorldModel:
+    tick_id:          int               # monotonic counter
+    timestamp_ms:     float             # wall-clock ms
+    player:           PlayerState       # HP, mana, position, cooldowns, status effects
+    enemies:          list[EnemyState]  # per-entity HP, aggro, animation frame, phase
+    environment:      EnvironmentState  # zone, hazards, interactables, spawn timers
+    economy:          EconomyState      # gold, inventory, shop availability
+    events:           list[GameEvent]   # frame-level events parsed this tick
+    delta:            StateDelta        # diff from previous WorldModel
+---
+
+Key responsibilities
+- Signal fusion — merge inputs from all sources into a single coherent snapshot per tick.
+- Normalization — convert raw pixel / memory values to typed domain objects.
+- Delta computation — diff the new WorldModel against the previous one so downstream layers only process what changed.
+- Confidence scoring — tag each field with a confidence value (0–1) when the source is ambiguous (e.g., partially occluded UI).
+
+---
+
+2. World Model Store (StateBuffer)
+
+A fixed-size circular buffer of recent WorldModel snapshots.
+
+---
+  StateBuffer:
+    capacity:         int               # e.g., 600 ticks = 10 seconds at 60 Hz
+    snapshots:        deque[WorldModel]
+    indexes:          dict[str, int]    # named checkpoints (e.g., "combat_start")
+  
+  Methods:
+    push(model)                        # append and evict oldest if full
+    latest() → WorldModel
+    at(tick_id) → WorldModel
+    range(start, end) → list[WorldModel]
+    trend(field_path, window) → float  # slope of a numeric field over N ticks
+    checkpoint(label)                  # pin current tick_id to a named label
+---
+
+This enables the Decision Layer to reason over temporal patterns — not just the current frame, but trajectories, rates of change, and historical context.
+
+---
+
+3. Decision Layer (DecisionEngine)
+
+Evaluates the current WorldModel (and historical context via StateBuffer) against a priority-ordered rule set and emits ActionIntent objects.
+
+3a. Rule Set — PerceptionRule
+
+Each rule encodes one predictive or reactive strategy.
+
+---
+  PerceptionRule:
+    id:               str
+    priority:         int               # lower = evaluated first; ties broken by specificity
+    preconditions:    list[Condition]   # all must pass for rule to activate
+    prediction:       WindowPredictor   # optional — forecasts when conditions will be optimal
+    action_template:  ActionTemplate    # what to do when activated
+    cooldown_ms:      float             # minimum re-fire interval
+    max_activations:  int | None        # circuit-breaker; None = unlimited
+---
+
+3b. Condition Primitives
+
+Conditions are composable predicates evaluated against the WorldModel.
+
+| Primitive | Description |
+|---|---|
+| FieldEquals(path, value) | Exact match on a WorldModel field |
+| FieldInRange(path, lo, hi) | Numeric range check |
+| DeltaExceeds(path, threshold) | Field changed by more than N in last tick |
+| TrendDirection(path, window, dir) | Field trending up/down over N ticks |
+| EventPresent(event_type) | Specific GameEvent appeared this tick |
+| CooldownClear(ability_id) | Ability cooldown has expired |
+| TimeSinceCheckpoint(label, min_ms, max_ms) | Elapsed time since a named checkpoint |
+| Confidence(path, min_val) | Field confidence score passes threshold |
+| Not(condition) | Negation |
+| Any(*conditions) | Logical OR |
+| All(*conditions) | Logical AND |
+
+3c. Window Predictor — WindowPredictor
+
+A WindowPredictor looks ahead using trend data to forecast the optimal execution moment rather than firing the instant conditions are first met.
+
+---
+  WindowPredictor:
+    method:       Literal["immediate", "trend_intercept", "cooldown_align", "phase_boundary"]
+    params:       dict
+  
+    predict(state_buffer) → PredictedWindow:
+      optimal_tick_id:    int        # predicted best tick to execute
+      confidence:         float      # 0–1
+      valid_range:        (int, int) # earliest / latest acceptable tick
+      rationale:          str        # human-readable explanation for logging
+---
+
+Prediction methods
+
+- immediate — No lookahead. Execute as soon as preconditions pass. Used for time-critical reactions (e.g., dodge on projectile spawn).
+- trend_intercept — Extrapolate a numeric field's trend line to predict when it will cross a target value (e.g., "enemy HP will drop below 20% in ~8 ticks — queue execute ability").
+- cooldown_align — Delay execution until the intersection of multiple ability cooldowns to maximize burst damage.
+- phase_boundary — Monitor enemy animation state machine; fire at the predicted transition between a dangerous phase and a vulnerable recovery phase.
+
+---
+
+4. Action Layer (ActionDispatcher)
+
+Receives ActionIntent objects from the DecisionEngine and executes them with precise timing.
+
+---
+  ActionIntent:
+    rule_id:          str
+    action_type:      str                  # "keypress", "mouse_click", "api_call", "macro"
+    payload:          dict                 # action-specific parameters
+    scheduled_tick:   int                 # when to execute (from WindowPredictor)
+    deadline_tick:    int                 # cancel if window has passed
+    priority:         int                 # for conflict resolution
+---
+
+Dispatcher responsibilities
+- Queue management — maintain a priority queue of pending ActionIntent objects sorted by scheduled_tick.
+- Conflict resolution — if two intents target the same resource (e.g., the same key), the higher-priority intent wins and the lower is dropped or deferred.
+- Deadline enforcement — intents past their deadline_tick are discarded without execution and logged.
+- Execution jitter — apply configurable sub-millisecond randomized timing offsets to avoid mechanical detection signatures.
+- Post-action confirmation — after execution, read back the WorldModel delta on the next tick to verify the action had its intended effect; if not, re-queue with a backoff.
+
+---
+
+The Perception Loop — Tick Lifecycle
+
+---
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                        PERCEPTION LOOP                          │
+  │                     (runs at configured Hz)                     │
+  │                                                                 │
+  │  ┌────────────┐    ┌──────────────┐    ┌──────────────────────┐ │
+  │  │ Perception │───▶│  StateBuffer │───▶│   DecisionEngine     │ │
+  │  │    Core    │    │  (push/trim) │    │                      │ │
+  │  │            │    └──────────────┘    │  for each rule       │ │
+  │  │ • screen   │                        │  (priority order):   │ │
+  │  │ • memory   │    ┌──────────────┐    │   1. eval conditions │ │
+  │  │ • network  │───▶│  WorldModel  │───▶│   2. run predictor   │ │
+  │  │ • audio    │    │   (current)  │    │   3. emit intent     │ │
+  │  └────────────┘    └──────────────┘    └──────────┬───────────┘ │
+  │                                                   │             │
+  │                                        ┌──────────▼───────────┐ │
+  │                                        │  ActionDispatcher    │ │
+  │                                        │                      │ │
+  │                                        │  • priority queue    │ │
+  │                                        │  • conflict resolve  │ │
+  │                                        │  • deadline check    │ │
+  │                                        │  • execute + verify  │ │
+  │                                        └──────────────────────┘ │
+  └─────────────────────────────────────────────────────────────────┘
+---
+
+Per-tick execution order
+1. PerceptionCore.ingest() — collect all signals, build new WorldModel, compute StateDelta.
+2. StateBuffer.push(world_model) — store snapshot, evict oldest.
+3. DecisionEngine.evaluate(world_model, state_buffer) — iterate rules in priority order, run predictors, emit ActionIntent objects.
+4. ActionDispatcher.enqueue(intents) — merge new intents into the priority queue.
+5. ActionDispatcher.flush(current_tick) — execute all intents whose scheduled_tick ≤ current_tick; discard expired.
+6. Yield until next tick boundary.
+
+---
+
+Configuration Schema
+
+---
+  perception_engine:
+    tick_rate_hz: 60                     # main loop frequency
+    state_buffer_capacity: 600          # ticks of history (~10s at 60 Hz)
+  
+    perception:
+      screen_capture_fps: 30
+      memory_read_interval_ticks: 1
+      confidence_threshold: 0.75        # discard low-confidence fields below this
+  
+    decision:
+      rule_evaluation_budget_ms: 4      # max time for all rule evaluation per tick
+      max_intents_per_tick: 8           # cap on emitted intents per cycle
+  
+    dispatcher:
+      jitter_range_ms: [8, 40]          # random humanization offset per action
+      confirmation_timeout_ticks: 10    # ticks to wait for post-action verification
+      backoff_multiplier: 1.5           # exponential backoff on failed confirmation
+  
+    rules:
+      - id: execute_low_hp_enemy
+        priority: 10
+        preconditions:
+          - FieldInRange("enemies[0].hp_pct", 0.0, 0.22)
+          - CooldownClear("execute")
+          - Not(EventPresent("player_stunned"))
+        prediction:
+          method: trend_intercept
+          params: { field: "enemies[0].hp_pct", target: 0.20, window_ticks: 30 }
+        action_template:
+          action_type: keypress
+          payload: { key: "E", hold_ms: 80 }
+        cooldown_ms: 1200
+  
+      - id: dodge_projectile
+        priority: 1
+        preconditions:
+          - EventPresent("projectile_inbound")
+          - CooldownClear("dash")
+        prediction:
+          method: immediate
+        action_template:
+          action_type: keypress
+          payload: { key: "SPACE" }
+        cooldown_ms: 800
+---
+
+---
+
+Observability and Diagnostics
+
+Every loop iteration emits a structured telemetry line to a local JSONL trace file.
+
+Trace fields per tick
+
+| Field | Description |
+|---|---|
+| tick_id | Monotonic counter |
+| timestamp_ms | Wall-clock time |
+| world_model_confidence | Mean confidence across all WorldModel fields |
+| rules_evaluated | Count of rules checked this tick |
+| rules_activated | IDs of rules that fired |
+| intents_emitted | Count and types of ActionIntent objects queued |
+| actions_executed | Count and types of actions dispatched |
+| actions_expired | Count of intents past deadline |
+| confirmations_failed | Count of actions that didn't produce expected delta |
+| tick_duration_ms | Total wall time for this iteration |
+
+Live diagnostics
+- A lightweight dashboard mode prints a rolling summary: active rules, queue depth, last 5 actions with confirmation status, and current tick rate vs. target.
+- Any tick that exceeds 1000ms / tick_rate_hz budget fires a tick_overrun warning with a breakdown of where time was spent.
+
+---
+
+Extension Points
+
+| Interface | Purpose |
+|---|---|
+| PerceptionPlugin | Add new signal sources (e.g., second monitor, external API polling) |
+| ConditionPlugin | Register custom condition primitives beyond the built-in set |
+| WindowPredictorPlugin | Implement domain-specific lookahead strategies |
+| ActionPlugin | Add new action execution backends (e.g., controller input, script injection) |
+| TelemetryExporter | Stream trace data to external sinks (Datadog, local SQLite, etc.) |
+
+All plugins are registered at engine startup via a declarative config block and must conform to their respective abstract base class interface.
