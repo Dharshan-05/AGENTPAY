@@ -196,7 +196,11 @@ const INITIAL_QUEUE: FraudCase[] = [
   },
 ];
 
+import { useFraudGuard } from '@/lib/hooks/useFraudGuard';
+
 export default function FraudGuardProductionPage() {
+  const { runInference, evaluateRiskDecision } = useFraudGuard();
+
   const [queue, setQueue] = useState<FraudCase[]>(INITIAL_QUEUE);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<'1H' | '24H' | '7D'>('24H');
@@ -234,10 +238,27 @@ export default function FraudGuardProductionPage() {
   }, [queue, riskFilter, decisionFilter, searchQuery]);
 
   // Handle Investigator Verdict Updates
-  const handleUpdateVerdict = (caseId: string, verdict: 'AUTHORIZED' | 'PENDING REVIEW' | 'BLOCKED') => {
+  const handleUpdateVerdict = async (caseId: string, verdict: 'AUTHORIZED' | 'PENDING REVIEW' | 'BLOCKED') => {
     setQueue((prev) =>
       prev.map((item) => (item.id === caseId ? { ...item, decision: verdict } : item))
     );
+
+    // Call backend FraudGuard / Risk Decision evaluation if item exists
+    const targetCase = queue.find((c) => c.id === caseId);
+    if (targetCase) {
+      try {
+        await evaluateRiskDecision({
+          transaction_id: targetCase.transactionId,
+          agent_id: targetCase.agentId,
+          amount: parseFloat(targetCase.amount.replace(/[^0-9.]/g, '')) || 0,
+          merchant: targetCase.merchant,
+          category: targetCase.category,
+          risk_score: targetCase.riskScore,
+        });
+      } catch (err) {
+        console.warn('Backend verdict synchronization note:', err);
+      }
+    }
   };
 
   // Handle Add Note

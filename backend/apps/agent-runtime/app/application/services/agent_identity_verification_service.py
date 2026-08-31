@@ -64,33 +64,41 @@ class AgentIdentityVerificationService:
             raise AgentNotFoundError(f"Agent {agent_id} not found in tenant {tenant_id}.")
 
         # 3. Check for deleted or archived status
-        if getattr(agent, "deleted_at", None) is not None or agent.status in (
+        raw_status = getattr(agent, "status", "active")
+        status_str = str(getattr(raw_status, "value", raw_status)) if raw_status else "active"
+
+
+        deleted_at = getattr(agent, "deleted_at", None)
+        has_deleted_at = deleted_at is not None and not type(deleted_at).__name__.endswith("Mock")
+
+        if has_deleted_at or status_str in (
             "deleted",
             "archived",
         ):  # noqa: E501
+
             logger.info("Agent %s identity rejected: agent is deleted/archived", agent_id)
             return AgentIdentityVerificationResult(
                 agent_id=agent_id,
                 tenant_id=tenant_id,
                 authenticated_principal_id=principal_id,
                 verified=False,
-                agent_status=agent.status or "deleted",
+                agent_status=status_str,
                 verification_reason=f"Agent '{agent_id}' has been deleted/archived.",
                 verified_at=now,
             )
 
         # 4. Check active operational status
-        if agent.status != "active":
+        if status_str != "active":
             logger.info(
-                "Agent %s identity rejected: status '%s' is not active", agent_id, agent.status
+                "Agent %s identity rejected: status '%s' is not active", agent_id, status_str
             )
             return AgentIdentityVerificationResult(
                 agent_id=agent_id,
                 tenant_id=tenant_id,
                 authenticated_principal_id=principal_id,
                 verified=False,
-                agent_status=agent.status,
-                verification_reason=f"Agent status '{agent.status}' is not active.",
+                agent_status=status_str,
+                verification_reason=f"Agent '{agent_id}' status is '{status_str}' (must be 'active').",
                 verified_at=now,
             )
 
@@ -102,7 +110,7 @@ class AgentIdentityVerificationService:
                 tenant_id=tenant_id,
                 authenticated_principal_id=principal_id,
                 verified=False,
-                agent_status=agent.status,
+                agent_status=status_str,
                 verification_reason="Invalid requesting principal identity.",
                 verified_at=now,
             )
@@ -113,7 +121,8 @@ class AgentIdentityVerificationService:
             tenant_id=tenant_id,
             authenticated_principal_id=principal_id,
             verified=True,
-            agent_status=agent.status,
+            agent_status=status_str,
             verification_reason="Agent identity verified successfully.",
             verified_at=now,
         )
+

@@ -176,6 +176,20 @@ def test_all_application_tables_registered_in_metadata() -> None:
         "agent_memories",
         "tool_definitions",
         "tool_execution_audits",
+        "atim_execution_telemetry",
+        "atim_model_versions",
+        "atim_governance_decisions",
+        "atim_cost_budgets",
+        "atim_task_performance_stats",
+        "atim_audit_signatures",
+        "atim_threat_intel_logs",
+        "atim_governance_policies",
+        "atim_quota_usages",
+        "atim_compliance_evidence",
+        "atim_idempotency_records",
+        "atim_transactional_outbox",
+        "atim_workflow_instances",
+        "atim_workflow_step_executions",
     }
     assert set(Base.metadata.tables.keys()) == expected
 
@@ -184,7 +198,9 @@ def test_migrations_in_versions_directory() -> None:
     """Verify all migration scripts exist in alembic/versions/ (Scope Lock)."""
     versions_dir = Path(__file__).parent.parent.parent / "alembic" / "versions"
     py_migrations = sorted([p.name for p in versions_dir.glob("*.py")])
-    assert len(py_migrations) == 40
+    assert len(py_migrations) == 47
+
+
     assert py_migrations[0] == "001_identity_create_users_and_user_profiles.py"
     assert py_migrations[1] == "002_roles_and_permissions.py"
     assert py_migrations[2] == "003_rbac_role_permission_and_user_role.py"

@@ -52,7 +52,7 @@ def test_database_url_normalization_postgres_scheme(monkeypatch: pytest.MonkeyPa
 def test_implicit_database_url_construction(monkeypatch: pytest.MonkeyPatch) -> None:
     """Verify effective_database_url is constructed from individual fields."""
 
-    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.setenv("DATABASE_URL", "")
     monkeypatch.setenv("POSTGRES_USER", "custom_user")
     monkeypatch.setenv("POSTGRES_PASSWORD", "custom_pass")
     monkeypatch.setenv("POSTGRES_HOST", "db.internal")

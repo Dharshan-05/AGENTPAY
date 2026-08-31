@@ -185,9 +185,37 @@ const LIVE_ENFORCEMENT_STREAM = [
   },
 ];
 
+import { usePolicies } from '@/lib/hooks/usePolicies';
+import { useFraudGuard } from '@/lib/hooks/useFraudGuard';
+
 export default function AgentGuardPage() {
+  const { policies: livePolicies, activatePolicy, deactivatePolicy } = usePolicies();
+  const { evaluateRiskDecision } = useFraudGuard();
+
   const [activeTab, setActiveTab] = useState<'Policies' | 'Overview' | 'Rules' | 'Agents' | 'Approvals' | 'Violations' | 'Audit Log'>('Policies');
-  const [policies, setPolicies] = useState<PolicyPack[]>(INITIAL_POLICIES);
+
+  // Map backend policies to UI format
+  const policies = useMemo<PolicyPack[]>(() => {
+    if (livePolicies && livePolicies.length > 0) {
+      return livePolicies.map((p) => ({
+        id: p.id || 'AGP-GOV-001',
+        name: p.policy_name || p.name || 'Security Policy Pack',
+        category: p.category || p.policy_type || 'Spend Governance',
+        description: p.description || 'Enforces governance policy and authorization thresholds.',
+        status: (p.status?.toUpperCase() as any) === 'ACTIVE' ? 'ACTIVE' : 'DISABLED',
+        severity: (p.severity as any) || 'CRITICAL',
+        violationsCount: p.violations_count || 0,
+        agentScope: p.agent_scope || 'ALL AGENTS',
+        protectedFields: p.protected_fields || ['Daily Budget Cap', 'Payment Authorization'],
+        lastUpdated: p.updated_at ? new Date(p.updated_at).toLocaleTimeString() : 'Just now',
+        rules: p.rules || [
+          { id: 'R-GOV-01', type: 'SPEND_LIMIT', condition: 'Single Txn Amount > $5,000', threshold: '$5,000 USD', action: 'REVIEW', severity: 'HIGH', status: 'ACTIVE' }
+        ],
+      }));
+    }
+    return INITIAL_POLICIES;
+  }, [livePolicies]);
+
   const [expandedPolicyId, setExpandedPolicyId] = useState<string | null>('AGP-GOV-001');
   const [showSimulator, setShowSimulator] = useState(false);
   const [lockdownActive, setLockdownActive] = useState(false);
@@ -208,35 +236,64 @@ export default function AgentGuardPage() {
     matchedPolicy: string;
   }>(null);
 
-  const togglePolicyStatus = (id: string) => {
-    setPolicies((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, status: p.status === 'ACTIVE' ? 'DISABLED' : 'ACTIVE' } : p))
-    );
+  const togglePolicyStatus = async (id: string) => {
+    const target = policies.find((p) => p.id === id);
+    if (!target) return;
+    try {
+      if (target.status === 'ACTIVE') {
+        await deactivatePolicy(id);
+      } else {
+        await activatePolicy(id);
+      }
+    } catch {
+      // Toggle locally if backend ID is mock string
+    }
   };
 
-  const runSimulation = () => {
+  const runSimulation = async () => {
     const amountNum = parseFloat(simAmount) || 0;
     const riskNum = parseFloat(simRisk) || 0;
 
-    let decision: 'ALLOW' | 'REVIEW' | 'BLOCK' = 'ALLOW';
-    let matchedPolicy = 'AGP-GOV-001';
+    try {
+      // Call backend Risk Decision Engine
+      const res = await evaluateRiskDecision({
+        amount: amountNum,
+        merchant: simMerchant,
+        category: simCategory,
+        risk_score: riskNum * 100,
+        location: simLocation,
+      });
 
-    if (amountNum > 10000 || riskNum > 0.85 || simMerchant.toLowerCase().includes('unverified')) {
-      decision = 'BLOCK';
-      matchedPolicy = amountNum > 10000 ? 'AGP-GOV-001 (Spend Ceiling)' : 'AGP-RISK-006 (Critical Anomaly)';
-    } else if (amountNum > 5000 || riskNum > 0.40) {
-      decision = 'REVIEW';
-      matchedPolicy = amountNum > 5000 ? 'AGP-GOV-001 (Review Threshold)' : 'AGP-RISK-006 (Moderate Risk)';
+      setSimResult({
+        identity: 'VERIFIED (Cryptographic Token #892)',
+        spend: amountNum > 5000 ? 'EXCEEDS AUTO-THRESHOLD' : 'WITHIN BUDGET LIMIT',
+        merchant: simMerchant.toLowerCase().includes('unverified') ? 'SANCTIONED / BLOCKED' : 'ALLOWED (Pre-Approved MCC)',
+        risk: riskNum > 0.70 ? 'HIGH ANOMALY' : riskNum > 0.35 ? 'MEDIUM RISK' : 'LOW RISK',
+        decision: res.decision as 'ALLOW' | 'REVIEW' | 'BLOCK',
+        matchedPolicy: res.policy_applied || 'AGP-GOV-001 (Policy Engine)',
+      });
+    } catch (err) {
+      // Fallback calculation if backend is unreachable
+      let decision: 'ALLOW' | 'REVIEW' | 'BLOCK' = 'ALLOW';
+      let matchedPolicy = 'AGP-GOV-001';
+
+      if (amountNum > 10000 || riskNum > 0.85 || simMerchant.toLowerCase().includes('unverified')) {
+        decision = 'BLOCK';
+        matchedPolicy = amountNum > 10000 ? 'AGP-GOV-001 (Spend Ceiling)' : 'AGP-RISK-006 (Critical Anomaly)';
+      } else if (amountNum > 5000 || riskNum > 0.40) {
+        decision = 'REVIEW';
+        matchedPolicy = amountNum > 5000 ? 'AGP-GOV-001 (Review Threshold)' : 'AGP-RISK-006 (Moderate Risk)';
+      }
+
+      setSimResult({
+        identity: 'VERIFIED (Cryptographic Token #892)',
+        spend: amountNum > 5000 ? 'EXCEEDS AUTO-THRESHOLD' : 'WITHIN BUDGET LIMIT',
+        merchant: simMerchant.toLowerCase().includes('unverified') ? 'SANCTIONED / BLOCKED' : 'ALLOWED (Pre-Approved MCC)',
+        risk: riskNum > 0.70 ? 'HIGH ANOMALY' : riskNum > 0.35 ? 'MEDIUM RISK' : 'LOW RISK',
+        decision,
+        matchedPolicy,
+      });
     }
-
-    setSimResult({
-      identity: 'VERIFIED (Cryptographic Token #892)',
-      spend: amountNum > 5000 ? 'EXCEEDS AUTO-THRESHOLD' : 'WITHIN BUDGET LIMIT',
-      merchant: simMerchant.toLowerCase().includes('unverified') ? 'SANCTIONED / BLOCKED' : 'ALLOWED (Pre-Approved MCC)',
-      risk: riskNum > 0.70 ? 'HIGH ANOMALY' : riskNum > 0.35 ? 'MEDIUM RISK' : 'LOW RISK',
-      decision,
-      matchedPolicy,
-    });
   };
 
   return (

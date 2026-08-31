@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.api.v1.agents import agents_router
 from app.api.v1.approvals import approvals_router
+from app.api.v1.atim import atim_router
 from app.api.v1.auth import auth_router
 from app.api.v1.fraudguard import fraudguard_router
 from app.api.v1.health import health_router
@@ -60,3 +61,7 @@ api_v1_router.include_router(payments_router)
 
 # Phases 304–305: Payment Approvals Workflow Boundary
 api_v1_router.include_router(approvals_router)
+
+# Phase 10 / Group 5: ATIM Transaction Intelligence, Evaluation & Observability Engine
+api_v1_router.include_router(atim_router)
+

@@ -7,9 +7,11 @@ import app.infrastructure.database.models  # noqa: F401
 from app.infrastructure.database.base import Base
 
 
-def test_01_table_count_and_scope_lock() -> None:
-    """1. Verify exactly 53 application tables are registered in Base.metadata (Scope Lock)."""
-    assert len(Base.metadata.tables) == 57
+def test_01_metadata_tables_count() -> None:
+    """Verify exactly 73 ORM tables registered in SQLAlchemy Metadata."""
+    assert len(Base.metadata.tables) == 73
+
+
 
 
 def test_02_all_tenant_tables_have_tenant_id_and_index() -> None:

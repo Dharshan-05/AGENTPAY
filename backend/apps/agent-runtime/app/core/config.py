@@ -131,6 +131,47 @@ class Settings(BaseSettings):
     )
     razorpay_enabled: bool = Field(default=False, validation_alias="RAZORPAY_ENABLED")
 
+
+    # ATIM LLM Intelligence Settings
+    llm_enabled: bool = Field(default=True, validation_alias="LLM_ENABLED")
+    llm_primary_provider: str = Field(default="openai", validation_alias="LLM_PRIMARY_PROVIDER")
+    llm_primary_model: str = Field(default="gpt-4o-mini", validation_alias="LLM_PRIMARY_MODEL")
+    llm_secondary_provider: str = Field(default="anthropic", validation_alias="LLM_SECONDARY_PROVIDER")
+    llm_secondary_model: str = Field(
+        default="claude-3-5-haiku-20241022", validation_alias="LLM_SECONDARY_MODEL"
+    )
+    llm_timeout_seconds: float = Field(
+        default=10.0, validation_alias="LLM_TIMEOUT_SECONDS", ge=0.1, le=120.0
+    )
+    llm_max_retries: int = Field(default=3, validation_alias="LLM_MAX_RETRIES", ge=0, le=10)
+    llm_temperature: float = Field(default=0.0, validation_alias="LLM_TEMPERATURE", ge=0.0, le=1.0)
+    openai_api_key: SecretStr | None = Field(default=None, validation_alias="OPENAI_API_KEY")
+    anthropic_api_key: SecretStr | None = Field(default=None, validation_alias="ANTHROPIC_API_KEY")
+    gemini_api_key: SecretStr | None = Field(default=None, validation_alias="GEMINI_API_KEY")
+
+    # ATIM Group 2 (Phase 4 Security & Phase 5 Memory/RAG Settings)
+    atim_security_enabled: bool = Field(default=True, validation_alias="ATIM_SECURITY_ENABLED")
+    atim_max_input_length: int = Field(default=10000, validation_alias="ATIM_MAX_INPUT_LENGTH")
+    atim_max_memory_items: int = Field(default=10, validation_alias="ATIM_MAX_MEMORY_ITEMS")
+    atim_max_memory_tokens: int = Field(default=3000, validation_alias="ATIM_MAX_MEMORY_TOKENS")
+    atim_max_context_tokens: int = Field(default=6000, validation_alias="ATIM_MAX_CONTEXT_TOKENS")
+    atim_enable_pii_redaction: bool = Field(default=True, validation_alias="ATIM_ENABLE_PII_REDACTION")
+    atim_enable_memory_security: bool = Field(default=True, validation_alias="ATIM_ENABLE_MEMORY_SECURITY")
+    atim_enable_context_compression: bool = Field(default=True, validation_alias="ATIM_ENABLE_CONTEXT_COMPRESSION")
+
+    # ATIM Group 4 (Phase 8 Evaluation & Phase 9 Intelligent Routing Settings)
+    atim_evaluation_enabled: bool = Field(default=True, validation_alias="ATIM_EVALUATION_ENABLED")
+    atim_security_min_score: float = Field(default=0.95, validation_alias="ATIM_SECURITY_MIN_SCORE")
+    atim_min_schema_validity: float = Field(default=0.95, validation_alias="ATIM_MIN_SCHEMA_VALIDITY")
+    atim_max_model_failure_rate: float = Field(default=0.05, validation_alias="ATIM_MAX_MODEL_FAILURE_RATE")
+    atim_routing_enabled: bool = Field(default=True, validation_alias="ATIM_ROUTING_ENABLED")
+    atim_routing_max_cost: float = Field(default=0.10, validation_alias="ATIM_ROUTING_MAX_COST")
+    atim_circuit_breaker_threshold: int = Field(default=3, validation_alias="ATIM_CIRCUIT_BREAKER_THRESHOLD")
+    atim_circuit_breaker_cooldown: int = Field(default=60, validation_alias="ATIM_CIRCUIT_BREAKER_COOLDOWN")
+
+
+
+
     # Security foundation settings
 
     cors_allowed_origins: list[str] | str = Field(

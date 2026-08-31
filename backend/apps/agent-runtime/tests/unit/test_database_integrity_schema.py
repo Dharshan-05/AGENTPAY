@@ -4,8 +4,10 @@ from app.infrastructure.database.base import Base
 
 
 def test_01_all_tables_have_primary_keys() -> None:
-    """1. Verify all 53 application tables have a valid primary key named pk_<table>."""
-    assert len(Base.metadata.tables) == 57
+    """1. Verify all 73 application tables have a valid primary key named pk_<table_name>."""
+    assert len(Base.metadata.tables) == 73
+
+
 
     for name, table in Base.metadata.tables.items():
         assert table.primary_key is not None

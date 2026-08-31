@@ -47,7 +47,22 @@ class VelocityDetectionService:
         res = db.execute(stmt)
         if inspect.isawaitable(res):
             res = await res
-        orders: list[PaymentOrder] = list(res.scalars().all()) if hasattr(res, "scalars") else []
+
+        orders: list[PaymentOrder] = []
+        if hasattr(res, "scalars") and callable(getattr(res, "scalars", None)):
+            try:
+                scalars_obj = res.scalars()
+                if inspect.isawaitable(scalars_obj):
+                    scalars_obj = await scalars_obj
+                if hasattr(scalars_obj, "all") and callable(getattr(scalars_obj, "all", None)):
+                    all_res = scalars_obj.all()
+                    if inspect.isawaitable(all_res):
+                        all_res = await all_res
+                    if isinstance(all_res, (list, tuple, set)):
+                        orders = list(all_res)
+            except Exception:
+                orders = []
+
 
         # Filter valid order entities
         valid_orders = [o for o in orders if hasattr(o, "total_amount")]

@@ -29,7 +29,11 @@ import {
   MOCK_TXN_DETAIL
 } from '@/components/transactions/transaction-data';
 
+import { useTransactions } from '@/lib/hooks/useTransactions';
+
 export default function TransactionOperationsPage() {
+  const { createPurchaseRequest, validatePurchaseRequest, executePurchaseRequest } = useTransactions();
+
   const [activeTab, setActiveTab] = useState<TxnTabType>('REGISTRY');
   const [selectedLifecycle, setSelectedLifecycle] = useState<'SETTLED' | 'BLOCKED'>('SETTLED');
   const [selectedTxn, setSelectedTxn] = useState<TxnInspectorDetail | null>(null);

@@ -5,10 +5,11 @@ from __future__ import annotations
 from app.infrastructure.database.base import Base
 
 
-def test_01_total_table_count() -> None:
-    """Test 1: ORM metadata contains exactly 57 database tables."""
-    tables = Base.metadata.tables
-    assert len(tables) == 57
+def test_01_all_tables_have_primary_keys() -> None:
+    """1. Verify all 73 application tables have a valid primary key named pk_<table>."""
+    assert len(Base.metadata.tables) == 73
+
+
 
 
 def test_02_payment_idempotency_keys_constraints() -> None:

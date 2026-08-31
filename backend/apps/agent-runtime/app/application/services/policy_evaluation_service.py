@@ -267,9 +267,23 @@ class PolicyEvaluationService:
         res = db.execute(stmt)
         if inspect.isawaitable(res):
             res = await res
-        raw_policies: list[SecurityPolicy] = (
-            list(res.scalars().all()) if hasattr(res, "scalars") else []
-        )
+
+        raw_policies: list[SecurityPolicy] = []
+        if hasattr(res, "scalars") and callable(getattr(res, "scalars", None)):
+
+            try:
+                sc = res.scalars()
+                if inspect.isawaitable(sc):
+                    sc = await sc
+                if hasattr(sc, "all") and callable(getattr(sc, "all", None)):
+                    all_p = sc.all()
+                    if inspect.isawaitable(all_p):
+                        all_p = await all_p
+                    if isinstance(all_p, (list, tuple, set)):
+                        raw_policies = list(all_p)
+            except Exception:
+                raw_policies = []
+
 
         if not raw_policies:
             logger.info("No active policies found for tenant %s", tenant_id)
@@ -610,9 +624,22 @@ class PolicyEvaluationService:
             r_res = db.execute(rule_stmt)
             if inspect.isawaitable(r_res):
                 r_res = await r_res
-            p_rules: list[PolicyRule] = (
-                list(r_res.scalars().all()) if hasattr(r_res, "scalars") else []
-            )
+
+            p_rules: list[PolicyRule] = []
+            if hasattr(r_res, "scalars") and callable(getattr(r_res, "scalars", None)):
+                try:
+                    sc_r = r_res.scalars()
+                    if inspect.isawaitable(sc_r):
+                        sc_r = await sc_r
+                    if hasattr(sc_r, "all") and callable(getattr(sc_r, "all", None)):
+                        all_r = sc_r.all()
+                        if inspect.isawaitable(all_r):
+                            all_r = await all_r
+                        if isinstance(all_r, (list, tuple, set)):
+                            p_rules = list(all_r)
+                except Exception:
+                    p_rules = []
+
 
             for r in p_rules:
                 if hasattr(r, "operator"):

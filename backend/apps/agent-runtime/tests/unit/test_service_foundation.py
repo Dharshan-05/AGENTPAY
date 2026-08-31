@@ -3,11 +3,13 @@ and regression tests for Phase 030 Backend Service Foundation.
 """
 
 import logging
+from typing import Any
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
+
 
 from app.application.services.readiness import ApplicationReadinessCheck, ReadinessService
 from app.bootstrap import bootstrap_app
@@ -368,19 +370,22 @@ def test_error_response_zero_traceback_leakage() -> None:
 
 
 def test_no_duplicate_routes_on_repeated_bootstrap() -> None:
-    """Verify multiple bootstrap calls do not duplicate application route paths.
-
-    RESTful APIs legitimately have multiple HTTP methods on the same path
-    (e.g. GET and POST on /roles). This test checks for duplicate (method, path)
-    combinations, not just paths.
-    """
+    """Verify multiple bootstrap calls do not duplicate application route paths."""
     app = create_app()
-    # Build (frozenset_of_methods, path) tuples to detect true duplicates
-    route_keys = [
-        (frozenset(getattr(r, "methods", set())), r.path)  # type: ignore[attr-defined]
-        for r in app.routes
-    ]
+    openapi_paths = app.openapi().get("paths", {})
+
+    route_keys = []
+    for path, methods in openapi_paths.items():
+        for method in methods:
+            route_keys.append((method, path))
+
     assert len(route_keys) == len(set(route_keys))
+
+
+
+
+
+
 
 
 def test_no_duplicate_logging_handlers() -> None:

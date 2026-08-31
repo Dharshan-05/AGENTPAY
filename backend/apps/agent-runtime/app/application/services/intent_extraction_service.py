@@ -145,7 +145,17 @@ class IntentExtractionService:
     """Application service orchestrating Intent Extraction (Phase 140)."""
 
     def __init__(self, provider: BaseIntentExtractorProvider | None = None) -> None:
-        self.provider = provider or RuleBasedIntentExtractorProvider()
+        if provider is not None:
+            self.provider = provider
+        else:
+            try:
+                from app.application.services.llm_intent_extractor_provider import (
+                    LLMIntentExtractorProvider,
+                )
+                self.provider = LLMIntentExtractorProvider()
+            except Exception:
+                self.provider = RuleBasedIntentExtractorProvider()
+
 
     async def extract_intent(
         self,

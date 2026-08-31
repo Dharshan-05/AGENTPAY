@@ -238,10 +238,19 @@ def test_unsupported_http_methods_return_405() -> None:
 def test_no_duplicate_health_routes_in_app() -> None:
     """Audit application route table to verify no duplicate health routes exist."""
     app = create_app()
-    route_paths = [getattr(r, "path", "") for r in app.routes]
-
-    health_occurrences = [p for p in route_paths if p == "/api/v1/health"]
+    openapi_paths = app.openapi().get("paths", {})
+    health_occurrences = [p for p in openapi_paths if p.endswith("/health")]
     assert len(health_occurrences) == 1
+
+
+
+
+
+
+
+
+
+
 
 
 def test_performance_lightweight_execution() -> None:

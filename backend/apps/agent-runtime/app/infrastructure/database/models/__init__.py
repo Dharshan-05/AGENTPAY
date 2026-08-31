@@ -13,6 +13,35 @@ from app.infrastructure.database.models.agent_session import AgentSession
 from app.infrastructure.database.models.agent_trust import AgentTrust
 from app.infrastructure.database.models.approval_decision import ApprovalDecision
 from app.infrastructure.database.models.approval_request import ApprovalRequest
+from app.infrastructure.database.models.atim_audit_lock import (
+    ATIMAuditSignature,
+    ATIMThreatIntelLog,
+)
+from app.infrastructure.database.models.atim_compliance import ATIMComplianceEvidence
+from app.infrastructure.database.models.atim_governance import (
+    ATIMCostBudget,
+    ATIMGovernanceDecision,
+    ATIMModelVersion,
+    ATIMTaskPerformanceStats,
+)
+from app.infrastructure.database.models.atim_idempotency import (
+    ATIMIdempotencyRecord,
+    ATIMTransactionalOutbox,
+)
+from app.infrastructure.database.models.atim_policy import (
+    ATIMGovernancePolicy,
+    ATIMQuotaUsage,
+)
+from app.infrastructure.database.models.atim_consensus import (
+    ATIMConsensusSession,
+    ATIMConsensusVote,
+)
+from app.infrastructure.database.models.atim_workflow import (
+    ATIMWorkflowInstance,
+    ATIMWorkflowStepExecution,
+)
+from app.infrastructure.database.models.atim_telemetry import ATIMExecutionTelemetry
+
 from app.infrastructure.database.models.attack_simulation import AttackSimulation
 from app.infrastructure.database.models.audit_log import AuditLog
 from app.infrastructure.database.models.authentication_security import AuthenticationSecurity
@@ -72,7 +101,24 @@ __all__ = [
     "AgentTrust",
     "ApprovalDecision",
     "ApprovalRequest",
+    "ATIMAuditSignature",
+    "ATIMComplianceEvidence",
+    "ATIMConsensusSession",
+    "ATIMConsensusVote",
+    "ATIMCostBudget",
+    "ATIMExecutionTelemetry",
+    "ATIMGovernanceDecision",
+    "ATIMGovernancePolicy",
+    "ATIMIdempotencyRecord",
+    "ATIMModelVersion",
+    "ATIMQuotaUsage",
+    "ATIMTaskPerformanceStats",
+    "ATIMThreatIntelLog",
+    "ATIMTransactionalOutbox",
+    "ATIMWorkflowInstance",
+    "ATIMWorkflowStepExecution",
     "AttackSimulation",
+
     "AuditLog",
     "AuthenticationSecurity",
     "BehaviourEvent",
@@ -117,3 +163,4 @@ __all__ = [
     "UserRole",
     "XAIExplanation",
 ]
+
