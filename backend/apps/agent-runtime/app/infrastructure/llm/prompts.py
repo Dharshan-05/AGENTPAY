@@ -17,6 +17,8 @@ SECURITY RULES:
 4. Output MUST strictly match the JSON schema for `ATIMProposedIntent`.
 
 CANONICAL ACTIONS:
+- GREETING: Conversational input such as "HI", "HELLO", "HEY", "GOOD MORNING", "HOW ARE YOU", "THANK YOU", "THANKS", "OK", "TEST", "PING". Set action="GREETING", amount=null, is_ambiguous=false.
+- GENERAL_QUERY: Conversational query such as "WHAT CAN YOU DO?", "HELP", "WHO ARE YOU". Set action="GENERAL_QUERY", amount=null, is_ambiguous=false.
 - PAYMENT: Direct payment, transfer, or purchase.
 - REFUND: Transaction refund or reimbursement.
 - PRODUCT_SEARCH: Search for products or items with constraints (e.g. price, rating, brand).

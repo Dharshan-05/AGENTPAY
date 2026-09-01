@@ -103,10 +103,12 @@ class ATIMFraudGuardIntegrationService:
             f_names = f_names[:min_len]
             f_vals = f_vals[:min_len]
 
+        from datetime import timezone, datetime
         eval_req = FraudGuardEvaluateRequest(
             agent_id=agent_id,
             transaction_id=transaction_id,
             model_name="fraudguard_xgboost_prod",
+            prediction_timestamp=datetime.now(timezone.utc),
             feature_names=f_names,
             feature_values=f_vals,
             include_xai=include_xai,

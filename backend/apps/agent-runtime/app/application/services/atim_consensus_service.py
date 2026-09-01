@@ -12,7 +12,7 @@ from typing import Any, Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.domain.exceptions.base import ApplicationError
+from app.domain.exceptions.base import DomainError
 from app.domain.governance.consensus_models import (
     ConsensusSessionRecord,
     ConsensusSessionStatus,

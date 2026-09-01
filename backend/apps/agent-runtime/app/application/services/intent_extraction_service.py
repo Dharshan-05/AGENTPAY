@@ -95,7 +95,76 @@ class RuleBasedIntentExtractorProvider(BaseIntentExtractorProvider):
             merchant = m_match.group(1).strip()
 
         # Infer Action
-        if any(w in lower_text for w in ["pay", "payment", "send money", "transfer"]):
+        clean_prompt = lower_text.strip()
+        greetings = {
+            "hi", "hello", "hey", "hi there", "good morning", "good afternoon",
+            "good evening", "how are you", "thank you", "thanks", "ok", "okay",
+            "test", "ping"
+        }
+        queries = {
+            "what can you do?", "what can you do", "help", "who are you"
+        }
+
+        # 0. Check Prompt Injection Security Attack Phrases
+        from app.application.services.prompt_guard_service import SUSPICIOUS_INJECTION_PATTERNS
+        if any(pat.search(clean_prompt) for pat in SUSPICIOUS_INJECTION_PATTERNS):
+            return StructuredIntent(
+                intent_id=uuid.uuid4(),
+                action="prompt_injection",
+                target="security_shield",
+                entities=ExtractedEntities(amount=Decimal("0.00"), currency="USD"),
+                parameters={"raw_prompt_length": len(sanitized_text)},
+                constraints=context_metadata.get("constraints", {}),
+                confidence=Decimal("1.00"),
+            )
+
+        # Greetings & General Queries (Checked before general keyword matches)
+        if clean_prompt in greetings or any(clean_prompt.startswith(g + " ") for g in ["hi", "hello", "hey", "good morning"]):
+            action = "greeting"
+            target = None
+            confidence = Decimal("1.00")
+        elif clean_prompt in queries or any(q in clean_prompt for q in queries):
+            action = "general_query"
+            target = None
+            confidence = Decimal("1.00")
+        elif any(w in lower_text for w in ["which seller", "safest seller", "seller is safest", "seller trust", "seller rating"]):
+            action = "seller_analysis"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["genuine", "is this product genuine", "product risky", "is product 1 risky", "counterfeit", "product risk"]):
+            action = "product_risk_analysis"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["price is real", "check this price", "check this product price", "price analysis", "price anomaly"]):
+            action = "price_analysis"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["compare", "comparison", "difference between"]):
+            action = "product_comparison"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["tell me about", "specs of", "details of"]):
+            action = "product_details"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(lower_text.startswith(w) or f" {w} " in f" {lower_text} " for w in ["buy", "purchase"]):
+            action = "purchase_request"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["show my transactions", "check my last payment", "transaction history", "lookup payment"]):
+            action = "transaction_query"
+            target = "ledger"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in [
+            "laptop", "phone", "mobile", "smartphone", "smartwatch", "headphones", "earbuds", "tablet", "tv", "monitor", "keyboard", "camera", "gaming", "coding", "under", "undr", "below", "budget", "price", "seller", "deal", "cheapest"
+        ]):
+            if any(w in lower_text for w in ["recommend", "suggest", "best for", "which mobile is best", "which phone is best"]):
+                action = "product_recommendation"
+            else:
+                action = "product_search"
+            target = "commerce"
+            confidence = Decimal("0.95")
+        elif any(w in lower_text for w in ["pay", "payment", "send money", "transfer", "authorize"]):
             action = "payment"
             target = "merchant" if merchant else "recipient"
             confidence = Decimal("0.95")

@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import ForeignKey, Index, UniqueConstraint, func
+from sqlalchemy import ForeignKey, Index, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,12 +30,7 @@ DEFAULT_PREFERENCES: dict[str, Any] = {
 
 
 class UserPreferences(Base):
-    """UserPreferences ORM entity storing tenant-scoped user preference configuration.
-
-    Preferences are stored in a JSONB column for flexibility. The `preferences` dict
-    is always merged against DEFAULT_PREFERENCES so that new preference keys added
-    in the future have safe defaults even for existing records.
-    """
+    """UserPreferences ORM entity storing tenant-scoped user preference configuration."""
 
     __tablename__ = "user_preferences"
 
@@ -73,7 +68,7 @@ class UserPreferences(Base):
     preferences: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         nullable=False,
-        server_default="'{}'::jsonb",
+        server_default=text("'{}'"),
     )
 
     # Audit timestamps

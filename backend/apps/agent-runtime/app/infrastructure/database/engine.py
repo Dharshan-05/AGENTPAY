@@ -44,6 +44,8 @@ def get_async_engine(settings: Settings | None = None) -> AsyncEngine:
         connect_args={
             "command_timeout": current_settings.db_command_timeout,
             "timeout": current_settings.db_connect_timeout,
+            "statement_cache_size": 0,
+            "prepared_statement_cache_size": 0,
         },
     )
 

@@ -120,7 +120,7 @@ class SecurityViolation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_policies.id",
-            name="fk_security_violations_security_policy_id_security_policies",
+            name="fk_sec_viols_security_policy_id_security_policies",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -138,7 +138,7 @@ class SecurityViolation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_security_violations_policy_evaluation_id_policy_evaluations",
+            name="fk_sec_viols_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -183,7 +183,7 @@ class SecurityViolation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "purchase_intents.id",
-            name="fk_security_violations_purchase_intent_id_purchase_intents",
+            name="fk_sec_viols_purchase_intent_id_purchase_intents",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -201,7 +201,7 @@ class SecurityViolation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_security_violations_commerce_transaction_id_commerce_transactions",
+            name="fk_sec_viols_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

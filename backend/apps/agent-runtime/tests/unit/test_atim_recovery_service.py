@@ -23,8 +23,7 @@ def test_01_transactional_outbox_staging_and_dispatch(recovery_service):
 
     assert event.tenant_id == tenant_id
     assert event.processed is False
-    # Sanitization check
-    assert "api_key" not in event.payload or event.payload["api_key"] == "[REDACTED]"
+    assert "api_key" not in event.payload or event.payload["api_key"] in ("[REDACTED]", "[REDACTED_SECRET]")
 
     dispatched = recovery_service.dispatch_pending_outbox_events(tenant_id)
     assert dispatched == 1

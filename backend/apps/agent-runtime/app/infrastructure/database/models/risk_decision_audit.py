@@ -148,7 +148,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_risk_decision_audits_policy_evaluation_id_policy_evaluations",
+            name="fk_risk_decision_audits_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -157,7 +157,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_policies.id",
-            name="fk_risk_decision_audits_security_policy_id_security_policies",
+            name="fk_short_88891787",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -184,7 +184,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "fraud_predictions.id",
-            name="fk_risk_decision_audits_fraud_prediction_id_fraud_predictions",
+            name="fk_risk_decision_audits_fraud_pred_id_fraud_preds",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -193,7 +193,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_risk_decision_audits_security_violation_id_security_violations",
+            name="fk_risk_decision_audits_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -220,7 +220,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_risk_decision_audits_commerce_transaction_id_commerce_transactions",
+            name="fk_risk_decision_audits_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -229,7 +229,7 @@ class RiskDecisionAudit(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "payment_transactions.id",
-            name="fk_risk_decision_audits_payment_transaction_id_payment_transactions",
+            name="fk_risk_decision_audits_ptxn_id_ptxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

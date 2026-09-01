@@ -159,7 +159,9 @@ class FraudGuardEvaluateRequest(BaseModel):
     agent_id: uuid.UUID = Field(..., description="Target Agent UUID")
     transaction_id: str = Field(..., description="Target transaction ID")
     model_name: str = Field(default="fraudguard_xgboost", description="Target model name")
-    prediction_timestamp: datetime = Field(..., description="Prediction timestamp UTC")
+    prediction_timestamp: datetime = Field(
+        default_factory=lambda: datetime.now(UTC), description="Prediction timestamp UTC"
+    )
     feature_names: list[str] = Field(..., description="Ordered feature names")
     feature_values: list[float] = Field(..., description="Ordered feature values")
     merchant_signal: dict[str, Any] | None = Field(default=None, description="Merchant signal")

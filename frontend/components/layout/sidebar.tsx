@@ -27,14 +27,14 @@ interface SidebarProps {
 const NAV_ITEMS = [
   { id: 'command-center', name: 'COMMAND CENTER', icon: ShieldCheck, badge: 'LIVE', href: '/command-center' },
   { id: 'ai-command-center', name: 'AI COMMAND CENTER', icon: Terminal, badge: 'PAGE 003', href: '/ai-command-center' },
-  { id: 'dashboard', name: 'DASHBOARD', icon: LayoutDashboard },
-  { id: 'agents', name: 'AGENTS', icon: Bot, count: 6 },
+  { id: 'dashboard', name: 'DASHBOARD', icon: LayoutDashboard, href: '/' },
+  { id: 'agents', name: 'AGENTS', icon: Bot, count: 6, href: '/agents' },
   { id: 'agentguard', name: 'AGENTGUARD', icon: Shield, badge: 'POLICIES', href: '/agentguard' },
   { id: 'fraudguard', name: 'FRAUDGUARD', icon: Cpu, badge: 'AI RISK', href: '/fraudguard' },
-  { id: 'payments', name: 'PAYMENTS', icon: CreditCard },
-  { id: 'analytics', name: 'ANALYTICS', icon: BarChart3 },
-  { id: 'developer', name: 'DEVELOPER', icon: Code2 },
-  { id: 'settings', name: 'SETTINGS', icon: Settings },
+  { id: 'payments', name: 'PAYMENTS', icon: CreditCard, href: '/transactions' },
+  { id: 'analytics', name: 'ANALYTICS', icon: BarChart3, href: '/analytics' },
+  { id: 'developer', name: 'DEVELOPER', icon: Code2, href: '/developers' },
+  { id: 'settings', name: 'SETTINGS', icon: Settings, href: '/settings' },
 ];
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {

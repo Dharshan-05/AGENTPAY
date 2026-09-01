@@ -1,6 +1,7 @@
 """Database ORM models package for AGENTPAY."""
 
 from app.infrastructure.database.models.agent import Agent
+from app.infrastructure.database.models.tenant import Tenant
 from app.infrastructure.database.models.agent_audit import AgentAudit
 from app.infrastructure.database.models.agent_credential import AgentCredential
 from app.infrastructure.database.models.agent_identity import AgentIdentity
@@ -89,6 +90,7 @@ from app.infrastructure.database.models.xai_explanation import XAIExplanation
 
 __all__ = [
     "Agent",
+    "Tenant",
     "AgentAudit",
     "AgentCredential",
     "AgentIdentity",

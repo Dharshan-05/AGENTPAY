@@ -68,6 +68,10 @@ class RoutingDecision(BaseModel):
     fallback_route: str | None = Field(default=None)
 
 
+# Alias for backward compatibility across ATIM services
+ModelRoutingResult = RoutingDecision
+
+
 class ATIMIntelligentRouter:
     """Deterministic, risk-aware LLM router for AGENTPAY transactions."""
 

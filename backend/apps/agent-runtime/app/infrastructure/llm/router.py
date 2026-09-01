@@ -18,13 +18,15 @@ from app.infrastructure.llm.schemas import (
     StructuredLLMResponse,
 )
 
+from app.infrastructure.llm.openrouter_provider import OpenRouterProvider
+
 logger = logging.getLogger("agentpay.atim.llm.router")
 
 T = TypeVar("T", bound=BaseModel)
 
 
 class LLMRouter:
-    """Production LLM Router orchestrating multi-provider failover and structured generation."""
+    """Production LLM Router orchestrating multi-provider failover, model selection, and structured generation."""
 
     def __init__(
         self,
@@ -32,6 +34,7 @@ class LLMRouter:
         primary_provider: ILLMProvider | None = None,
         secondary_provider: ILLMProvider | None = None,
         tertiary_provider: ILLMProvider | None = None,
+        openrouter_provider: ILLMProvider | None = None,
     ) -> None:
         self.settings = settings or Settings()
 
@@ -50,14 +53,26 @@ class LLMRouter:
             if getattr(self.settings, "gemini_api_key", None)
             else None
         )
+        openrouter_key = (
+            self.settings.openrouter_api_key.get_secret_value()
+            if getattr(self.settings, "openrouter_api_key", None)
+            else None
+        )
 
-        self.primary_provider = primary_provider or OpenAIProvider(
+        self.openrouter_provider = openrouter_provider or OpenRouterProvider(
+            api_key=openrouter_key,
+            base_url=getattr(self.settings, "openrouter_base_url", "https://openrouter.ai/api/v1"),
+            default_model="openai/gpt-4o-mini",
+        )
+        self.primary_provider = primary_provider or (
+            self.openrouter_provider if openrouter_key else OpenAIProvider(
+                api_key=openai_key,
+                default_model=self.settings.llm_primary_model,
+            )
+        )
+        self.secondary_provider = secondary_provider or OpenAIProvider(
             api_key=openai_key,
             default_model=self.settings.llm_primary_model,
-        )
-        self.secondary_provider = secondary_provider or AnthropicProvider(
-            api_key=anthropic_key,
-            default_model=self.settings.llm_secondary_model,
         )
         self.tertiary_provider = tertiary_provider or GeminiProvider(
             api_key=gemini_key,
@@ -68,19 +83,39 @@ class LLMRouter:
         self,
         schema: type[T],
         request: LLMRequest,
+        target_model: str | None = None,
         max_retries: int | None = None,
     ) -> StructuredLLMResponse[T]:
-        """Execute structured generation with primary -> secondary failover.
-
-        Raises:
-            LLMProviderError: if all configured LLM providers fail or are disabled.
-        """
+        """Execute structured generation with dynamic model selection and failover."""
         if not self.settings.llm_enabled:
             raise LLMProviderError("LLM generation is disabled via configuration (LLM_ENABLED=false).")
 
         retries = max_retries if max_retries is not None else self.settings.llm_max_retries
 
-        # 1. Attempt Primary Provider
+        # If explicit model requested, attempt via OpenRouter first
+        if target_model and target_model.strip() and target_model.lower() not in ("auto", "default"):
+            clean_model = target_model.strip()
+            try:
+                logger.info(
+                    "Routing request %s to targeted model '%s' via OpenRouter",
+                    request.correlation_id,
+                    clean_model,
+                )
+                return await self.openrouter_provider.generate_structured(
+                    schema=schema,
+                    request=request,
+                    model=clean_model,
+                    max_retries=retries,
+                )
+            except Exception as model_exc:
+                logger.warning(
+                    "Targeted model '%s' via OpenRouter failed for req %s: %s. Falling back to primary router.",
+                    clean_model,
+                    request.correlation_id,
+                    model_exc,
+                )
+
+        # 1. Attempt OpenRouter / Primary Provider
         try:
             logger.info(
                 "Routing request %s to primary provider '%s' (%s)",
@@ -91,7 +126,7 @@ class LLMRouter:
             return await self.primary_provider.generate_structured(
                 schema=schema,
                 request=request,
-                model=self.settings.llm_primary_model,
+                model=self.primary_provider.default_model,
                 max_retries=retries,
             )
         except Exception as primary_exc:
@@ -113,7 +148,7 @@ class LLMRouter:
             return await self.secondary_provider.generate_structured(
                 schema=schema,
                 request=request,
-                model=self.settings.llm_secondary_model,
+                model=self.secondary_provider.default_model,
                 max_retries=retries,
             )
         except Exception as secondary_exc:

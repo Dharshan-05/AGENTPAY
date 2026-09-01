@@ -101,7 +101,7 @@ class XAIExplanation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "fraud_predictions.id",
-            name="fk_xai_explanations_fraud_prediction_id_fraud_predictions",
+            name="fk_xai_explanations_fraud_pred_id_fraud_preds",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -119,7 +119,7 @@ class XAIExplanation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_xai_explanations_security_violation_id_security_violations",
+            name="fk_xai_explanations_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -128,7 +128,7 @@ class XAIExplanation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_xai_explanations_policy_evaluation_id_policy_evaluations",
+            name="fk_xai_explanations_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -191,7 +191,7 @@ class XAIExplanation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_xai_explanations_commerce_transaction_id_commerce_transactions",
+            name="fk_xai_explanations_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

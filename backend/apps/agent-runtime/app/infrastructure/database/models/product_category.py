@@ -83,7 +83,7 @@ class ProductCategory(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "product_categories.id",
-            name="fk_product_categories_parent_category_id_product_categories",
+            name="fk_short_74121343",
             ondelete="RESTRICT",
         ),
         nullable=True,

@@ -1,23 +1,52 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AgentPayShell } from '@/components/layout/AgentPayShell';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { AGMetricCard } from '@/components/ui/ag-card';
 import { AGButton } from '@/components/ui/ag-button';
 import { AGBadge } from '@/components/ui/ag-badge';
-import { Package, RefreshCw, Plus } from 'lucide-react';
+import { Package, RefreshCw, Plus, Check } from 'lucide-react';
 import { ProductsTabType } from '@/components/products/product-types';
 import { MOCK_PRODUCTS } from '@/components/products/product-data';
+import { getSharedCommerceState, saveSharedCommerceState, addToCart } from '@/lib/commerce-store';
 
 export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState<ProductsTabType>('CATALOG');
   const [search, setSearch] = useState('');
+  const [sharedState, setSharedState] = useState<any>(() => getSharedCommerceState());
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setSharedState(getSharedCommerceState());
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('agentpay_commerce_session_updated', handleUpdate);
+      return () => window.removeEventListener('agentpay_commerce_session_updated', handleUpdate);
+    }
+  }, []);
+
+  const combinedProducts = useMemo(() => {
+    const sessionItems = (sharedState?.products || []).map((p: any, idx: number) => ({
+      id: p.product_id || `session_${idx}`,
+      productId: p.product_id || `PROD-${idx + 1}`,
+      name: p.product_name,
+      sku: `SKU-LIVE-${p.product_id ? p.product_id.slice(-6).toUpperCase() : idx + 1}`,
+      type: p.category || 'COMMERCE',
+      price: `₹${Number(p.price).toLocaleString('en-IN')}`,
+      rawPrice: Number(p.price),
+      currency: p.currency || 'INR',
+      taxCategory: 'STANDARD_GST_18',
+      status: sharedState?.selected_product_id === p.product_id ? 'ACTIVE' : 'READY',
+      originalProduct: p,
+    }));
+    return [...sessionItems, ...MOCK_PRODUCTS];
+  }, [sharedState]);
 
   const filtered = useMemo(() => {
-    return MOCK_PRODUCTS.filter(p => 
+    return combinedProducts.filter(p => 
       !search || p.productId.toLowerCase().includes(search.toLowerCase()) || p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+  }, [combinedProducts, search]);
 
   return (
     <AgentPayShell activeTab="products">
@@ -31,13 +60,13 @@ export default function ProductsPage() {
           statusBadge="● PRODUCT CATALOG ACTIVE"
           actions={
             <div className="flex gap-2">
-              <AGButton variant="ghost" size="sm" onClick={() => alert('Telemetry refreshed.')}><RefreshCw className="w-3.5 h-3.5 mr-1.5" /> REFRESH</AGButton>
-              <AGButton variant="primary" size="sm" onClick={() => alert('Add Product Flow')}><Plus className="w-3.5 h-3.5 mr-1.5" /> ADD PRODUCT</AGButton>
+              <AGButton variant="ghost" size="sm" onClick={() => setSharedState(getSharedCommerceState())}><RefreshCw className="w-3.5 h-3.5 mr-1.5" /> REFRESH</AGButton>
+              <AGButton variant="primary" size="sm" onClick={() => window.location.href = '/ai-command-center'}><Plus className="w-3.5 h-3.5 mr-1.5" /> SEARCH PRODUCTS</AGButton>
             </div>
           }
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <AGMetricCard label="CATALOG PRODUCTS" value={`${MOCK_PRODUCTS.length}`} subtext="ACTIVE SKU ITEMS" accentColor="text-blue-400" />
+          <AGMetricCard label="CATALOG PRODUCTS" value={`${combinedProducts.length}`} subtext="ACTIVE SKU ITEMS" accentColor="text-blue-400" />
           <AGMetricCard label="DIGITAL SERVICES" value="02" subtext="SOFTWARE & API SKU" accentColor="text-emerald-400" />
           <AGMetricCard label="TAX CATEGORIES" value="VERIFIED" subtext="AUTOMATED VAT/GST MAPPING" accentColor="text-emerald-400" />
           <AGMetricCard label="MERCHANT SYNC" value="100%" subtext="MULTI-CATALOG BINDING" accentColor="text-purple-400" />
@@ -61,20 +90,62 @@ export default function ProductsPage() {
                   <th className="p-3">SKU</th>
                   <th className="p-3">TYPE</th>
                   <th className="p-3">PRICE</th>
-                  <th className="p-3">TAX CATEGORY</th>
                   <th className="p-3">STATUS</th>
+                  <th className="p-3">ACTION</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.04]">
                 {filtered.map(p => (
-                  <tr key={p.id} className="hover:bg-slate-900/40 cursor-pointer">
+                  <tr key={p.id} className="hover:bg-slate-900/40">
                     <td className="p-3 font-bold text-blue-400">{p.productId}</td>
                     <td className="p-3 font-bold text-slate-200">{p.name}</td>
                     <td className="p-3 font-bold text-purple-400">{p.sku}</td>
                     <td className="p-3 text-slate-300">{p.type}</td>
                     <td className="p-3 font-bold text-emerald-400">{p.price} ({p.currency})</td>
-                    <td className="p-3 text-slate-400">{p.taxCategory}</td>
                     <td className="p-3"><AGBadge status={p.status} size="sm" /></td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            const prodObj = p.originalProduct || {
+                              product_id: p.productId,
+                              product_name: p.name,
+                              price: p.rawPrice || 44990,
+                              currency: p.currency || 'INR',
+                              seller: { seller_id: 'seller_appario_retail', seller_name: 'Appario Retail' },
+                            };
+                            saveSharedCommerceState({
+                              selected_product: prodObj,
+                              selected_product_id: prodObj.product_id,
+                              purchase_state: 'SELECTED',
+                              current_price: Number(prodObj.price),
+                            });
+                            setSharedState(getSharedCommerceState());
+                          }}
+                          className="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30 font-bold"
+                        >
+                          {sharedState?.selected_product_id === (p.originalProduct?.product_id || p.productId) ? 'SELECTED ✓' : '[SELECT]'}
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const prodObj = p.originalProduct || {
+                              product_id: p.productId,
+                              product_name: p.name,
+                              price: p.rawPrice || 44990,
+                              currency: p.currency || 'INR',
+                              seller: { seller_id: 'seller_appario_retail', seller_name: 'Appario Retail' },
+                            };
+                            const updated = addToCart(prodObj);
+                            setSharedState(updated);
+                            alert(`Added ${p.name} to AGENTPAY Cart.`);
+                          }}
+                          className="px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border border-blue-500/30 font-bold"
+                        >
+                          [ADD TO CART]
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

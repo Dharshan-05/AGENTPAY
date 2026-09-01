@@ -80,7 +80,7 @@ class Cancellation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "payment_transactions.id",
-            name="fk_cancellations_payment_transaction_id_payment_transactions",
+            name="fk_cancellations_ptxn_id_ptxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

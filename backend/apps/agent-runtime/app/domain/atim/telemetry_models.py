@@ -87,7 +87,7 @@ class ATIMTelemetryAggregate(BaseModel):
 class ATIMAnalyzeRequest(BaseModel):
     """Input payload for ATIM natural language transaction intelligence analysis."""
 
-    prompt: str = Field(..., min_length=3, max_length=2048, description="User prompt or intent string")
+    prompt: str = Field(..., min_length=1, max_length=2048, description="User prompt or intent string")
     tenant_id: uuid.UUID
     agent_id: uuid.UUID
     requested_action: Optional[str] = Field(default=None, description="Explicit action hint if available")
@@ -95,6 +95,7 @@ class ATIMAnalyzeRequest(BaseModel):
     requested_currency: Optional[str] = Field(default="USD", description="Currency code")
     merchant_id: Optional[uuid.UUID] = None
     category: Optional[str] = None
+    model: Optional[str] = Field(default=None, description="Target AI model e.g. auto, deepseek/deepseek-r1-distill-llama-70b")
 
 
 class ATIMAnalyzeResponse(BaseModel):

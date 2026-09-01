@@ -89,7 +89,7 @@ class PolicyEvaluation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_policies.id",
-            name="fk_policy_evaluations_security_policy_id_security_policies",
+            name="fk_pol_evals_security_policy_id_security_policies",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -143,7 +143,7 @@ class PolicyEvaluation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "purchase_intents.id",
-            name="fk_policy_evaluations_purchase_intent_id_purchase_intents",
+            name="fk_pol_evals_purchase_intent_id_purchase_intents",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -161,7 +161,7 @@ class PolicyEvaluation(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_policy_evaluations_commerce_transaction_id_commerce_transactions",
+            name="fk_pol_evals_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

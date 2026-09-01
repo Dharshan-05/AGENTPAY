@@ -94,3 +94,18 @@ async def get_current_user(
         session=session_obj,
         tenant_id=tenant_id,
     )
+
+
+async def get_current_user_optional(
+    request: Request,
+    db: Annotated[AsyncSession, Depends(get_db_session)],
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(http_bearer_scheme)],
+) -> AuthenticatedUser | None:
+    """Extract Bearer token if present, otherwise return None without raising error."""
+    if credentials is None or not credentials.credentials:
+        return None
+    try:
+        return await get_current_user(request=request, db=db, credentials=credentials)
+    except Exception:
+        return None
+

@@ -15,13 +15,23 @@ FORBIDDEN_SECRET_PATTERN = re.compile(
 
 # Known prompt injection attack phrases
 SUSPICIOUS_INJECTION_PATTERNS = [
-    re.compile(r"(?i)ignore\s+(all\s+)?(previous\s+)?instructions"),
-    re.compile(r"(?i)override\s+(all\s+)?(security\s+|policy\s+)?rules"),
-    re.compile(r"(?i)change\s+(my\s+)?spending\s+limit"),
-    re.compile(r"(?i)increase\s+(my\s+)?budget"),
-    re.compile(r"(?i)bypass\s+(agentguard|fraudguard|security)"),
+    re.compile(r"(?i)ignore\s+(all\s+)?(previous\s+|system\s+|security\s+|policy\s+|agentguard\s+|fraudguard\s+)?(instructions|rules|controls|policies)?"),
+    re.compile(r"(?i)ignore\s+(agentguard|security|policy|fraudguard|rules|instructions)"),
+    re.compile(r"(?i)bypass\s+(agentguard|fraudguard|security|approval|payment|hitl|controls)"),
+    re.compile(r"(?i)override\s+(all\s+)?(security|policy|agentguard|fraudguard|system)?\s*(rules|policies|instructions)?"),
+    re.compile(r"(?i)disable\s+(security|fraud|agentguard|fraudguard|detection|hitl)"),
+    re.compile(r"(?i)skip\s+(approval|hitl|fraud|security|checks|detection)"),
+    re.compile(r"(?i)authorize\s+(without\s+checking|automatically)"),
+    re.compile(r"(?i)execute\s+without\s+approval"),
+    re.compile(r"(?i)do\s+not\s+perform\s+risk\s+checks"),
+    re.compile(r"(?i)pretend\s+this\s+is\s+authorized"),
+    re.compile(r"(?i)pretend\s+agentguard\s+approved"),
+    re.compile(r"(?i)pay\s+without\s+approval"),
+    re.compile(r"(?i)buy\s+it\s+without\s+agentguard"),
     re.compile(r"(?i)call\s+payment\.authorize\s+directly"),
     re.compile(r"(?i)act\s+as\s+admin"),
+    re.compile(r"(?i)change\s+(my\s+)?spending\s+limit"),
+    re.compile(r"(?i)increase\s+(my\s+)?budget"),
 ]
 
 

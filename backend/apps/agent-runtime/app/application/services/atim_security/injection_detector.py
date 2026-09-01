@@ -16,7 +16,8 @@ INJECTION_CATEGORY_PATTERNS = [
     (
         "DIRECT_INSTRUCTION_OVERRIDE",
         [
-            re.compile(r"(?i)ignore\s+(all\s+)?(previous\s+)?(instructions|rules|system\s+prompts)"),
+            re.compile(r"(?i)ignore\s+(all\s+)?(previous\s+|system\s+|security\s+|policy\s+|agentguard\s+|fraudguard\s+)?(instructions|rules|controls|policies)?"),
+            re.compile(r"(?i)ignore\s+(agentguard|security|policy|fraudguard|rules|instructions)"),
             re.compile(r"(?i)disregard\s+(all\s+)?(prior|previous)\s+(directives|rules|instructions)"),
             re.compile(r"(?i)forget\s+(all\s+)?(previous\s+)?(rules|instructions)"),
         ],
@@ -27,6 +28,7 @@ INJECTION_CATEGORY_PATTERNS = [
             re.compile(r"(?i)you\s+are\s+now\s+(the\s+)?(payment\s+administrator|admin|system|root|supervisor)"),
             re.compile(r"(?i)act\s+as\s+(admin|administrator|system|security\s+engine|agentguard)"),
             re.compile(r"(?i)pretend\s+to\s+be\s+(a\s+)?(super_user|admin|payment_execution_engine)"),
+            re.compile(r"(?i)pretend\s+(this\s+is\s+authorized|agentguard\s+approved)"),
         ],
     ),
     (
@@ -40,9 +42,14 @@ INJECTION_CATEGORY_PATTERNS = [
     (
         "SECURITY_BYPASS",
         [
-            re.compile(r"(?i)bypass\s+(agentguard|fraudguard|security\s+rules|risk\s+check)"),
-            re.compile(r"(?i)skip\s+(fraud\s+checks|hitl\s+approval|spending\s+limit\s+check)"),
-            re.compile(r"(?i)disable\s+(security|fraudguard|agentguard|policy\s+engine)"),
+            re.compile(r"(?i)bypass\s+(agentguard|fraudguard|security|approval|payment|hitl|controls)"),
+            re.compile(r"(?i)skip\s+(fraud\s+checks|hitl\s+approval|spending\s+limit\s+check|approval|hitl|security|detection)"),
+            re.compile(r"(?i)disable\s+(security|fraudguard|agentguard|policy\s+engine|fraud|detection|hitl)"),
+            re.compile(r"(?i)authorize\s+(without\s+checking|automatically)"),
+            re.compile(r"(?i)execute\s+without\s+approval"),
+            re.compile(r"(?i)do\s+not\s+perform\s+risk\s+checks"),
+            re.compile(r"(?i)pay\s+without\s+approval"),
+            re.compile(r"(?i)buy\s+it\s+without\s+agentguard"),
         ],
     ),
     (

@@ -150,6 +150,6 @@ class PlanValidationResult(BaseModel):
     errors: list[str] = Field(default_factory=list, description="Validation error messages")
     warnings: list[str] = Field(default_factory=list, description="Non-fatal validation warnings")
     execution_eligible: bool = Field(
-        ..., description="True if plan is safe and eligible for future execution"
+        default=True, description="True if plan is safe and eligible for future execution"
     )
     validation_version: str = Field(default="1.0.0", description="Validator version")

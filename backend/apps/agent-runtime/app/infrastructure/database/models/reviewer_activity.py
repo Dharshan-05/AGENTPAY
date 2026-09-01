@@ -90,7 +90,7 @@ class ReviewerActivity(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "approval_requests.id",
-            name="fk_reviewer_activity_approval_request_id_approval_requests",
+            name="fk_short_18621725",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -99,7 +99,7 @@ class ReviewerActivity(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "approval_decisions.id",
-            name="fk_reviewer_activity_approval_decision_id_approval_decisions",
+            name="fk_short_37898079",
             ondelete="RESTRICT",
         ),
         nullable=True,

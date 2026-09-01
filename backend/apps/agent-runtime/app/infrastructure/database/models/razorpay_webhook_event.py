@@ -71,7 +71,7 @@ class RazorpayWebhookEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "payment_orders.id",
-            name="fk_razorpay_webhook_events_payment_order_id_payment_orders",
+            name="fk_short_7619972",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -80,7 +80,7 @@ class RazorpayWebhookEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "payment_transactions.id",
-            name="fk_razorpay_webhook_events_payment_transaction_id_payment_transactions",
+            name="fk_razorpay_webhook_events_ptxn_id_ptxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

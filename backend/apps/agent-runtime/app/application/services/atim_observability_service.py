@@ -70,6 +70,14 @@ class ATIMObservabilityService:
                         await commit_res
         except Exception as err:
             logger.warning("Failed to persist ATIM telemetry record to DB: %s", err)
+            try:
+                if hasattr(db, "rollback") and callable(getattr(db, "rollback", None)):
+                    rb_res = db.rollback()
+                    import inspect
+                    if inspect.isawaitable(rb_res):
+                        await rb_res
+            except Exception:
+                pass
 
         logger.info(
             "Recorded ATIM Telemetry [Tenant=%s Agent=%s Model=%s Latency=%.2fms Cost=$%.6f Blocked=%s]",

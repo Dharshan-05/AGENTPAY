@@ -120,7 +120,7 @@ class CommerceTransaction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "purchase_intents.id",
-            name="fk_commerce_transactions_purchase_intent_id_purchase_intents",
+            name="fk_ctxns_purchase_intent_id_purchase_intents",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -129,7 +129,7 @@ class CommerceTransaction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "purchase_plans.id",
-            name="fk_commerce_transactions_purchase_plan_id_purchase_plans",
+            name="fk_ctxns_purchase_plan_id_purchase_plans",
             ondelete="RESTRICT",
         ),
         nullable=True,

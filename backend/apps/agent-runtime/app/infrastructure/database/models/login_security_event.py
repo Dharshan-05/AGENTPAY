@@ -70,7 +70,7 @@ class LoginSecurityEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "refresh_tokens.id",
-            name="fk_login_security_events_refresh_token_id_refresh_tokens",
+            name="fk_short_81454732",
             ondelete="RESTRICT",
         ),
         nullable=True,

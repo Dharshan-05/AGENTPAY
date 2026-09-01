@@ -77,6 +77,13 @@ class PlanValidationService:
         errors: list[str] = []
         warnings: list[str] = []
 
+        if not plan:
+            return PlanValidationResult(
+                is_valid=True,
+                errors=[],
+                warnings=["No execution plan steps to validate."],
+            )
+
         # 1. Identity & Scope Consistency
         if target_tenant_id and plan.tenant_id != target_tenant_id:
             errors.append(

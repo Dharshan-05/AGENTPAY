@@ -128,7 +128,7 @@ class PaymentTransaction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_payment_transactions_commerce_transaction_id_commerce_transactions",
+            name="fk_ptxns_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

@@ -164,7 +164,7 @@ class ReviewQueue(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_review_queue_security_violation_id_security_violations",
+            name="fk_review_queue_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -191,7 +191,7 @@ class ReviewQueue(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_review_queue_commerce_transaction_id_commerce_transactions",
+            name="fk_review_queue_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -209,7 +209,7 @@ class ReviewQueue(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "payment_transactions.id",
-            name="fk_review_queue_payment_transaction_id_payment_transactions",
+            name="fk_review_queue_ptxn_id_ptxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

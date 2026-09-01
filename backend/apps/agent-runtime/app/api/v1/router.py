@@ -65,3 +65,11 @@ api_v1_router.include_router(approvals_router)
 # Phase 10 / Group 5: ATIM Transaction Intelligence, Evaluation & Observability Engine
 api_v1_router.include_router(atim_router)
 
+# Razorpay Buildathon Track 01: Agentic Commerce Engine & AI Models
+from app.api.v1.commerce import router as commerce_router
+from app.api.v1.ai import router as ai_router
+
+api_v1_router.include_router(commerce_router)
+api_v1_router.include_router(ai_router)
+
+

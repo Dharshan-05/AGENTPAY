@@ -115,8 +115,19 @@ export default function ProductionAgentRegistryPage() {
         
         {/* HEADER */}
         <AgentHeader
-          onRefresh={() => alert('Agent operations telemetry feed refreshed')}
-          onExport={() => alert('Exporting cryptographic agent identity ledger...')}
+          onRefresh={() => refetch()}
+          onExport={() => {
+            const headers = ['ID', 'Name', 'Type', 'Status', 'Public Key Hash', 'Created At'];
+            const rows = agents.map(a => [a.id, a.agentId, `"${a.name}"`, a.type, a.status, `"${a.owner}"`, `"${a.lastActive}"`]);
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `agentpay_agents_export_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+          }}
           onRegister={() => setIsRegisterModalOpen(true)}
         />
 

@@ -135,7 +135,7 @@ class RiskSignal(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_risk_signals_security_violation_id_security_violations",
+            name="fk_risk_signals_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -198,7 +198,7 @@ class RiskSignal(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_risk_signals_commerce_transaction_id_commerce_transactions",
+            name="fk_risk_signals_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

@@ -169,7 +169,7 @@ class BehaviourEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_behaviour_events_commerce_transaction_id_commerce_transactions",
+            name="fk_behaviour_events_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -178,7 +178,7 @@ class BehaviourEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_behaviour_events_policy_evaluation_id_policy_evaluations",
+            name="fk_behaviour_events_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,

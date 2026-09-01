@@ -177,7 +177,7 @@ class SecurityEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_security_events_security_violation_id_security_violations",
+            name="fk_security_events_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -195,7 +195,7 @@ class SecurityEvent(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_security_events_policy_evaluation_id_policy_evaluations",
+            name="fk_security_events_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,

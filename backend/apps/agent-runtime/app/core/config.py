@@ -148,6 +148,8 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = Field(default=None, validation_alias="OPENAI_API_KEY")
     anthropic_api_key: SecretStr | None = Field(default=None, validation_alias="ANTHROPIC_API_KEY")
     gemini_api_key: SecretStr | None = Field(default=None, validation_alias="GEMINI_API_KEY")
+    openrouter_api_key: SecretStr | None = Field(default=None, validation_alias="OPENROUTER_API_KEY")
+    openrouter_base_url: str = Field(default="https://openrouter.ai/api/v1", validation_alias="OPENROUTER_BASE_URL")
 
     # ATIM Group 2 (Phase 4 Security & Phase 5 Memory/RAG Settings)
     atim_security_enabled: bool = Field(default=True, validation_alias="ATIM_SECURITY_ENABLED")
@@ -175,7 +177,7 @@ class Settings(BaseSettings):
     # Security foundation settings
 
     cors_allowed_origins: list[str] | str = Field(
-        default_factory=lambda: ["http://localhost:3000"],
+        default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "*"],
         validation_alias=AliasChoices("CORS_ALLOWED_ORIGINS", "cors_allowed_origins"),
     )
     cors_allow_credentials: bool = Field(
@@ -354,14 +356,25 @@ class Settings(BaseSettings):
         if self.database_url and self.database_url.get_secret_value().strip():
             raw_url = self.database_url.get_secret_value().strip()
             if raw_url.startswith("postgresql://"):
-                normalized = "postgresql+asyncpg://" + raw_url[len("postgresql://") :]
+                raw_url = "postgresql+asyncpg://" + raw_url[len("postgresql://") :]
             elif raw_url.startswith("postgres://"):
-                normalized = "postgresql+asyncpg://" + raw_url[len("postgres://") :]
+                raw_url = "postgresql+asyncpg://" + raw_url[len("postgres://") :]
             elif not raw_url.startswith("postgresql+asyncpg://"):
-                normalized = f"postgresql+asyncpg://{raw_url}"
-            else:
-                normalized = raw_url
-            return SecretStr(normalized)
+                raw_url = f"postgresql+asyncpg://{raw_url}"
+
+            # Safely handle unencoded '@' symbols in password part of connection string
+            prefix = "postgresql+asyncpg://"
+            body = raw_url[len(prefix) :]
+            if "@" in body:
+                last_at = body.rfind("@")
+                userpass = body[:last_at]
+                hostdb = body[last_at + 1 :]
+                if ":" in userpass:
+                    user, pwd = userpass.split(":", 1)
+                    pwd_encoded = pwd.replace("@", "%40")
+                    raw_url = f"{prefix}{user}:{pwd_encoded}@{hostdb}"
+
+            return SecretStr(raw_url)
 
         pwd = self.postgres_password.get_secret_value()
         url = (

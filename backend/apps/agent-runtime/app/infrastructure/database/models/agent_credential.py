@@ -82,7 +82,7 @@ class AgentCredential(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "agent_credentials.id",
-            name="fk_agent_credentials_replaced_by_credential_id_agent_credentials",
+            name="fk_agent_cred_replaced_by_id",
             ondelete="RESTRICT",
         ),
         nullable=True,

@@ -125,7 +125,7 @@ class FraudPrediction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_policies.id",
-            name="fk_fraud_predictions_security_policy_id_security_policies",
+            name="fk_fraud_preds_security_policy_id_security_policies",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -143,7 +143,7 @@ class FraudPrediction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "policy_evaluations.id",
-            name="fk_fraud_predictions_policy_evaluation_id_policy_evaluations",
+            name="fk_fraud_preds_pol_eval_id_pol_evals",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -152,7 +152,7 @@ class FraudPrediction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "security_violations.id",
-            name="fk_fraud_predictions_security_violation_id_security_violations",
+            name="fk_fraud_preds_sec_viol_id_sec_viols",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -206,7 +206,7 @@ class FraudPrediction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "purchase_intents.id",
-            name="fk_fraud_predictions_purchase_intent_id_purchase_intents",
+            name="fk_fraud_preds_purchase_intent_id_purchase_intents",
             ondelete="RESTRICT",
         ),
         nullable=True,
@@ -224,7 +224,7 @@ class FraudPrediction(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_fraud_predictions_commerce_transaction_id_commerce_transactions",
+            name="fk_fraud_preds_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

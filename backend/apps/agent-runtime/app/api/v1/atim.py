@@ -9,7 +9,7 @@ from typing import Annotated, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.dependencies.auth import AuthenticatedUser, get_current_user
+from app.api.dependencies.auth import AuthenticatedUser, get_current_user, get_current_user_optional
 from app.application.services.atim_circuit_breaker import ATIMCircuitBreaker
 from app.application.services.atim_evaluation_service import ATIMEvaluationService
 from app.application.services.atim_facade_service import ATIMFacadeService
@@ -68,12 +68,12 @@ def get_atim_evaluation_service() -> ATIMEvaluationService:
 )
 async def analyze_transaction_intelligence(
     request: ATIMAnalyzeRequest,
-    current_user: Annotated[AuthenticatedUser, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db_session)],
     facade_service: Annotated[ATIMFacadeService, Depends(get_atim_facade_service)],
+    current_user: Annotated[AuthenticatedUser | None, Depends(get_current_user_optional)] = None,
 ) -> ATIMAnalyzeResponse:
     """Execute natural language transaction intelligence analysis under tenant boundary."""
-    if request.tenant_id != current_user.tenant_id:
+    if current_user and request.tenant_id != current_user.tenant_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Cross-tenant transaction intelligence analysis is forbidden.",

@@ -93,7 +93,7 @@ class Refund(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "commerce_transactions.id",
-            name="fk_refunds_commerce_transaction_id_commerce_transactions",
+            name="fk_refunds_ctxn_id_ctxns",
             ondelete="RESTRICT",
         ),
         nullable=True,

@@ -111,6 +111,11 @@ class ATIMProposedIntent(BaseModel):
     def validate_action(cls, v: str) -> str:
         clean = v.upper().strip()
         supported = {
+            "GREETING",
+            "GENERAL_QUERY",
+            "TRANSACTION_QUERY",
+            "AMBIGUOUS",
+            "NONE",
             "PAYMENT",
             "PURCHASE",
             "BUY",

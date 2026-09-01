@@ -57,7 +57,7 @@ class ApprovalDecision(Base):
         UUID(as_uuid=True),
         ForeignKey(
             "approval_requests.id",
-            name="fk_approval_decisions_approval_request_id_approval_requests",
+            name="fk_short_14556869",
             ondelete="RESTRICT",
         ),
         nullable=False,

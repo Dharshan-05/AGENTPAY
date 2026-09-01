@@ -43,7 +43,10 @@ class LLMIntentExtractorProvider(BaseIntentExtractorProvider):
 
 
     async def extract(
-        self, request_text: str, context_metadata: dict[str, Any]
+        self,
+        request_text: str,
+        context_metadata: dict[str, Any],
+        target_model: str | None = None,
     ) -> StructuredIntent:
         """Extract structured intent using LLM provider with fallback to rule engine."""
         # 1. Sanitize user prompt & evaluate security decision via ATIMSecurityClassifier
@@ -58,14 +61,20 @@ class LLMIntentExtractorProvider(BaseIntentExtractorProvider):
 
         sanitization = self.prompt_guard.sanitize_prompt(request_text)
 
-        # If critical prompt injection detected, fail closed via fallback
-        if sanitization.risk_level == "CRITICAL":
+        # If prompt injection or high/critical security threat detected, block immediately
+        if sanitization.contains_suspicious_injection or sanitization.risk_level in ("HIGH", "CRITICAL"):
             logger.warning(
-                "Critical prompt threat detected by PromptGuard: %s. Falling back to rule engine.",
+                "Prompt injection threat detected by PromptGuard: %s.",
                 sanitization.detected_threats,
             )
-            return await self.fallback_provider.extract(request_text, context_metadata)
-
+            return StructuredIntent(
+                intent_id=uuid.uuid4(),
+                action="prompt_injection",
+                target="security_shield",
+                entities=ExtractedEntities(amount=Decimal("0.00"), currency="USD"),
+                parameters={"raw_prompt_length": len(request_text)},
+                confidence=Decimal("1.00"),
+            )
 
         # 2. Build LLMRequest
         corr_id = uuid.uuid4()
@@ -77,12 +86,12 @@ class LLMIntentExtractorProvider(BaseIntentExtractorProvider):
             temperature=0.0,
         )
 
-
         # 3. Attempt LLM Extraction via Router
         try:
             res = await self.router.generate_structured(
                 schema=ATIMProposedIntent,
                 request=llm_req,
+                target_model=target_model,
             )
             raw_intent = res.data
 
