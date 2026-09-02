@@ -47,8 +47,8 @@ export default function LoginPage() {
       await login({ email, password });
       setAuthSuccess(true);
       setTimeout(() => {
-        router.push('/');
-      }, 600);
+        router.replace('/command-center');
+      }, 300);
     } catch (err: any) {
       console.warn('Backend authentication error:', err.message);
       if (email && password) {
@@ -59,8 +59,8 @@ export default function LoginPage() {
           localStorage.setItem('agentpay_user', JSON.stringify({ email, role: selectedRole }));
         } catch (e) {}
         setTimeout(() => {
-          router.push('/');
-        }, 600);
+          router.replace('/command-center');
+        }, 300);
       } else {
         setError(err.message || 'Authentication failed. Please check credentials.');
       }
