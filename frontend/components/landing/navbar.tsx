@@ -62,17 +62,17 @@ export function Navbar() {
         {/* Actions */}
         <div className="hidden md:flex items-center gap-4">
           <Link
-            href="/command-center"
-            className="text-xs font-mono tracking-wider text-slate-300 hover:text-white px-4 py-2 transition-colors uppercase"
+            href="/login"
+            className="text-xs font-mono tracking-wider text-slate-300 hover:text-white px-4 py-2 transition-colors uppercase font-bold"
           >
-            Command Center
+            Sign In
           </Link>
           <Magnetic strength={10}>
             <Link
-              href="/command-center"
+              href="/login"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-semibold text-xs font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all"
             >
-              Launch App
+              Get Started
               <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
             </Link>
           </Magnetic>
@@ -103,16 +103,16 @@ export function Navbar() {
           ))}
           <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-3">
             <Link
-              href="/command-center"
+              href="/login"
               className="text-center text-xs font-mono tracking-wider text-slate-300 hover:text-white py-2 uppercase border border-white/10 rounded-xl"
             >
-              Command Center
+              Sign In
             </Link>
             <Link
-              href="/command-center"
+              href="/login"
               className="text-center text-xs font-mono uppercase tracking-wider font-semibold py-3 rounded-xl bg-emerald-500 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
             >
-              Launch App
+              Get Started
             </Link>
           </div>
         </div>

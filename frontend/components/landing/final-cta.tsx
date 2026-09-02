@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Reveal } from '@/components/motion/reveal';
 import { Magnetic } from '@/components/motion/magnetic';
 import { ShimmerButton } from '@/components/motion/shimmer-button';
@@ -32,13 +33,13 @@ export function FinalCta() {
         <Reveal y={16} delay={0.3} className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Magnetic strength={14}>
             <ShimmerButton shimmerColor="rgba(16, 185, 129, 0.5)">
-              <a
-                href="#getstarted"
+              <Link
+                href="/login"
                 className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-slate-950 font-bold text-sm uppercase tracking-wider font-mono shadow-[0_0_35px_rgba(16,185,129,0.35)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] transition-all"
               >
                 Start Building
                 <ArrowRight className="w-4 h-4 text-slate-950" />
-              </a>
+              </Link>
             </ShimmerButton>
           </Magnetic>
 

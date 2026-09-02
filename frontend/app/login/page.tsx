@@ -229,6 +229,24 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {/* REMEMBER ME & SIGN UP OPTION */}
+              <div className="flex items-center justify-between py-1 text-xs">
+                <label className="flex items-center gap-2 cursor-pointer text-slate-400 hover:text-slate-200">
+                  <input
+                    type="checkbox"
+                    defaultChecked
+                    className="rounded bg-slate-950 border-white/20 text-emerald-500 focus:ring-emerald-500/30"
+                  />
+                  <span className="text-[11px] font-sans">Remember session</span>
+                </label>
+                <span className="text-[11px] font-sans text-slate-400">
+                  Don't have an account?{' '}
+                  <a href="#signup" onClick={() => setError('Sign up requires Enterprise Organization Admin approval.')} className="text-emerald-400 hover:underline font-bold">
+                    Sign Up
+                  </a>
+                </span>
+              </div>
+
               {/* ERROR ALERT */}
               {error && (
                 <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
